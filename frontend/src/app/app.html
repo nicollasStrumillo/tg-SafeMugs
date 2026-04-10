@@ -1,0 +1,33 @@
+<div class="app-shell">
+  <header class="shell-header">
+    <mat-toolbar class="topbar">
+      <a class="brand" routerLink="/login" aria-label="Ir para a página de login da SafeMugs">
+        <span class="brand-mark">SM</span>
+        <span class="brand-copy">
+          <strong>{{ appName }}</strong>
+          <small>Canecas para presentear e colecionar</small>
+        </span>
+      </a>
+
+      <nav class="topnav" aria-label="Navegação principal">
+        <a
+          mat-button
+          routerLink="/login"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Entrar
+        </a>
+        <a mat-button routerLink="/register" routerLinkActive="active-link">
+          Cadastrar
+        </a>
+      </nav>
+    </mat-toolbar>
+  </header>
+
+  <main class="shell-main">
+    <router-outlet />
+  </main>
+
+  <sm-footer />
+</div>

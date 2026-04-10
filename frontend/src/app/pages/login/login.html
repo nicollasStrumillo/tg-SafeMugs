@@ -1,0 +1,81 @@
+<section class="landing">
+	<div class="landing-copy">
+		<h1>Entre na sua conta.</h1>
+		<p class="lead">
+			Acesse para acompanhar pedidos, salvar endereços e finalizar suas próximas compras com
+			mais rapidez.
+		</p>
+
+		<div class="support-copy">
+			<p>
+				Tenha seu histórico sempre por perto e encontre suas canecas favoritas sem começar do
+				zero a cada visita.
+			</p>
+			<a class="secondary-link" routerLink="/register">Ainda não tem conta? Criar cadastro.</a>
+		</div>
+	</div>
+
+	<mat-card class="login-card">
+		<mat-card-header>
+			<mat-card-title>Entrar</mat-card-title>
+			<mat-card-subtitle>Use seu email e sua senha para acessar sua conta.</mat-card-subtitle>
+		</mat-card-header>
+
+		<mat-card-content>
+			<form class="login-form" [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+				<mat-form-field>
+					<mat-label>Email</mat-label>
+					<input matInput type="email" formControlName="email" autocomplete="email" />
+					@if (loginForm.controls.email.hasError('required') &&
+					(loginForm.controls.email.touched || formSubmitted())) {
+						<mat-error>Informe seu email para continuar.</mat-error>
+					}
+					@if (loginForm.controls.email.hasError('email') &&
+					(loginForm.controls.email.touched || formSubmitted())) {
+						<mat-error>Use um formato de email válido.</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field>
+					<mat-label>Senha</mat-label>
+					<input
+						matInput
+						[type]="passwordInputType()"
+						formControlName="password"
+						autocomplete="current-password"
+					/>
+					<button
+						type="button"
+						mat-icon-button
+						matSuffix
+						(click)="togglePasswordVisibility()"
+						[attr.aria-label]="passwordHidden() ? 'Mostrar senha' : 'Ocultar senha'"
+					>
+						<mat-icon>{{ passwordHidden() ? 'visibility' : 'visibility_off' }}</mat-icon>
+					</button>
+					@if (loginForm.controls.password.hasError('required') &&
+					(loginForm.controls.password.touched || formSubmitted())) {
+						<mat-error>Informe sua senha.</mat-error>
+					}
+					@if (loginForm.controls.password.hasError('minlength') &&
+					(loginForm.controls.password.touched || formSubmitted())) {
+						<mat-error>A senha precisa ter ao menos 8 caracteres.</mat-error>
+					}
+				</mat-form-field>
+
+				<button mat-flat-button type="submit" class="primary-action">Entrar</button>
+			</form>
+
+			@if (formSubmitted() && loginForm.valid) {
+				<p class="helper-note">
+					Dados preenchidos. Confira as informações antes de continuar.
+				</p>
+			}
+		</mat-card-content>
+
+		<mat-card-actions>
+			<a mat-button routerLink="/register">Criar conta</a>
+			<button mat-button type="button" disabled>Recuperar senha</button>
+		</mat-card-actions>
+	</mat-card>
+</section>

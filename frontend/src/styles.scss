@@ -1,0 +1,253 @@
+@use '@angular/material' as mat;
+
+html {
+	color-scheme: dark;
+	@include mat.theme(
+		(
+			color: mat.$azure-palette,
+			typography: (
+				plain-family: 'Manrope, sans-serif',
+				brand-family: 'Fraunces, serif',
+				regular-weight: 400,
+				medium-weight: 500,
+				bold-weight: 700,
+			),
+			density: 0,
+		),
+		$overrides: (
+			primary: #85a3da,
+			on-primary: #08111f,
+			primary-container: #17253d,
+			on-primary-container: #edf3ff,
+			secondary: #93a2bf,
+			on-secondary: #09111d,
+			tertiary: #5d7fbd,
+			on-tertiary: #edf3ff,
+			surface: #09111d,
+			on-surface: #edf3ff,
+			surface-container-low: #0d1728,
+			surface-container: #111c32,
+			surface-container-high: #17253d,
+			surface-container-highest: #1d2d47,
+			surface-variant: #17253d,
+			on-surface-variant: #93a2bf,
+			background: #09111d,
+			on-background: #edf3ff,
+			outline: rgba(147, 162, 191, 0.4),
+			outline-variant: rgba(147, 162, 191, 0.22),
+			error: #f3a2a2,
+			on-error: #2b1111,
+			shadow: rgba(1, 7, 18, 0.48),
+			scrim: rgba(1, 7, 18, 0.6),
+		),
+	);
+
+	@include mat.toolbar-overrides(
+		(
+			container-background-color: transparent,
+			container-text-color: #edf3ff,
+		),
+	);
+
+	@include mat.icon-overrides(
+		(
+			color: #93a2bf,
+		),
+	);
+}
+
+:root {
+	--sm-display: 'Fraunces', serif;
+	--sm-body: 'Manrope', sans-serif;
+	--sm-bg: var(--mat-sys-surface);
+	--sm-bg-elevated: #0d1728;
+	--sm-surface: var(--mat-sys-surface-container);
+	--sm-surface-soft: var(--mat-sys-surface-container-high);
+	--sm-ink: var(--mat-sys-on-surface);
+	--sm-muted: var(--mat-sys-on-surface-variant);
+	--sm-accent: #5d7fbd;
+	--sm-accent-strong: var(--mat-sys-primary);
+	--sm-accent-soft: rgba(93, 127, 189, 0.16);
+	--sm-border: var(--mat-sys-outline-variant);
+	--sm-border-strong: var(--mat-sys-outline);
+	--sm-shadow: 0 22px 58px rgba(1, 7, 18, 0.48);
+	--sm-shadow-soft: 0 14px 32px rgba(1, 7, 18, 0.34);
+}
+
+html,
+body {
+	min-height: 100%;
+}
+
+body {
+	margin: 0;
+	color: var(--sm-ink);
+	font-family: var(--sm-body);
+	line-height: 1.5;
+	background:
+		radial-gradient(circle at top right, rgba(93, 127, 189, 0.16), transparent 28%),
+		linear-gradient(180deg, #0d1728 0%, #09111d 56%, #07101b 100%);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+	font: inherit;
+}
+
+a {
+	color: inherit;
+}
+
+body .mat-toolbar,
+body .mat-mdc-card {
+	color: var(--sm-ink);
+}
+
+body .mat-mdc-card {
+	border: 1px solid var(--sm-border);
+	border-radius: 0.5rem;
+	background: rgba(17, 28, 50, 0.96);
+	box-shadow: var(--sm-shadow-soft);
+}
+
+body .mat-mdc-card-header {
+	padding: 1.5rem 1.5rem 0;
+}
+
+body .mat-mdc-card-title {
+	font-size: 1.35rem;
+	font-weight: 700;
+}
+
+body .mat-mdc-card-subtitle {
+	color: var(--sm-muted);
+}
+
+body .mat-mdc-card-content {
+	padding-top: 1.25rem;
+}
+
+body .mat-mdc-card-actions {
+	padding: 0.75rem 1rem 1rem;
+	border-top: 1px solid var(--sm-border);
+}
+
+body .mat-mdc-form-field {
+	width: 100%;
+	--mdc-outlined-text-field-outline-color: var(--sm-border);
+	--mdc-outlined-text-field-hover-outline-color: var(--sm-border-strong);
+	--mdc-outlined-text-field-focus-outline-color: var(--sm-accent-strong);
+	--mdc-outlined-text-field-label-text-color: var(--sm-muted);
+	--mdc-outlined-text-field-focus-label-text-color: var(--sm-accent-strong);
+	--mdc-outlined-text-field-input-text-color: var(--sm-ink);
+	--mat-form-field-leading-icon-color: var(--sm-muted);
+	--mat-form-field-trailing-icon-color: var(--sm-muted);
+	--mat-form-field-error-text-color: #f3a2a2;
+	--mat-form-field-focus-select-arrow-color: var(--sm-accent-strong);
+	--mat-form-field-container-text-font: var(--sm-body);
+}
+
+body .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+	background-color: rgba(255, 255, 255, 0.02);
+	transition: background-color 120ms ease, box-shadow 120ms ease;
+	border-radius: 0.45rem;
+}
+
+body .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+	background-color: rgba(255, 255, 255, 0.04);
+}
+
+body .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+	background-color: rgba(255, 255, 255, 0.05);
+	box-shadow: inset 0 0 0 1px rgba(133, 163, 218, 0.1);
+}
+
+body .mat-mdc-form-field .mdc-text-field--outlined {
+	border-radius: inherit;
+}
+
+body .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__leading,
+body .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__notch,
+body .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__trailing {
+	border-color: var(--sm-border);
+}
+
+body .mat-mdc-form-field:hover .mdc-text-field--outlined .mdc-notched-outline__leading,
+body .mat-mdc-form-field:hover .mdc-text-field--outlined .mdc-notched-outline__notch,
+body .mat-mdc-form-field:hover .mdc-text-field--outlined .mdc-notched-outline__trailing {
+	border-color: var(--sm-border-strong);
+}
+
+body .mat-mdc-form-field.mat-focused .mdc-text-field--outlined .mdc-notched-outline__leading,
+body .mat-mdc-form-field.mat-focused .mdc-text-field--outlined .mdc-notched-outline__notch,
+body .mat-mdc-form-field.mat-focused .mdc-text-field--outlined .mdc-notched-outline__trailing {
+	border-color: var(--sm-accent-strong);
+}
+
+body .mat-mdc-form-field input.mat-mdc-input-element,
+body .mat-mdc-form-field textarea.mat-mdc-input-element,
+body .mat-mdc-form-field .mdc-text-field__input {
+	color: var(--sm-ink) !important;
+	caret-color: var(--sm-accent-strong);
+	-webkit-text-fill-color: var(--sm-ink) !important;
+	opacity: 1;
+}
+
+body .mat-mdc-form-field input.mat-mdc-input-element::placeholder,
+body .mat-mdc-form-field textarea.mat-mdc-input-element::placeholder {
+	color: rgba(237, 243, 255, 0.48);
+}
+
+body .mat-mdc-unelevated-button {
+	--mdc-filled-button-container-color: var(--sm-accent);
+	--mdc-filled-button-label-text-color: #f5f8ff;
+}
+
+body .mat-mdc-button,
+body .mat-mdc-outlined-button,
+body .mat-mdc-unelevated-button,
+body .mat-mdc-icon-button {
+	border-radius: 0.45rem;
+	transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+body .mat-mdc-outlined-button {
+	--mdc-outlined-button-outline-color: var(--sm-border-strong);
+	--mdc-outlined-button-label-text-color: var(--sm-ink);
+}
+
+body .mat-mdc-button {
+	--mdc-text-button-label-text-color: var(--sm-muted);
+}
+
+body .mat-mdc-icon-button {
+	color: var(--sm-muted);
+}
+
+body .mat-mdc-icon-button:hover {
+	background: rgba(255, 255, 255, 0.04);
+	color: var(--sm-ink);
+}
+
+body .mat-icon,
+body .material-icons {
+	font-family: 'Material Icons';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	line-height: 1;
+	letter-spacing: normal;
+	text-transform: none;
+	display: inline-block;
+	white-space: nowrap;
+	word-wrap: normal;
+	direction: ltr;
+	font-feature-settings: 'liga';
+	-webkit-font-smoothing: antialiased;
+}
