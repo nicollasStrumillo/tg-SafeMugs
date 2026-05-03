@@ -1,0 +1,15 @@
+<mat-grid-list cols="4" rowHeight="400px" gutterSize="16px">
+  @for (p of produtosFiltrados(); track p.id) {
+    <mat-grid-tile>
+      <mat-card class="product-card">
+        <img mat-card-image [src]="obterImagem(p.nome)" [alt]="p.nome">
+        
+        <mat-card-content class="text-center">
+          <h3 class="product-title">{{ p.nome }}</h3>
+          <p class="price-text">{{ p.preco | currency:'BRL' }}</p>
+        </mat-card-content>
+          <p class="review-text">{{ p.review}}</p> <!-- depois colocar um botão que mostra todas as reviews -->
+      </mat-card>
+    </mat-grid-tile>
+  }
+</mat-grid-list>
