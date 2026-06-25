@@ -3,6 +3,6 @@ import { Injectable, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class Buscaservice {
+export class BuscaService {
   termoBusca = signal<string>('');
 }

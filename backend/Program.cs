@@ -1,16 +1,26 @@
-using backend.database;
+using backend.Data;
+using backend.repositories.Implementations;
+using backend.repositories.Interfaces;
+using backend.services.Implementations;
+using backend.services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers();
-builder.Services.AddCors(options => {
+builder.Services.AddCors(options =>
+{
     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 });
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
+var serverVersion = ServerVersion.AutoDetect(connectionString);
+
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
-        options.UseMySql(
-            builder.Configuration.GetConnectionString("DefaultConnection"),
-            ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-        )
-    );
+    options.UseMySql(connectionString, serverVersion));
+builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
+builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

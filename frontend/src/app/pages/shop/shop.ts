@@ -1,13 +1,13 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Buscaservice } from '../../services/buscaservice';
+import { BuscaService } from '../../services/buscaservice';
 import { HttpClient } from '@angular/common/http';
 import { MatGridListModule} from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-vitrine',
+  selector: 'sm-vitrine',
   imports: [CommonModule, RouterModule, MatGridListModule,MatCardModule],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router';
 })
 export class Shop implements OnInit {
   private http = inject(HttpClient);
-  public buscaService = inject(Buscaservice);
+  public buscaService = inject(BuscaService);
 
   todosProdutos = signal<any[]>([]);
 

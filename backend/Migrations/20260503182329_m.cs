@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace backend.Migrations
+namespace backend.Migrations;
+
+/// <inheritdoc />
+public partial class m : Migration
 {
     /// <inheritdoc />
-    public partial class m : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
             migrationBuilder.AlterDatabase()
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -31,13 +31,12 @@ namespace backend.Migrations
                     table.PrimaryKey("PK_produtos", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-        }
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
             migrationBuilder.DropTable(
                 name: "produtos");
-        }
     }
 }
