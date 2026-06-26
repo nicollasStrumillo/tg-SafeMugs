@@ -18,9 +18,9 @@ export const routes: Routes = [
 	},
 	
 	{
-		path: 'shop',
+		path: 'catalogo',
 		loadComponent: () =>
-			import('./pages/shop/shop').then((module) => module.Shop),
+			import('./pages/catalogo/catalogo').then((module) => module.Catalogo),
 	},
 	{
 		path: '**',

@@ -1,0 +1,73 @@
+<section class="catalogo-shell">
+  <header class="catalogo-hero">
+    <div class="catalogo-copy">
+      <p class="eyebrow">Catalogo</p>
+      <h1>Escolha sua próxima caneca.</h1>
+    </div>
+
+    <mat-form-field class="catalogo-search" appearance="outline">
+      <mat-label>Pesquisar produtos</mat-label>
+      <input
+        matInput
+        type="search"
+        [value]="termoBusca()"
+        (input)="atualizarBusca($event)"
+        placeholder="Nome, descricao ou categoria"
+      />
+      @if (termoBusca()) {
+        <button mat-icon-button matSuffix type="button" (click)="limparBusca()" aria-label="Limpar busca" class="clear-button">
+          <mat-icon>close_small</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+  </header>
+
+  @if (carregando()) {
+    <div class="catalogo-state">Carregando catalogo...</div>
+  } @else if (erroCarregamento()) {
+    <div class="catalogo-state catalogo-state-error">{{ erroCarregamento() }}</div>
+  } @else if (produtosFiltrados().length === 0) {
+    <div class="catalogo-state">
+      Nenhum produto encontrado para "{{ termoBusca() }}".
+    </div>
+  } @else {
+    <section class="product-grid">
+      @for (p of produtosFiltrados(); track trackById($index, p)) {
+        <mat-card
+          class="product-card"
+          (click)="abrirDetalhes(p)"
+          (keyup.enter)="abrirDetalhes(p)"
+          tabindex="0"
+          role="button"
+          aria-label="Abrir detalhes do produto {{ p.nome }}"
+        >
+          <div class="product-media">
+            <img [src]="p.imagemUrl" [alt]="p.imagemLegenda" loading="lazy" />
+            <span class="category-pill">{{ p.categoria }}</span>
+          </div>
+
+          <mat-card-content class="product-content">
+            <div class="product-header">
+              <h3 class="product-title">{{ p.nome }}</h3>
+
+              <p class="price-text">{{ p.preco | currency:'BRL' }}</p>
+            </div>
+
+            <p class="product-description">{{ resumirDescricao(p.descricao) }}</p>
+
+            <div class="product-meta">
+              <span>
+                <mat-icon>star</mat-icon>
+                {{ formataAvaliacao(p.avaliacaoMedia) }}
+              </span>
+              <span>
+                <mat-icon>rate_review</mat-icon>
+                {{ p.quantidadeAvaliacoes }} reviews
+              </span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </section>
+  }
+</section>
