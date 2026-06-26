@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using backend.Data;
 using backend.repositories.Implementations;
 using backend.repositories.Interfaces;
@@ -7,7 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler =
+            ReferenceHandler.IgnoreCycles;
+    });;
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -29,6 +35,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
+app.UseStaticFiles();
 app.UseCors();
 app.UseHttpsRedirection();
 app.MapControllers();

@@ -235,5 +235,405 @@ public class ApplicationDBContext : DbContext
                 .HasForeignKey(e => e.DesafioId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
+
+
+        // Adiciona dados iniciais para o banco
+        #region Seed Data
+        var seedDate = new DateTime(2026, 6, 1, 8, 0, 0, DateTimeKind.Utc);
+
+        modelBuilder.Entity<Perfil>().HasData(
+            new Perfil
+            {
+                Id = 1,
+                Nome = "Cliente",
+                Descricao = "Perfil padrao para compras e avaliacoes"
+            },
+            new Perfil
+            {
+                Id = 2,
+                Nome = "Administrador",
+                Descricao = "Perfil para gestao interna da loja"
+            });
+
+        modelBuilder.Entity<CategoriaProduto>().HasData(
+            new CategoriaProduto
+            {
+                Id = 1,
+                Nome = "Canecas Decoradas",
+                Descricao = "Canecas com estampas afetivas e divertidas"
+            },
+            new CategoriaProduto
+            {
+                Id = 2,
+                Nome = "Canecas Tematicas",
+                Descricao = "Modelos inspirados em pets e personagens"
+            },
+            new CategoriaProduto
+            {
+                Id = 3,
+                Nome = "Canecas Rusticas",
+                Descricao = "Pecas com acabamento artesanal e visual mais natural"
+            });
+
+        modelBuilder.Entity<Usuario>().HasData(
+            new Usuario
+            {
+                Id = 1,
+                NomeCompleto = "Ana Lopes",
+                Email = "ana.lopes@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000001",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 2,
+                NomeCompleto = "Bruno Costa",
+                Email = "bruno.costa@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000002",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 3,
+                NomeCompleto = "Carla Mendes",
+                Email = "carla.mendes@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000003",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 4,
+                NomeCompleto = "Diego Souza",
+                Email = "diego.souza@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000004",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 5,
+                NomeCompleto = "Elisa Martins",
+                Email = "elisa.martins@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000005",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 6,
+                NomeCompleto = "Felipe Rocha",
+                Email = "felipe.rocha@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000006",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 7,
+                NomeCompleto = "Marina Alves",
+                Email = "marina.alves@safermugs.com",
+                Senha = "Seed@12345",
+                Telefone = "11990000007",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 2
+            });
+
+        modelBuilder.Entity<Produto>().HasData(
+            new Produto
+            {
+                Id = 1,
+                Nome = "Caneca Be Happy",
+                Descricao = "Caneca clara com mensagem positiva e visual minimalista para o dia a dia.",
+                Preco = 59.90m,
+                Estoque = 18,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1
+            },
+            new Produto
+            {
+                Id = 2,
+                Nome = "Caneca Ceramica Rustica",
+                Descricao = "Modelo com acabamento artesanal, textura marcada e estilo mais natural.",
+                Preco = 54.90m,
+                Estoque = 12,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 3
+            },
+            new Produto
+            {
+                Id = 3,
+                Nome = "Caneca Coala",
+                Descricao = "Caneca escura com estampa de coala para quem gosta de pecas fofas e diferentes.",
+                Preco = 64.90m,
+                Estoque = 15,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 2
+            },
+            new Produto
+            {
+                Id = 4,
+                Nome = "Caneca Coracao",
+                Descricao = "Caneca em tom quente com detalhe de coracao para presentear com carinho.",
+                Preco = 62.90m,
+                Estoque = 20,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1
+            },
+            new Produto
+            {
+                Id = 5,
+                Nome = "Caneca Cachorro",
+                Descricao = "Caneca com ilustracao de cachorro e acabamento divertido para uso diario.",
+                Preco = 58.90m,
+                Estoque = 10,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 2
+            },
+            new Produto
+            {
+                Id = 6,
+                Nome = "Caneca Vermelha Cafe",
+                Descricao = "Caneca vermelha intensa, classica e versatil para cafe, cha ou chocolate.",
+                Preco = 49.90m,
+                Estoque = 25,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1
+            });
+
+        modelBuilder.Entity<ImagemProduto>().HasData(
+            new ImagemProduto
+            {
+                Id = 1,
+                UrlImagem = "/imagens/mug_behappy.jpg",
+                Legenda = "Caneca Be Happy",
+                ProdutoId = 1
+            },
+            new ImagemProduto
+            {
+                Id = 2,
+                UrlImagem = "/imagens/mug_ceramica_rustica.jpg",
+                Legenda = "Caneca Ceramica Rustica",
+                ProdutoId = 2
+            },
+            new ImagemProduto
+            {
+                Id = 3,
+                UrlImagem = "/imagens/mug_coala.jpg",
+                Legenda = "Caneca Coala",
+                ProdutoId = 3
+            },
+            new ImagemProduto
+            {
+                Id = 4,
+                UrlImagem = "/imagens/mug_coracao.jpg",
+                Legenda = "Caneca Coracao",
+                ProdutoId = 4
+            },
+            new ImagemProduto
+            {
+                Id = 5,
+                UrlImagem = "/imagens/mug_dogpan.jpg",
+                Legenda = "Caneca cachorro",
+                ProdutoId = 5
+            },
+            new ImagemProduto
+            {
+                Id = 6,
+                UrlImagem = "/imagens/mug_vermelha_cafe.jpg",
+                Legenda = "Caneca Vermelha Cafe",
+                ProdutoId = 6
+            });
+
+        modelBuilder.Entity<Avaliacao>().HasData(
+            new Avaliacao
+            {
+                Id = 1,
+                Nota = 5,
+                Comentario = "Acabamento impecavel e o visual ficou exatamente como esperava.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 1
+            },
+            new Avaliacao
+            {
+                Id = 2,
+                Nota = 4,
+                Comentario = "Linda e com boa qualidade, chegou muito bem embalada.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 1
+            },
+            new Avaliacao
+            {
+                Id = 3,
+                Nota = 5,
+                Comentario = "Mensagem bem delicada e otima para presentear.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3,
+                ProdutoId = 1
+            },
+            new Avaliacao
+            {
+                Id = 4,
+                Nota = 4,
+                Comentario = "Textura bonita e o estilo rustico da um charme extra.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 2
+            },
+            new Avaliacao
+            {
+                Id = 5,
+                Nota = 5,
+                Comentario = "Peca muito bonita e com ar artesanal bem marcante.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4,
+                ProdutoId = 2
+            },
+            new Avaliacao
+            {
+                Id = 6,
+                Nota = 5,
+                Comentario = "A estampa de coala ficou excelente e a caneca e bem resistente.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 3
+            },
+            new Avaliacao
+            {
+                Id = 7,
+                Nota = 4,
+                Comentario = "Produto bonito e com acabamento muito caprichado.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 5,
+                ProdutoId = 3
+            },
+            new Avaliacao
+            {
+                Id = 8,
+                Nota = 5,
+                Comentario = "Visual apaixonante e otima escolha para presente.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 6,
+                ProdutoId = 3
+            },
+            new Avaliacao
+            {
+                Id = 9,
+                Nota = 5,
+                Comentario = "A ideia do coracao combinou muito com a cor da caneca.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3,
+                ProdutoId = 4
+            },
+            new Avaliacao
+            {
+                Id = 10,
+                Nota = 4,
+                Comentario = "Bonita e delicada, atende bem quem gosta de pecas afetivas.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 7,
+                ProdutoId = 4
+            },
+            new Avaliacao
+            {
+                Id = 11,
+                Nota = 5,
+                Comentario = "A caneca do cachorro e divertida e tem uma pintura muito boa.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4,
+                ProdutoId = 5
+            },
+            new Avaliacao
+            {
+                Id = 12,
+                Nota = 4,
+                Comentario = "Gostei bastante do formato e da proposta mais descontraida.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 5,
+                ProdutoId = 5
+            },
+            new Avaliacao
+            {
+                Id = 13,
+                Nota = 5,
+                Comentario = "Cor vibrante, pega muito bem e parece otima para o dia a dia.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 6
+            },
+            new Avaliacao
+            {
+                Id = 14,
+                Nota = 4,
+                Comentario = "Modelo classico e elegante, combina com qualquer ambiente.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 6
+            },
+            new Avaliacao
+            {
+                Id = 15,
+                Nota = 5,
+                Comentario = "Perfeita para cafe, com cor intensa e acabamento uniforme.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 6,
+                ProdutoId = 6
+            });
+
+
+        #endregion
+
+
     }
 }
