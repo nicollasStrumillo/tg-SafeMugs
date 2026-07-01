@@ -29,6 +29,7 @@ export class CatalogoService {
 				? avaliacoes.reduce((soma, avaliacao) => soma + avaliacao.nota, 0) /
 				  avaliacoes.length
 				: null;
+		const comentarios = produto.comentariosProduto ?? [];
 
 		return {
 			id: produto.id,
@@ -42,6 +43,7 @@ export class CatalogoService {
 			avaliacaoMedia,
 			quantidadeAvaliacoes: avaliacoes.length,
 			ativo: produto.ativo,
+			comentarios,
 		};
 	}
 

@@ -4,9 +4,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialog } from '@angular/material/dialog';
 
 import { CatalogoService } from './catalogo.service';
 import { ProdutoCardViewModel } from './catalogo.models';
+import { DetalhesProduto } from './detalhes-produto/detalhes-produto';
 
 @Component({
   selector: 'sm-catalogo',
@@ -42,6 +44,8 @@ export class Catalogo implements OnInit {
       return this.normalizarTexto(camposBusca).includes(termo);
     });
   });
+
+  constructor(private readonly dialog: MatDialog) {}
 
   ngOnInit() {
     this.catalogoService.listarProdutos().subscribe({
@@ -84,7 +88,15 @@ export class Catalogo implements OnInit {
   }
 
   abrirDetalhes(produto: ProdutoCardViewModel): void {
-    // Placeholder for future product detail view/modal.
+    this.dialog.open(DetalhesProduto, {
+      data: {
+        produto: produto
+      },
+      width: '1100px',
+      maxWidth: '95vw',
+      maxHeight: '90vh'
+    });
+
     console.debug('Abrir detalhes do produto', produto.id);
   }
 

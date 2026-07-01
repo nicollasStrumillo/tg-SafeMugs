@@ -26,6 +26,12 @@ export interface AvaliacaoDto {
 	usuario?: UsuarioResumoDto | null;
 }
 
+export interface ComentarioProdutoDto {
+	id: number;
+	comentario: string;
+	usuario?: UsuarioResumoDto | null;
+}
+
 export interface ProdutoCatalogoDto {
 	id: number;
 	nome: string;
@@ -36,6 +42,7 @@ export interface ProdutoCatalogoDto {
 	categoriaProduto?: CategoriaProdutoDto | null;
 	imagensProduto?: ImagemProdutoDto[];
 	avaliacoes?: AvaliacaoDto[];
+	comentariosProduto?: ComentarioProdutoDto[];
 }
 
 export interface ProdutoCardViewModel {
@@ -50,4 +57,5 @@ export interface ProdutoCardViewModel {
 	avaliacaoMedia: number | null;
 	quantidadeAvaliacoes: number;
 	ativo: boolean;
+	comentarios: ComentarioProdutoDto[];
 }
