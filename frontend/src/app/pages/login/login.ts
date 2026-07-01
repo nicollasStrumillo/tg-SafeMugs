@@ -1,14 +1,20 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { finalize } from 'rxjs';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+
+import { AuthApiService } from '../../shared/auth/auth-api.service';
+import { AuthSessionService } from '../../shared/auth/auth-session.service';
+import { obterMensagemErroAuth } from '../../shared/auth/auth-error.utils';
 
 @Component({
   selector: 'sm-login',
+  standalone: true,
   imports: [
     MatButtonModule,
     MatCardModule,
@@ -24,9 +30,14 @@ import { RouterLink } from '@angular/router';
 })
 export class LoginPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly authApiService = inject(AuthApiService);
+  private readonly authSessionService = inject(AuthSessionService);
+  private readonly router = inject(Router);
 
   protected readonly formSubmitted = signal(false);
   protected readonly passwordHidden = signal(true);
+  protected readonly carregando = signal(false);
+  protected readonly mensagemErro = signal<string | null>(null);
   protected readonly passwordInputType = computed(() =>
     this.passwordHidden() ? 'password' : 'text',
   );
@@ -39,6 +50,33 @@ export class LoginPage {
   protected submitLogin(): void {
     this.formSubmitted.set(true);
     this.loginForm.markAllAsTouched();
+
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    this.mensagemErro.set(null);
+    this.carregando.set(true);
+
+    const { email, password } = this.loginForm.getRawValue();
+
+    this.authApiService
+      .login({ email, senha: password })
+      .pipe(finalize(() => this.carregando.set(false)))
+      .subscribe({
+        next: (usuario) => {
+          this.authSessionService.salvarLogin(usuario);
+          void this.router.navigate(['/catalogo']);
+        },
+        error: (error) => {
+          this.mensagemErro.set(
+            obterMensagemErroAuth(
+              error,
+              'Não foi possível entrar. Confira seus dados e tente novamente.',
+            ),
+          );
+        },
+      });
   }
 
   protected togglePasswordVisibility(): void {

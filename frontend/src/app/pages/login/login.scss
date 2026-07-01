@@ -59,6 +59,16 @@ h1 {
 	margin-bottom: 7px;
 }
 
+.error-note {
+	margin: 0;
+	padding: 0.9rem 1rem;
+	border: 1px solid rgba(255, 109, 109, 0.28);
+	border-radius: 0.5rem;
+	background: rgba(255, 109, 109, 0.12);
+	color: #ffd0d0;
+	line-height: 1.6;
+}
+
 .helper-note {
 	margin: 1rem 0 0;
 	padding: 0.9rem 1rem;

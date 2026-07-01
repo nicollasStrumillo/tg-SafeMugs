@@ -23,6 +23,10 @@
 
 		<mat-card-content>
 			<form class="login-form" [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+				@if (mensagemErro()) {
+					<p class="error-note" role="alert">{{ mensagemErro() }}</p>
+				}
+
 				<mat-form-field>
 					<mat-label>Email</mat-label>
 					<input matInput type="email" formControlName="email" autocomplete="email" />
@@ -63,14 +67,10 @@
 					}
 				</mat-form-field>
 
-				<button mat-flat-button type="submit" class="primary-action">Entrar</button>
+				<button mat-flat-button type="submit" class="primary-action" [disabled]="carregando()">
+					{{ carregando() ? 'Entrando...' : 'Entrar' }}
+				</button>
 			</form>
-
-			@if (formSubmitted() && loginForm.valid) {
-				<p class="helper-note">
-					Dados preenchidos. Confira as informações antes de continuar.
-				</p>
-			}
 		</mat-card-content>
 
 		<mat-card-actions>

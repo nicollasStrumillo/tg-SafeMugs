@@ -18,6 +18,10 @@
 
 		<mat-card-content>
 			<form class="register-form" [formGroup]="registerForm" (ngSubmit)="submitRegister()" novalidate>
+				@if (mensagemErro()) {
+					<p class="error-note" role="alert">{{ mensagemErro() }}</p>
+				}
+
 				<mat-form-field>
 					<mat-label>Nome completo</mat-label>
 					<input matInput type="text" formControlName="name" autocomplete="name" />
@@ -94,20 +98,16 @@
 					(registerForm.controls.confirmPassword.touched || formSubmitted())) {
 						<mat-error>Confirme a senha.</mat-error>
 					}
-					@if (registerForm.hasError('passwordMismatch') &&
+					@if (registerForm.controls.confirmPassword.hasError('passwordMismatch') &&
 					(registerForm.controls.confirmPassword.touched || formSubmitted())) {
 						<mat-error>As senhas precisam ser iguais.</mat-error>
 					}
 				</mat-form-field>
 
-				<button mat-flat-button type="submit" class="primary-action">Cadastrar</button>
+				<button mat-flat-button type="submit" class="primary-action" [disabled]="carregando()">
+					{{ carregando() ? 'Cadastrando...' : 'Cadastrar' }}
+				</button>
 			</form>
-
-			@if (formSubmitted() && registerForm.valid) {
-				<p class="helper-note">
-					Cadastro pronto. Revise os dados antes de continuar.
-				</p>
-			}
 		</mat-card-content>
 
 		<mat-card-actions>
