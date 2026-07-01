@@ -1,8 +1,8 @@
 using backend.models;
-using backend.services.Interfaces;
+using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace backend.controllers;
+namespace backend.Controllers;
 
 [ApiController]
 [Route("api/produtos")]

@@ -44,8 +44,8 @@ public class ApplicationDBContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.NomeCompleto).IsRequired().HasMaxLength(150);
             entity.Property(e => e.Email).IsRequired().HasMaxLength(180);
-            entity.Property(e => e.Senha).IsRequired().HasMaxLength(255);
-            entity.Property(e => e.Telefone).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.HashSenha).IsRequired().HasMaxLength(255);
+            entity.Property(e => e.Telefone).IsRequired(false).HasMaxLength(20);
             entity.Property(e => e.Ativo).HasDefaultValue(true);
             entity.HasIndex(e => e.Email).IsUnique();
 
@@ -299,7 +299,7 @@ public class ApplicationDBContext : DbContext
                 Id = 1,
                 NomeCompleto = "Ana Lopes",
                 Email = "ana.lopes@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000001",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -311,7 +311,7 @@ public class ApplicationDBContext : DbContext
                 Id = 2,
                 NomeCompleto = "Bruno Costa",
                 Email = "bruno.costa@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000002",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -323,7 +323,7 @@ public class ApplicationDBContext : DbContext
                 Id = 3,
                 NomeCompleto = "Carla Mendes",
                 Email = "carla.mendes@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000003",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -335,7 +335,7 @@ public class ApplicationDBContext : DbContext
                 Id = 4,
                 NomeCompleto = "Diego Souza",
                 Email = "diego.souza@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000004",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -347,7 +347,7 @@ public class ApplicationDBContext : DbContext
                 Id = 5,
                 NomeCompleto = "Elisa Martins",
                 Email = "elisa.martins@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000005",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -359,7 +359,7 @@ public class ApplicationDBContext : DbContext
                 Id = 6,
                 NomeCompleto = "Felipe Rocha",
                 Email = "felipe.rocha@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000006",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -371,7 +371,7 @@ public class ApplicationDBContext : DbContext
                 Id = 7,
                 NomeCompleto = "Marina Alves",
                 Email = "marina.alves@safermugs.com",
-                Senha = "Seed@12345",
+                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
                 Telefone = "11990000007",
                 Ativo = true,
                 DtCadastro = seedDate,

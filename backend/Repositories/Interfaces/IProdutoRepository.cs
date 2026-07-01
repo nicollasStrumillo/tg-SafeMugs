@@ -1,6 +1,6 @@
 using backend.models;
 
-namespace backend.repositories.Interfaces;
+namespace backend.Repositories.Interfaces;
 
 public interface IProdutoRepository
 {

@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 using backend.Data;
-using backend.repositories.Implementations;
-using backend.repositories.Interfaces;
-using backend.services.Implementations;
-using backend.services.Interfaces;
+using backend.Repositories.Implementations;
+using backend.Repositories.Interfaces;
+using backend.Services.Implementations;
+using backend.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +27,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseMySql(connectionString, serverVersion));
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

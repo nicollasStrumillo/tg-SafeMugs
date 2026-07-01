@@ -1,8 +1,8 @@
 using backend.models;
-using backend.repositories.Interfaces;
-using backend.services.Interfaces;
+using backend.Repositories.Interfaces;
+using backend.Services.Interfaces;
 
-namespace backend.services.Implementations;
+namespace backend.Services.Implementations;
 
 public class ProdutoService : IProdutoService
 {

@@ -1,6 +1,6 @@
 using backend.models;
 
-namespace backend.services.Interfaces;
+namespace backend.Services.Interfaces;
 
 public interface IProdutoService
 {
