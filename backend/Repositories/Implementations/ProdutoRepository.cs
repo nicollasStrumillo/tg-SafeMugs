@@ -19,6 +19,8 @@ public class ProdutoRepository : IProdutoRepository
         return await _dbContext.Produtos.AsNoTracking()
         .Include(p => p.Avaliacoes)
             .ThenInclude(a => a.Usuario)
+        .Include(p => p.ComentariosProduto)
+            .ThenInclude(c => c.Usuario)
         .Include(p => p.CategoriaProduto)
         .Include(p => p.ImagensProduto)
         .Select(p => new Produto
@@ -45,6 +47,17 @@ public class ProdutoRepository : IProdutoRepository
                 {
                     Id = a.Usuario.Id,
                     NomeCompleto = a.Usuario.NomeCompleto
+                }
+            }).ToList(),
+            ComentariosProduto = p.ComentariosProduto.Select(c => new ComentarioProduto
+            {
+                Id = c.Id,
+                Comentario = c.Comentario,
+                UsuarioId = c.UsuarioId,
+                Usuario = new Usuario
+                {
+                    Id = c.UsuarioId == null ? 0 : c.Usuario!.Id,
+                    NomeCompleto = c.UsuarioId == null ? "Anônimo" : c.Usuario!.NomeCompleto
                 }
             }).ToList(),
             ImagensProduto = p.ImagensProduto.Select(i => new ImagemProduto

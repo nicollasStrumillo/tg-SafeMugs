@@ -16,6 +16,7 @@ public class Usuario
 
     public ICollection<Endereco> Enderecos { get; set; } = new List<Endereco>();
     public ICollection<Avaliacao> Avaliacoes { get; set; } = new List<Avaliacao>();
+    public ICollection<ComentarioProduto> ComentariosProduto { get; set; } = new List<ComentarioProduto>();
     public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
     public ICollection<ProgressoDesafio> ProgressosDesafio { get; set; } = new List<ProgressoDesafio>();
     public Carrinho? Carrinho { get; set; }

@@ -15,6 +15,7 @@ public class Produto
 
     public ICollection<ImagemProduto> ImagensProduto { get; set; } = new List<ImagemProduto>();
     public ICollection<Avaliacao> Avaliacoes { get; set; } = new List<Avaliacao>();
+    public ICollection<ComentarioProduto> ComentariosProduto { get; set; } = new List<ComentarioProduto>();
     public ICollection<ItemCarrinho> ItensCarrinho { get; set; } = new List<ItemCarrinho>();
     public ICollection<ItemPedido> ItensPedido { get; set; } = new List<ItemPedido>();
 }

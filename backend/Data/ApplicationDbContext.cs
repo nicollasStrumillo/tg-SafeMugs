@@ -125,6 +125,24 @@ public class ApplicationDBContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
+        modelBuilder.Entity<ComentarioProduto>(entity =>
+        {
+            entity.ToTable("comentarios_produto");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Comentario).IsRequired().HasMaxLength(400);
+
+            entity.HasOne(e => e.Usuario)
+                .WithMany(e => e.ComentariosProduto)
+                .HasForeignKey(e => e.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            entity.HasOne(e => e.Produto)
+                .WithMany(e => e.ComentariosProduto)
+                .HasForeignKey(e => e.ProdutoId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
         modelBuilder.Entity<Carrinho>(entity =>
         {
             entity.ToTable("carrinhos");
@@ -631,6 +649,140 @@ public class ApplicationDBContext : DbContext
                 ProdutoId = 6
             });
 
+        modelBuilder.Entity<ComentarioProduto>().HasData(
+            new ComentarioProduto
+            {
+                Id = 1,
+                ProdutoId = 1,
+                UsuarioId = 1,
+                Comentario = "Muito bonita pessoalmente."
+            },
+            new ComentarioProduto
+            {
+                Id = 2,
+                ProdutoId = 1,
+                UsuarioId = null,
+                Comentario = "Chegou antes do prazo."
+            },
+            new ComentarioProduto
+            {
+                Id = 3,
+                ProdutoId = 1,
+                UsuarioId = 3,
+                Comentario = "A estampa ficou exatamente como nas fotos."
+            },
+
+            new ComentarioProduto
+            {
+                Id = 4,
+                ProdutoId = 2,
+                UsuarioId = 2,
+                Comentario = "Gostei bastante do acabamento."
+            },
+            new ComentarioProduto
+            {
+                Id = 5,
+                ProdutoId = 2,
+                UsuarioId = null,
+                Comentario = "A textura é bem diferente."
+            },
+            new ComentarioProduto
+            {
+                Id = 6,
+                ProdutoId = 2,
+                UsuarioId = 5,
+                Comentario = "Combina muito com decoração em madeira."
+            },
+
+            new ComentarioProduto
+            {
+                Id = 7,
+                ProdutoId = 3,
+                UsuarioId = 6,
+                Comentario = "Minha filha adorou."
+            },
+            new ComentarioProduto
+            {
+                Id = 8,
+                ProdutoId = 3,
+                UsuarioId = null,
+                Comentario = "A arte ficou muito bonita."
+            },
+            new ComentarioProduto
+            {
+                Id = 9,
+                ProdutoId = 3,
+                UsuarioId = 1,
+                Comentario = "Veio muito bem embalada."
+            },
+
+            new ComentarioProduto
+            {
+                Id = 10,
+                ProdutoId = 4,
+                UsuarioId = 4,
+                Comentario = "Comprei para dar de presente."
+            },
+            new ComentarioProduto
+            {
+                Id = 11,
+                ProdutoId = 4,
+                UsuarioId = null,
+                Comentario = "A cor é ainda mais bonita ao vivo."
+            },
+            new ComentarioProduto
+            {
+                Id = 12,
+                ProdutoId = 4,
+                UsuarioId = 2,
+                Comentario = "Gostei do tamanho da caneca."
+            },
+
+            new ComentarioProduto
+            {
+                Id = 13,
+                ProdutoId = 5,
+                UsuarioId = 5,
+                Comentario = "Perfeita para quem gosta de cachorros."
+            },
+            new ComentarioProduto
+            {
+                Id = 14,
+                ProdutoId = 5,
+                UsuarioId = null,
+                Comentario = "Entrega rápida."
+            },
+            new ComentarioProduto
+            {
+                Id = 15,
+                ProdutoId = 5,
+                UsuarioId = 7,
+                Comentario = "A impressão ficou muito nítida."
+            },
+
+            new ComentarioProduto
+            {
+                Id = 16,
+                ProdutoId = 6,
+                UsuarioId = 3,
+                Comentario = "Bem resistente."
+            },
+            new ComentarioProduto
+            {
+                Id = 17,
+                ProdutoId = 6,
+                UsuarioId = null,
+                Comentario = "Ótima para café pela manhã."
+            },
+            new ComentarioProduto
+            {
+                Id = 18,
+                ProdutoId = 6,
+                UsuarioId = 6,
+                Comentario = "Produto conforme anunciado."
+            }
+
+        );
 
         #endregion
 
