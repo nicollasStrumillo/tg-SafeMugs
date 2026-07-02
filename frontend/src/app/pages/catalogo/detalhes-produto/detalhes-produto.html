@@ -1,0 +1,103 @@
+<mat-card class="product-details-card">
+    <button
+        mat-icon-button
+        type="button"
+        class="close-button"
+        (click)="fechar()"
+        aria-label="Fechar detalhes do produto"
+    >
+        <mat-icon>close</mat-icon>
+    </button>
+
+    <div class="product-details-layout">
+        <div class="product-details-image">
+            <img [src]="data.produto.imagemUrl" [alt]="data.produto.imagemLegenda" />
+        </div>
+
+        <div class="product-details-info">
+            <p class="eyebrow">{{ data.produto.categoria }}</p>
+            <h2>{{ data.produto.nome }}</h2>
+
+            <p class="product-description">
+                {{ data.produto.descricao }}
+            </p>
+
+            <div class="product-summary">
+                <div>
+                    <span class="summary-label">Preço</span>
+                    <strong>{{ data.produto.preco | currency:'BRL' }}</strong>
+                </div>
+
+                <div>
+                    <span class="summary-label">Avaliação média</span>
+                    <strong>
+                        {{ formataAvaliacao(data.produto.avaliacaoMedia) }}
+                        <span class="summary-muted">/ 5</span>
+                    </strong>
+                </div>
+
+                <div>
+                    <span class="summary-label">Comentários</span>
+                    <strong>{{ comentarios().length }}</strong>
+                </div>
+            </div>
+
+            <div class="comments-panel">
+                <details closed>
+                    <summary>
+                        Comentários do produto
+                        <span class="material-icons toggle-icon">keyboard_arrow_down</span>
+                    </summary>
+
+                    @if (carregandoComentarios()) {
+                        <p class="empty-comments">Carregando comentarios...</p>
+                    } @else if (comentarios().length > 0) {
+                        <ul class="comments-list">
+                            @for (comentario of comentarios(); track comentario.id) {
+                                <li class="comment-item">
+                                    <p class="comment-text">{{ comentario.comentario }}</p>                          
+                                    <span class="comment-author">{{ comentario.usuario?.nomeCompleto ?? 'Anônimo' }}</span>  
+                                </li>
+                            }
+                        </ul>
+                    } @else {
+                        <p class="empty-comments">Nenhum comentario ainda.</p>
+                    }
+                </details>
+            </div>
+
+            <mat-form-field appearance="outline" class="comment-field">
+                <mat-label>Escreva seu comentario</mat-label>
+                <textarea
+                    matInput
+                    #comentarioInput
+                    rows="3"
+                    [value]="comentarioRascunho()"
+                    (input)="atualizarComentario(comentarioInput.value)"
+                    maxlength="220"
+                    placeholder="Comentario curto e objetivo"
+                ></textarea>
+            </mat-form-field>
+
+            <div class="actions-row">
+                <button
+                    mat-flat-button
+                    type="button"
+                    [disabled]="!comentarioRascunho().trim() || enviandoComentario() || carregandoComentarios()"
+                    (click)="enviarComentario(data.produto.id)"
+                >
+                    Enviar comentario
+                </button>
+
+                <button mat-stroked-button type="button" (click)="adicionarAoCarrinho()">
+                    Adicionar ao carrinho
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+
+
+
+

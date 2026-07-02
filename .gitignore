@@ -30,3 +30,35 @@ yarn-error.log*
 # IA Agent
 .claude
 docs
+
+# .NET Build outputs
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.so
+*.dylib
+
+# Visual Studio
+.vs/
+.vscode/
+*.csproj.user
+*.sln.user
+*.user
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~

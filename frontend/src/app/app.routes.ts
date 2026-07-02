@@ -16,8 +16,14 @@ export const routes: Routes = [
 		loadComponent: () =>
 			import('./pages/register/register').then((module) => module.RegisterPage),
 	},
+	
+	{
+		path: 'catalogo',
+		loadComponent: () =>
+			import('./pages/catalogo/catalogo').then((module) => module.Catalogo),
+	},
 	{
 		path: '**',
 		redirectTo: 'login',
-	},
+	}
 ];

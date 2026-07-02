@@ -116,6 +116,11 @@ body .mat-mdc-card {
 	box-shadow: var(--sm-shadow-soft);
 }
 
+body .mat-mdc-card img {
+	display: block;
+	max-width: 100%;
+}
+
 body .mat-mdc-card-header {
 	padding: 1.5rem 1.5rem 0;
 }
@@ -136,6 +141,13 @@ body .mat-mdc-card-content {
 body .mat-mdc-card-actions {
 	padding: 0.75rem 1rem 1rem;
 	border-top: 1px solid var(--sm-border);
+}
+
+body .sm-elevated-panel {
+	border: 1px solid var(--sm-border);
+	border-radius: 0.7rem;
+	background: rgba(17, 28, 50, 0.84);
+	box-shadow: var(--sm-shadow-soft);
 }
 
 body .mat-mdc-form-field {
