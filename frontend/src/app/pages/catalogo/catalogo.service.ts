@@ -5,6 +5,8 @@ import { map, Observable } from 'rxjs';
 import {
 	ProdutoCardViewModel,
 	ProdutoCatalogoDto,
+	ComentarioRequest,
+	ComentarioProdutoDto
 } from './catalogo.models';
 
 @Injectable({
@@ -29,7 +31,6 @@ export class CatalogoService {
 				? avaliacoes.reduce((soma, avaliacao) => soma + avaliacao.nota, 0) /
 				  avaliacoes.length
 				: null;
-		const comentarios = produto.comentariosProduto ?? [];
 
 		return {
 			id: produto.id,
@@ -42,8 +43,7 @@ export class CatalogoService {
 			imagemLegenda: imagemPrincipal?.legenda ?? produto.nome,
 			avaliacaoMedia,
 			quantidadeAvaliacoes: avaliacoes.length,
-			ativo: produto.ativo,
-			comentarios,
+			ativo: produto.ativo
 		};
 	}
 
@@ -53,5 +53,14 @@ export class CatalogoService {
 		}
 
 		return urlImagem.startsWith('http') ? urlImagem : `http://localhost:5242${urlImagem}`;
+	}
+
+	//comentarios
+	public obterComentarios(produtoId: number): Observable<ComentarioProdutoDto[]> {
+		return this.http.get<ComentarioProdutoDto[]>(`${this.apiBaseUrl}/api/produtos/comentarios/${produtoId}`);
+	}
+
+	public fazerComentario(produtoId: number, comentarioRequest: ComentarioRequest): Observable<void>{
+		return this.http.post<void>(`${this.apiBaseUrl}/api/produtos/comentarios/${produtoId}`, comentarioRequest);
 	}
 }

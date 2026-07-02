@@ -87,6 +87,24 @@ h2 {
     font-weight: 500;
 }
 
+summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.toggle-icon {
+    font-size: 20px;          
+    line-height: 1;
+    transition: transform .2s ease;
+    flex-shrink: 0;
+}
+
+details[open] .toggle-icon {
+    transform: rotate(180deg);
+}
+
 .comments-panel {
     padding: 0.75rem 0;
 
