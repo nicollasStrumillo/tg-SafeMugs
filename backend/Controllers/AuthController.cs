@@ -22,9 +22,19 @@ public class AuthController : ControllerBase
         {
             await _authService.CadastrarUsuarioAsync(request);
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
-            return StatusCode(500, new { message = "Ocorreu um erro ao registrar o usuário.", details = ex.Message });
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, new
+            {
+                message = "Erro interno do servidor."
+            });
         }
         
         return Ok();

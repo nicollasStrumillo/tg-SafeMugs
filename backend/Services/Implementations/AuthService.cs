@@ -27,14 +27,7 @@ public class AuthService : IAuthService
         string hashSenha = HashHelper.GerarMD5(request.Senha); 
         request.HashSenha = hashSenha;
 
-        try
-        {
-            await _authRepository.CadastrarUsuarioAsync(request);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+        await _authRepository.CadastrarUsuarioAsync(request);        
     }
 
     public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)

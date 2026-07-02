@@ -17,27 +17,20 @@ public class AuthRepository : IAuthRepository
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
     {
-        try
+        var novoUsuario = new Usuario
         {
-            var novoUsuario = new Usuario
-            {
-                NomeCompleto = request.NomeCompleto,
-                Email = request.Email,
-                HashSenha = request.HashSenha!,
-                Telefone = null, 
-                Ativo = true,
-                DtCadastro = DateTime.UtcNow,
-                DtAtualizacao = DateTime.UtcNow,
-                PerfilId = 1 // Definindo o PerfilId como 1 (Cliente) 
-            };
+            NomeCompleto = request.NomeCompleto,
+            Email = request.Email,
+            HashSenha = request.HashSenha!,
+            Telefone = null, 
+            Ativo = true,
+            DtCadastro = DateTime.UtcNow,
+            DtAtualizacao = DateTime.UtcNow,
+            PerfilId = 1 // Definindo o PerfilId como 1 (Cliente) 
+        };
 
-            _dbContext.Usuarios.Add(novoUsuario);
-            await _dbContext.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Erro ao cadastrar usuário: {ex.Message}");
-        }
+        _dbContext.Usuarios.Add(novoUsuario);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
