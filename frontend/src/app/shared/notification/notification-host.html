@@ -1,0 +1,24 @@
+@if (notification(); as current) {
+	<div
+		class="sm-notification"
+		[style.--notification-accent]="current.variant === 'success' ? 'var(--mat-sys-primary)' : current.variant === 'error' ? 'var(--mat-sys-error)' : 'var(--sm-accent)'">
+		<button
+			type="button"
+			class="notification-close"
+			(click)="fechar()"
+			aria-label="Fechar notificação"
+		>
+			<mat-icon>close</mat-icon>
+		</button>
+
+		<div class="notification-body">
+			@if (current.icon) {
+				<mat-icon class="notification-icon">{{ current.icon }}</mat-icon>
+			} @else {
+				<mat-icon class="notification-icon">{{ iconFor(current.variant) }}</mat-icon>
+			}
+
+			<p class="notification-message">{{ current.message }}</p>
+		</div>
+	</div>
+}

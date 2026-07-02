@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { FooterComponent } from './shared/footer/footer';
+import { NotificationHostComponent } from './shared/notification/notification-host';
 
 @Component({
   selector: 'sm-root',
@@ -11,6 +12,7 @@ import { FooterComponent } from './shared/footer/footer';
     FooterComponent,
     MatButtonModule,
     MatToolbarModule,
+    NotificationHostComponent,
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
