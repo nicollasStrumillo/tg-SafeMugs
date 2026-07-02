@@ -13,8 +13,18 @@ public class ProdutoService : IProdutoService
         _produtoRepository = produtoRepository;
     }
 
-    public Task<IReadOnlyList<Produto>> ObterTodosAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Produto>> ObterTodosAsync(CancellationToken cancellationToken = default)
     {
-        return _produtoRepository.ObterTodosAsync(cancellationToken);
+        return await _produtoRepository.ObterTodosAsync(cancellationToken);
+    }
+
+    public async Task<List<ComentarioProduto>> ObterComentariosPorProdutoIdAsync(int produtoId)
+    {
+        return await _produtoRepository.ObterComentariosPorProdutoIdAsync(produtoId);
+    }
+
+    public async Task FazerComentarioAsync(int produtoId, int? usuarioId, string comentario)
+    {
+        await _produtoRepository.FazerComentarioAsync(produtoId, usuarioId, comentario);
     }
 }

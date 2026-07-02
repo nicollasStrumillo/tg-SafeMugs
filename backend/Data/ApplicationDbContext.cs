@@ -13,6 +13,7 @@ public class ApplicationDBContext : DbContext
     public DbSet<Produto> Produtos => Set<Produto>();
     public DbSet<ImagemProduto> ImagensProduto => Set<ImagemProduto>();
     public DbSet<Avaliacao> Avaliacoes => Set<Avaliacao>();
+    public DbSet<ComentarioProduto> ComentariosProduto => Set<ComentarioProduto>();
     public DbSet<Carrinho> Carrinhos => Set<Carrinho>();
     public DbSet<ItemCarrinho> ItensCarrinho => Set<ItemCarrinho>();
     public DbSet<Pedido> Pedidos => Set<Pedido>();
