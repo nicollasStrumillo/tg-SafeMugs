@@ -81,10 +81,12 @@ npx ng serve --configuration development
 
 ## Observação
 
-Sempre que fizer pull e perceber que uma nova migration foi adionada, rode este comando para atualizar o banco de dados:
+Sempre que fizer pull e perceber que uma nova migration foi adicionada, rode este comando para atualizar o banco de dados:
 
 ```bash
 cd backend
 dotnet ef database update
 ```
 
+### Atribuição de créditos
+Todas as imagens de produtos nesta aplicação foram tiradas do site: https://unsplash.com
