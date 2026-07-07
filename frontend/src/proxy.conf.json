@@ -1,0 +1,14 @@
+{
+  "/api": {
+    "target": "https://localhost:7224",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  },
+  "/imagens": {
+    "target": "https://localhost:7224",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
+  }
+}

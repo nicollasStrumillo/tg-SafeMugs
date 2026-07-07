@@ -14,11 +14,10 @@ import {
 })
 export class CatalogoService {
 	private readonly http = inject(HttpClient);
-	private readonly apiBaseUrl = 'http://localhost:5242';
 
 	public listarProdutos(): Observable<ProdutoCardViewModel[]> {
 		return this.http
-			.get<ProdutoCatalogoDto[]>(`${this.apiBaseUrl}/api/produtos/lista`)
+			.get<ProdutoCatalogoDto[]>(`/api/produtos/lista`)
 			.pipe(map((produtos) => produtos.map((produto) => this.paraViewModel(produto))));
 	}
 
@@ -52,15 +51,19 @@ export class CatalogoService {
 			return '/imagens/mug_behappy.jpg';
 		}
 
-		return urlImagem.startsWith('http') ? urlImagem : `http://localhost:5242${urlImagem}`;
+		if (urlImagem.startsWith('http') || urlImagem.startsWith('/')) {
+			return urlImagem;
+		}
+
+		return `/${urlImagem}`;
 	}
 
 	//comentarios
 	public obterComentarios(produtoId: number): Observable<ComentarioProdutoDto[]> {
-		return this.http.get<ComentarioProdutoDto[]>(`${this.apiBaseUrl}/api/produtos/comentarios/${produtoId}`);
+		return this.http.get<ComentarioProdutoDto[]>(`/api/produtos/comentarios/${produtoId}`);
 	}
 
 	public fazerComentario(produtoId: number, comentarioRequest: ComentarioRequest): Observable<void>{
-		return this.http.post<void>(`${this.apiBaseUrl}/api/produtos/comentarios/${produtoId}`, comentarioRequest);
+		return this.http.post<void>(`/api/produtos/comentarios/${produtoId}`, comentarioRequest);
 	}
 }
