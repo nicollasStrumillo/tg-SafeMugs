@@ -1,0 +1,210 @@
+<section class="scoreboard-shell">
+  <header class="scoreboard-hero">
+    <div class="scoreboard-copy">
+      <p class="eyebrow">Score-board</p>
+      <h1>Exploração guiada dos desafios do SafeMugs.</h1>
+      <p class="lead">
+        Acompanhe o progresso, filtre as vulnerabilidades e navegue pelos desafios.
+      </p>
+    </div>
+
+    <mat-card class="score-summary sm-elevated-panel">
+      <div class="summary-total">
+        <span class="summary-label">Desafios resolvidos</span>
+        <strong [class.is-solved]="totalResolvidos() === totalDesafios()">{{ totalResolvidos() }}/{{ totalDesafios() }}</strong>
+      </div>
+
+      <div class="summary-breakdown">
+        @for (item of resolvidosPorDificuldade(); track trackByNivel($index, item)) {
+          <article class="summary-tile">
+            <div class="summary-tile-top">             
+              <div class="star-row" aria-hidden="true">
+                @for (estrela of estrelasPara(item.nivel); track estrela) {
+                  <mat-icon class="star">star</mat-icon>
+                }
+                @for (estrela of estrelasVaziasPara(item.nivel); track estrela) {
+                  <mat-icon class="star-border">star_border</mat-icon>
+                }
+              </div>
+            </div>
+            <strong [class.is-solved]="item.quantidadeResolvida === item.quantidadeTotal">{{ item.quantidadeResolvida }}/{{ item.quantidadeTotal }}</strong>
+          </article>
+        }
+      </div>
+    </mat-card>
+  </header>
+
+  <section class="filters-panel sm-elevated-panel">
+    <div class="filters-topline">
+      <mat-form-field class="search-field" appearance="outline">      
+        <mat-label>Buscar desafios</mat-label>
+        <input
+          matInput
+          type="search"
+          [value]="termoBusca()"
+          (input)="atualizarBusca($event)"
+          placeholder="Nome ou descrição"
+        />
+        @if (termoBusca()) {
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="limparBusca()"
+            aria-label="Limpar busca"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        type="button"
+        class="clear-filters-button"
+        (click)="limparFiltros()"
+        matTooltip="Limpar todos os filtros"
+        aria-label="Limpar todos os filtros"
+      >
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+    </div>
+    <span class="chip-label">Dificuldade:</span>
+    <div class="difficulty-filters" aria-label="Filtro de dificuldade">
+      
+      <button
+        type="button"
+        class="difficulty-chip difficulty-chip-all"
+        [class.is-active]="dificuldadeSelecionada() === null"
+        (click)="selecionarDificuldade(null)"
+      >
+        Todos os níveis
+      </button>
+
+      @for (nivel of niveisDificuldade; track nivel) {
+        <button
+          type="button"
+          class="difficulty-chip"
+          [class.is-active]="dificuldadeSelecionada() === nivel"
+          (click)="selecionarDificuldade(nivel)"
+          [attr.aria-label]="'Filtrar dificuldade ' + nivel"
+        >
+          <span class="chip-stars" aria-hidden="true">
+            @for (estrela of estrelasPara(nivel); track estrela) {
+              <mat-icon class="star">star</mat-icon>
+            }
+          </span>         
+        </button>
+      }
+    </div>
+
+    <span class="chip-label">Categorias:</span>
+    <div class="category-row">
+      <button
+        type="button"
+        class="category-chip"
+        [class.is-active]="todasSelecionadas()"
+        (click)="selecionarTodasCategorias()"
+      >
+        Todas
+      </button>
+
+      @if (carregandoCategorias()) {
+        <span class="mini-status">Carregando categorias...</span>
+      } @else {
+        @for (categoria of categorias(); track trackByCategoria($index, categoria)) {
+          <button
+            type="button"
+            class="category-chip"
+            [class.is-active]="categoriaEstaSelecionada(categoria)"
+            (click)="alternarCategoria(categoria)"
+          >
+            {{ categoria }}
+          </button>
+        }
+      }
+    </div>
+
+    @if (erroCategorias()) {
+      <div class="inline-state inline-state-error">{{ erroCategorias() }}</div>
+    }
+  </section>
+
+  <section class="challenge-section">
+    @if (carregandoDesafios()) {
+      <div class="inline-state">Carregando desafios...</div>
+    } @else if (erroDesafios()) {
+      <div class="inline-state inline-state-error">{{ erroDesafios() }}</div>
+    } @else if (desafiosFiltrados().length === 0) {
+      <div class="inline-state">Nenhum desafio encontrado com os filtros atuais.</div>
+    } @else {
+      <div class="challenge-grid">
+        @for (desafio of desafiosFiltrados(); track trackById($index, desafio)) {
+          <mat-card
+            class="challenge-card"
+            (click)="abrirDesafio(desafio)"
+            (keyup.enter)="abrirDesafio(desafio)"
+            (keyup.space)="abrirDesafio(desafio)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Abrir desafio ' + desafio.nome"
+            [class.is-resolved]="ehResolvido(desafio)"
+          >
+            <div class="challenge-topline">
+              <span class="category-pill">{{ desafio.categoria }}</span>
+
+              <button
+                mat-icon-button
+                type="button"
+                class="hint-button"
+                matTooltip="Ver dicas"
+                [attr.aria-label]="'Ver dicas de ' + desafio.nome"
+                [matMenuTriggerFor]="dicasMenu"
+                (click)="verDicas(desafio, $event)"
+                [disabled]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0"
+              >
+                <mat-icon class="icon-tip" [class.no-tips]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0">tips_and_updates</mat-icon>
+              </button>
+              <mat-menu class="menu-tip" panelClass="menu-tip-panel" #dicasMenu="matMenu" xPosition="after">
+                <div class="menu-tittle-tip">Dica {{ dicaAtual()?.nrDica }}:</div> 
+
+                  <div class="menu-content-tip">{{ dicaAtual()?.texto }}</div>
+
+                <div class="menu-navigation-tip">
+                  <button mat-icon-button type="button"  aria-label="Dica anterior" (click)="mudarDica(desafio, false, $event)">
+                    <mat-icon class="arrow-tip" [class.arrow-tip-disabled]="dicaAtual()?.nrDica === 1">chevron_left</mat-icon>
+                  </button>
+
+                  <span class="menu-count-tip">{{ dicaAtual()?.nrDica }}/{{ desafio.dicasDesafio.length}}</span>
+
+                  <button mat-icon-button type="button" aria-label="Próxima dica" (click)="mudarDica(desafio, true, $event)">
+                    <mat-icon class="arrow-tip" [class.arrow-tip-disabled]="dicaAtual()?.nrDica === desafio.dicasDesafio.length">chevron_right</mat-icon>
+                  </button>
+                </div>
+              </mat-menu>
+            </div>
+
+            <div class="challenge-title-row">
+              <h2>{{ desafio.nome }}</h2>
+            </div>
+            
+            <p class="challenge-description">{{ desafio.descricao }}</p>
+
+            <div class="challenge-footer">
+              <div class="difficulty-inline" [attr.aria-label]="'Dificuldade ' + desafio.dificuldade">
+                @for (estrela of niveisDificuldade; track estrela) {
+                  <mat-icon class="star"> {{ estrela <= desafio.dificuldade ? 'star' : 'star_border' }} </mat-icon>
+                }
+              </div>
+
+              <span class="hint-count">
+                <mat-icon class="icon-tip-qt">help_outline</mat-icon>
+                {{ desafio.dicasDesafio.length }} dicas
+              </span>
+            </div>
+          </mat-card>
+        }
+      </div>
+    }
+  </section>
+</section>

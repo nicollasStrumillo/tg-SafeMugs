@@ -23,6 +23,11 @@ export const routes: Routes = [
 			import('./pages/catalogo/catalogo').then((module) => module.Catalogo),
 	},
 	{
+		path: 'score-board',
+		loadComponent: () =>
+			import('./pages/score-board/score-board').then((module) => module.ScoreBoard),
+	},
+	{
 		path: '**',
 		redirectTo: 'login',
 	}
