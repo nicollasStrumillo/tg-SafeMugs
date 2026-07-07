@@ -29,6 +29,8 @@ builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDesafioRepository, DesafioRepository>();
+builder.Services.AddScoped<IDesafioService, DesafioService>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

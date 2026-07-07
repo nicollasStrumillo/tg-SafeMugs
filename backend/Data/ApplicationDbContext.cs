@@ -217,11 +217,12 @@ public class ApplicationDBContext : DbContext
 
         modelBuilder.Entity<Desafio>(entity =>
         {
-            entity.ToTable("desafios");
+            entity.ToTable("desafios", d => d.HasCheckConstraint("CK_Desafio_Dificuldade", "Dificuldade >= 1 AND Dificuldade <= 5"));
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Nome).IsRequired().HasMaxLength(150);
+            entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);
             entity.Property(e => e.Categoria).IsRequired().HasConversion<string>().HasMaxLength(100);
-            entity.Property(e => e.Dificuldade).HasConversion<string>().HasMaxLength(30);
+            entity.Property(e => e.Dificuldade).IsRequired();
             entity.Property(e => e.UrlMitigacao).IsRequired().HasMaxLength(500);
         });
 
@@ -785,8 +786,292 @@ public class ApplicationDBContext : DbContext
 
         );
 
+        // Desafios e dicas 
+        modelBuilder.Entity<Desafio>().HasData(
+            new Desafio
+            {
+                Id = 1,
+                Nome = "Login como Admin",
+                Descricao = "Acesse a conta administrativa usando o fluxo de login.",
+                Categoria = CategoriaDesafio.SqlInjection,
+                Dificuldade = 3,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 2,
+                Nome = "Encontrar usuários válidos",
+                Descricao = "Enumere alguns e-mails de usuários existentes.",
+                Categoria = CategoriaDesafio.ExcessiveDataExposure,
+                Dificuldade = 2,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 3,
+                Nome = "Brute force login",
+                Descricao = "Utilize uma 'wordlist' para encontrar a senha de um usuário por força bruta.",
+                Categoria = CategoriaDesafio.BrokenAntiAutomation,
+                Dificuldade = 2,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 4,
+                Nome = "Validar cadastro",
+                Descricao = "Teste a validação do formulário de cadastro.",
+                Categoria = CategoriaDesafio.ImproperInputValidation,
+                Dificuldade = 2,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 5,
+                Nome = "Manipular cadastro",
+                Descricao = "Altere os dados enviados antes que eles cheguem ao servidor e crie uma conta de administrador.",
+                Categoria = CategoriaDesafio.ParameterTampering,
+                Dificuldade = 3,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 6,
+                Nome = "Buscar por SQL Injection",
+                Descricao = "Use a busca do catálogo para injetar uma consulta.",
+                Categoria = CategoriaDesafio.SqlInjection,
+                Dificuldade = 3,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 7,
+                Nome = "Buscar com script",
+                Descricao = "Explore a busca do catálogo com payload de XSS refletido.",
+                Categoria = CategoriaDesafio.ReflectedXSS,
+                Dificuldade = 2,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 8,
+                Nome = "Alterar ordenação do catálogo",
+                Descricao = "Modifique os parâmetros de filtro e ordenação da listagem para encontrar informações sensíveis.",
+                Categoria = CategoriaDesafio.ParameterTampering,
+                Dificuldade = 2,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 9,
+                Nome = "Comentar com HTML",
+                Descricao = "Insira conteúdo malicioso nos comentários do produto.",
+                Categoria = CategoriaDesafio.StoredXSS,
+                Dificuldade = 3,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 10,
+                Nome = "Criar um comentário por outro usuário",
+                Descricao = "Escreva um comentário que não pertence ao seu usuário.",
+                Categoria = CategoriaDesafio.IDOR,
+                Dificuldade = 3,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 11,
+                Nome = "Recuperar senha insegura",
+                Descricao = "Explore o fluxo de esqueci minha senha sem proteção suficiente.",
+                Categoria = CategoriaDesafio.BrokenAuthentication,
+                Dificuldade = 3,
+                UrlMitigacao = "url_placeholder"
+            },
+            new Desafio
+            {
+                Id = 12,
+                Nome = "Encontrar a Score-Board",
+                Descricao = "Localize a página de desafios por enumeração de diretórios.",
+                Categoria = CategoriaDesafio.Outros,
+                Dificuldade = 1,
+                UrlMitigacao = "url_placeholder"
+            }
+        );
+
+        modelBuilder.Entity<DicaDesafio>().HasData(
+            new DicaDesafio
+            {
+                Id = 1,
+                NrDica = 1,
+                Texto = "Primeiro, identifique qual é o e-mail do administrador.",
+                DesafioId = 1
+            },
+            new DicaDesafio
+            {
+                Id = 2,
+                NrDica = 2,
+                Texto = "A falha está no fluxo de autenticação.",
+                DesafioId = 1
+            },
+            new DicaDesafio
+            {
+                Id = 3,
+                NrDica = 3,
+                Texto = "Teste SQL Injection em entradas no campo de e-mail ou senha.",
+                DesafioId = 1
+            },
+
+            new DicaDesafio
+            {
+                Id = 4,
+                NrDica = 1,
+                Texto = "O desafio pode ser resolvido na página de detalhes do produto.",
+                DesafioId = 2
+            },
+            new DicaDesafio
+            {
+                Id = 5,
+                NrDica = 2,
+                Texto = "Observe o retorno da chamada que lista comentários do produto.",
+                DesafioId = 2
+            },
+
+            new DicaDesafio
+            {
+                Id = 6,
+                NrDica = 1,
+                Texto = "Não há bloqueio por muitas tentativas repetidas por minuto.",
+                DesafioId = 3
+            },
+            new DicaDesafio
+            {
+                Id = 7,
+                NrDica = 2,
+                Texto = "Encontre um e-mail de usuário válido para atacar.",
+                DesafioId = 3
+            },
+
+            new DicaDesafio
+            {
+                Id = 8,
+                NrDica = 1,
+                Texto = "Observe quais campos aceitam valores inesperados.",
+                DesafioId = 4
+            },
+            new DicaDesafio
+            {
+                Id = 9,
+                NrDica = 2,
+                Texto = "A validação dos campos pode ser insuficiente.",
+                DesafioId = 4
+            },
+
+            new DicaDesafio
+            {
+                Id = 10,
+                NrDica = 1,
+                Texto = "Primeiro, identifique um campo que compõe um usuário mas não devia ser enviado pelo formulário de cadastro.",
+                DesafioId = 5
+            },
+            new DicaDesafio
+            {
+                Id = 11,
+                NrDica = 2,
+                Texto = "O payload pode ser alterado antes de chegar ao servidor.",
+                DesafioId = 5
+            },
+
+            new DicaDesafio
+            {
+                Id = 12,
+                NrDica = 1,
+                Texto = "A busca do catálogo é a superfície de ataque.",
+                DesafioId = 6
+            },
+            new DicaDesafio
+            {
+                Id = 13,
+                NrDica = 2,
+                Texto = "O nome do desafio aponta para SQL Injection.",
+                DesafioId = 6
+            },
+
+            new DicaDesafio
+            {
+                Id = 14,
+                NrDica = 1,
+                Texto = "A busca reflete sua entrada na interface de resposta.",
+                DesafioId = 7
+            },
+            new DicaDesafio
+            {
+                Id = 15,
+                NrDica = 2,
+                Texto = "Teste inserir um payload malicioso no termo de pesquisa.",
+                DesafioId = 7
+            },
+
+            new DicaDesafio
+            {
+                Id = 16,
+                NrDica = 1,
+                Texto = "Filtros e ordenação costumam vir por query string.",
+                DesafioId = 8
+            },
+            new DicaDesafio
+            {
+                Id = 17,
+                NrDica = 2,
+                Texto = "O backend pode estar ordenando por qualquer parâmetro que ele receber.",
+                DesafioId = 8
+            },
+
+            new DicaDesafio
+            {
+                Id = 18,
+                NrDica = 1,
+                Texto = "O desafio está na página de detalhes do produto.",
+                DesafioId = 9
+            },
+            new DicaDesafio
+            {
+                Id = 19,
+                NrDica = 2,
+                Texto = "Comentários podem ser renderizados sem sanitização.",
+                DesafioId = 9
+            },
+
+            new DicaDesafio
+            {
+                Id = 20,
+                NrDica = 1,
+                Texto = "O payload enviado ao backend pode estar transmitindo dados de forma insegura.",
+                DesafioId = 10
+            },
+            new DicaDesafio
+            {
+                Id = 21,
+                NrDica = 2,
+                Texto = "Tente interceptar e modificar a requisição.",
+                DesafioId = 10
+            },
+
+            new DicaDesafio
+            {
+                Id = 22,
+                NrDica = 1,
+                Texto = "Dica 1 placeholder",
+                DesafioId = 11
+            },
+            new DicaDesafio
+            {
+                Id = 23,
+                NrDica = 2,
+                Texto = "Dica 2 placeholder",
+                DesafioId = 11
+            }
+        );
+
         #endregion
-
-
     }
 }
