@@ -11,6 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NotificationService } from '../../shared/notification/notification.service';
 import { DesafioResponse, DicaDesafioDto } from './score-board.models';
 import { ScoreBoardService } from './score-board.service';
+import { SignalRService } from '../../shared/signalR/signalr.service';
 
 @Component({
 	selector: 'sm-score-board',
@@ -32,9 +33,9 @@ import { ScoreBoardService } from './score-board.service';
 export class ScoreBoard implements OnInit {
 	private readonly scoreBoardService = inject(ScoreBoardService);
 	private readonly notificationService = inject(NotificationService);
+	private readonly signalRService = inject(SignalRService);
 
 	protected readonly niveisDificuldade = [1, 2, 3, 4, 5];
-	protected readonly desafioResolvidos = signal<Set<number>>(new Set<number>());
 	protected readonly desafios = signal<DesafioResponse[]>([]);
 	protected readonly categorias = signal<string[]>([]);
 	protected readonly carregandoDesafios = signal(true);
@@ -46,7 +47,7 @@ export class ScoreBoard implements OnInit {
 	protected readonly categoriasSelecionadas = signal<Set<string>>(new Set<string>());
 
 	protected readonly totalDesafios = computed(() => this.desafios().length);
-	protected readonly totalResolvidos = computed(() => this.desafioResolvidos().size);
+	protected readonly totalResolvidos = computed(() => this.desafios().filter((d) => d.resolvido).length);
 	protected readonly desafiosFiltrados = computed(() => {
 		const termo = this.normalizarTexto(this.termoBusca());
 		const dificuldade = this.dificuldadeSelecionada();
@@ -73,13 +74,12 @@ export class ScoreBoard implements OnInit {
 	});
 
 	protected readonly resolvidosPorDificuldade = computed(() => {
-		const resolvidos = this.desafioResolvidos();
 		const desafios = this.desafios();
 
 		return this.niveisDificuldade.map((nivel) => ({
 			nivel,
 			quantidadeTotal: desafios.filter((desafio) => desafio.dificuldade === nivel).length,
-			quantidadeResolvida: desafios.filter((desafio) => desafio.dificuldade === nivel && resolvidos.has(desafio.id)).length,
+			quantidadeResolvida: desafios.filter((desafio) => desafio.dificuldade === nivel && desafio.resolvido).length,
 		}));
 	});
 
@@ -87,9 +87,22 @@ export class ScoreBoard implements OnInit {
 
 	protected readonly dicaAtual = signal<DicaDesafioDto | null>(null);
 
+	private readonly mudancasPendentes: number[] = []; //variavel criada exclusivamente para lidar com a rece condition entre o WebSocket e a requisição HTTP
+
 	ngOnInit(): void {
 		this.carregarDesafios();
 		this.carregarCategorias();
+
+		this.signalRService.desafioSolved$.subscribe(async (desafio) => {
+			if (this.desafios().length === 0) {
+				this.mudancasPendentes.push(desafio.id);
+				return;
+			}
+
+			this.desafios.update((desafios) => 
+				desafios.map((d) => d.id === desafio.id ? { ...d, resolvido: true } : d)
+			);
+		});
 	}
 
 	protected atualizarBusca(event: Event): void {
@@ -172,10 +185,6 @@ export class ScoreBoard implements OnInit {
 		return item.nivel;
 	}
 
-	protected ehResolvido(desafio: DesafioResponse): boolean {
-		return this.desafioResolvidos().has(desafio.id) || desafio.dicasDesafio.length == 0;
-	}
-
 	protected estrelasPara(nivel: number): number[] {
 		return this.niveisDificuldade.slice(0, nivel);
 	}
@@ -189,6 +198,12 @@ export class ScoreBoard implements OnInit {
 
 		this.scoreBoardService.listarDesafios().subscribe({
 			next: (desafios) => {
+				if (this.mudancasPendentes.length > 0) {
+					desafios = desafios.map((desafio) => {
+						if (this.mudancasPendentes.includes(desafio.id)) return { ...desafio, resolvido: true };						
+						return desafio;
+					});
+				}
 				this.desafios.set(desafios);
 				this.erroDesafios.set(null);
 				this.carregandoDesafios.set(false);

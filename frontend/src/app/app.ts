@@ -5,11 +5,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { FooterComponent } from './shared/footer/footer';
 import { NotificationHostComponent } from './shared/notification/notification-host';
+import { DesafioNotification } from './shared/desafio-notification/desafio-notification';
 
 @Component({
   selector: 'sm-root',
   imports: [
     FooterComponent,
+    DesafioNotification,
     MatButtonModule,
     MatToolbarModule,
     NotificationHostComponent,
@@ -23,4 +25,5 @@ import { NotificationHostComponent } from './shared/notification/notification-ho
 })
 export class App {
   protected readonly appName = 'SafeMugs';
+
 }

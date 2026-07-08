@@ -11,5 +11,6 @@ export interface DesafioResponse {
 	categoria: string;
 	dificuldade: number;
 	urlMitigacao: string;
+	resolvido: boolean;
 	dicasDesafio: DicaDesafioDto[];
 }

@@ -1,0 +1,75 @@
+@if (notificacaoAtual(); as notification) {
+    <section class="toast-shell" aria-live="polite" aria-atomic="true">
+        <article class="toast-card" role="status">
+            <div class="toast-accent" aria-hidden="true"></div>
+
+            <header class="toast-header">
+                <div class="toast-badge">
+                    <mat-icon class="toast-badge-icon">check</mat-icon>
+                    <span>Desafio resolvido</span>
+                </div>
+
+                <button
+                    mat-icon-button
+                    type="button"
+                    class="toast-close"
+                    (click)="fecharNotificacao()"
+                    aria-label="Fechar notificação de desafio resolvido"
+                >
+                    <mat-icon>close</mat-icon>
+                </button>
+            </header>
+
+            <div class="toast-body">
+                <div class="toast-copy">
+                    <h3>{{ notification.nomeDesafio }}</h3>
+                    <span class="difficulty-stars" aria-hidden="true">
+                        @for (estrela of [1, 2, 3, 4, 5]; track estrela) {
+                            <mat-icon class="difficulty-star">{{ estrela <= notification.dificuldade ? 'star' : 'star_border' }}</mat-icon>
+                        }
+                    </span>
+                    <p class="toast-description">
+                        {{ notification.descricaoDesafio }}
+                    </p>
+                </div>
+            </div>
+
+            @if (notifications().length > 1) {
+                <div class="toast-navigation">
+                    <div class="toast-navigation-center">
+                        <button
+                            mat-icon-button
+                            type="button"
+                            aria-label="Ver notificação anterior"
+                            (click)="anteriorNotificacao()"
+                        >
+                            <mat-icon class="toast-nav-button" [class.toast-nav-button-disabled]="indiceAtual() === 0">chevron_left</mat-icon>
+                        </button>
+
+                        <span class="toast-counter">{{ indiceAtual() + 1 }}/{{ notifications().length }}</span>
+
+                        <button
+                            mat-icon-button
+                            type="button"
+                            [class.toast-nav-button-disabled]="indiceAtual() === notifications().length - 1"
+                            aria-label="Ver próxima notificação"
+                            (click)="proximaNotificacao()"
+                        >
+                            <mat-icon class="toast-nav-button" [class.toast-nav-button-disabled]="indiceAtual() === notifications().length - 1">chevron_right</mat-icon>
+                        </button>            
+                    </div>
+                
+                    <button
+                        mat-button
+                        type="button"
+                        class="fechar-todas"
+                        (click)="fecharTodasNotificacoes()"
+                        aria-label="Fechar todas as notificações"
+                    >
+                        Fechar todas
+                    </button>  
+                </div>
+            }
+        </article>
+    </section>
+}

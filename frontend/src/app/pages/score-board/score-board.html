@@ -148,7 +148,7 @@
             tabindex="0"
             role="button"
             [attr.aria-label]="'Abrir desafio ' + desafio.nome"
-            [class.is-resolved]="ehResolvido(desafio)"
+            [class.is-resolved]="desafio.resolvido"
           >
             <div class="challenge-topline">
               <span class="category-pill">{{ desafio.categoria }}</span>
