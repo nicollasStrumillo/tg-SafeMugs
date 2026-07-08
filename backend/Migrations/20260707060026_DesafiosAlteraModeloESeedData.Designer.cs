@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260707060026_DesafiosAlteraModeloESeedData")]
+    partial class DesafiosAlteraModeloESeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -473,9 +476,6 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Nome")
-                        .IsUnique();
-
                     b.ToTable("desafios", null, t =>
                         {
                             t.HasCheckConstraint("CK_Desafio_Dificuldade", "Dificuldade >= 1 AND Dificuldade <= 5");
@@ -596,7 +596,7 @@ namespace backend.Migrations
                         {
                             Id = 12,
                             Categoria = "Outros",
-                            Descricao = "Localize a página de score-board.",
+                            Descricao = "Localize a página de desafios por enumeração de diretórios.",
                             Dificuldade = 1,
                             Nome = "Encontrar a Score-Board",
                             Resolvido = false,

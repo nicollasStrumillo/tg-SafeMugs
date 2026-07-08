@@ -20,7 +20,6 @@ public class ApplicationDBContext : DbContext
     public DbSet<ItemPedido> ItensPedido => Set<ItemPedido>();
     public DbSet<Desafio> Desafios => Set<Desafio>();
     public DbSet<DicaDesafio> DicasDesafio => Set<DicaDesafio>();
-    public DbSet<ProgressoDesafio> ProgressosDesafio => Set<ProgressoDesafio>();
 
     public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
         : base(options)
@@ -224,6 +223,8 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.Categoria).IsRequired().HasConversion<string>().HasMaxLength(100);
             entity.Property(e => e.Dificuldade).IsRequired();
             entity.Property(e => e.UrlMitigacao).IsRequired().HasMaxLength(500);
+
+            entity.HasIndex(e => e.Nome).IsUnique();
         });
 
         modelBuilder.Entity<DicaDesafio>(entity =>
@@ -238,24 +239,6 @@ public class ApplicationDBContext : DbContext
                 .HasForeignKey(e => e.DesafioId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
-
-        modelBuilder.Entity<ProgressoDesafio>(entity =>
-        {
-            entity.ToTable("progressos_desafio");
-            entity.HasKey(e => e.Id);
-            entity.HasIndex(e => new { e.UsuarioId, e.DesafioId }).IsUnique();
-
-            entity.HasOne(e => e.Usuario)
-                .WithMany(e => e.ProgressosDesafio)
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(e => e.Desafio)
-                .WithMany(e => e.ProgressosDesafio)
-                .HasForeignKey(e => e.DesafioId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
 
         // Adiciona dados iniciais para o banco
         #region Seed Data
@@ -795,7 +778,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Acesse a conta administrativa usando o fluxo de login.",
                 Categoria = CategoriaDesafio.SqlInjection,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -804,7 +788,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Enumere alguns e-mails de usuários existentes.",
                 Categoria = CategoriaDesafio.ExcessiveDataExposure,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -813,7 +798,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Utilize uma 'wordlist' para encontrar a senha de um usuário por força bruta.",
                 Categoria = CategoriaDesafio.BrokenAntiAutomation,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -822,7 +808,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Teste a validação do formulário de cadastro.",
                 Categoria = CategoriaDesafio.ImproperInputValidation,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -831,7 +818,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Altere os dados enviados antes que eles cheguem ao servidor e crie uma conta de administrador.",
                 Categoria = CategoriaDesafio.ParameterTampering,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -840,7 +828,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Use a busca do catálogo para injetar uma consulta.",
                 Categoria = CategoriaDesafio.SqlInjection,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -849,7 +838,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Explore a busca do catálogo com payload de XSS refletido.",
                 Categoria = CategoriaDesafio.ReflectedXSS,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -858,7 +848,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Modifique os parâmetros de filtro e ordenação da listagem para encontrar informações sensíveis.",
                 Categoria = CategoriaDesafio.ParameterTampering,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -867,7 +858,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Insira conteúdo malicioso nos comentários do produto.",
                 Categoria = CategoriaDesafio.StoredXSS,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -876,7 +868,8 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Escreva um comentário que não pertence ao seu usuário.",
                 Categoria = CategoriaDesafio.IDOR,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
@@ -885,16 +878,18 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Explore o fluxo de esqueci minha senha sem proteção suficiente.",
                 Categoria = CategoriaDesafio.BrokenAuthentication,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             },
             new Desafio
             {
                 Id = 12,
                 Nome = "Encontrar a Score-Board",
-                Descricao = "Localize a página de desafios por enumeração de diretórios.",
+                Descricao = "Localize a página de score-board.",
                 Categoria = CategoriaDesafio.Outros,
                 Dificuldade = 1,
-                UrlMitigacao = "url_placeholder"
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             }
         );
 

@@ -13,6 +13,7 @@ public class DesafioResponse
     public int Dificuldade { get; set; }
 
     public string UrlMitigacao { get; set; } = string.Empty;
+    public bool Resolvido { get; set; }
 
     public List<DicaDesafioDTO> DicasDesafio { get; set; } = new List<DicaDesafioDTO>();
 }
