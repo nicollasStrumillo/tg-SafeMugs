@@ -10,5 +10,11 @@
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info"
+  },
+  "/notifications": {
+    "target": "https://localhost:7224",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "info"
   }
 }
