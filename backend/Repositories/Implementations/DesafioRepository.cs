@@ -26,6 +26,7 @@ public class DesafioRepository : IDesafioRepository
                 Categoria = d.Categoria,
                 Dificuldade = d.Dificuldade,
                 UrlMitigacao = d.UrlMitigacao,
+                Resolvido = d.Resolvido,
                 DicasDesafio = d.DicasDesafio.Select(dd => new DicaDesafio
                 {
                     Id = dd.Id,
@@ -34,8 +35,22 @@ public class DesafioRepository : IDesafioRepository
                     DesafioId = dd.DesafioId
                 }).ToList()
             })
+            .OrderBy(d => d.Dificuldade)
             .ToListAsync();
 
         return desafios;
+    }
+
+    public async Task<Desafio?> FindByNameAsync(string nomeDesafio)
+    {
+        return await _dbContext.Desafios
+            .Include(d => d.DicasDesafio)
+            .FirstOrDefaultAsync(d => d.Nome == nomeDesafio);
+    }
+
+    public async Task ResolverDesafioAsync(Desafio desafio)
+    {
+        desafio.Resolvido = true;
+        await _dbContext.SaveChangesAsync();
     }
 }

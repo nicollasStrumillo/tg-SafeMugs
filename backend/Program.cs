@@ -1,9 +1,12 @@
 using System.Text.Json.Serialization;
 using backend.Data;
+using backend.Hubs;
 using backend.Repositories.Implementations;
 using backend.Repositories.Interfaces;
 using backend.Services.Implementations;
+using backend.Services.Implementations.Util;
 using backend.Services.Interfaces;
+using backend.Services.Interfaces.Util;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +19,17 @@ builder.Services.AddControllers()
     });;
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://localhost:4200",
+                "https://localhost:4200"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -25,12 +38,20 @@ var serverVersion = ServerVersion.AutoDetect(connectionString);
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseMySql(connectionString, serverVersion));
+
+// Services e Repositories
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDesafioRepository, DesafioRepository>();
 builder.Services.AddScoped<IDesafioService, DesafioService>();
+
+//NotificationService e SignalR
+builder.Services.AddSingleton<INotificationService, NotificationService>();
+
+builder.Services.AddSignalR();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -40,8 +61,11 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseStaticFiles();
-app.UseCors();
 app.UseHttpsRedirection();
+app.UseCors("Frontend");
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notifications");
+
 app.Run();
 
