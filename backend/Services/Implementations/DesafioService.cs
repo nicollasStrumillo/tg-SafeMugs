@@ -55,6 +55,14 @@ public class DesafioService : IDesafioService
         return categorias.Select(c => c.GetDisplayName());
     }
 
+    public async Task<DesafioResponse?> ObterPorNomeAsync(string nomeDesafio)
+    {
+        var desafio = await _desafioRepository.FindByNameAsync(nomeDesafio);
+        if (desafio == null) return null;
+
+        return MapToDesafioResponse(desafio);
+    }
+
     // Resolucao de Desafios
     public async Task SolveIfAsync(string nomeDesafio, Func<bool> criteria)
     {

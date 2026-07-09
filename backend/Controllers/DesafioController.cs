@@ -32,6 +32,15 @@ public class DesafioController : ControllerBase
         return Ok(categorias);
     }
 
+    [HttpGet("{nomeDesafio}")]
+    public async Task<ActionResult<DesafioResponse?>> ObterPorNome(string nomeDesafio)
+    {
+        var desafio = await _desafioService.ObterPorNomeAsync(nomeDesafio);
+        if (desafio == null) return NotFound();
+
+        return Ok(desafio);
+    }
+
     [HttpGet("backup")]
     public async Task<ActionResult<string?>> BackupDesafiosGenerateAsync()
     {
