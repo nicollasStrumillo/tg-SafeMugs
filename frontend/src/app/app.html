@@ -1,14 +1,21 @@
 <div class="app-shell">
   <header class="shell-header">
     <mat-toolbar class="topbar">
-      <a class="brand" routerLink="/login" aria-label="Ir para a página de login da SafeMugs">
-        <span class="brand-mark">SM</span>
-        <span class="brand-copy">
-          <strong>{{ appName }}</strong>
-          <small>Canecas para presentear e colecionar</small>
-        </span>
-      </a>
-
+      <div class="topbar-left">
+        <a class="brand" routerLink="/catalogo" aria-label="Ir para a página de login da SafeMugs">
+          <mat-icon class="home-icon">emoji_food_beverage</mat-icon>
+          <span class="brand-copy">
+            <strong>{{ appName }}</strong>
+            <small>Canecas para presentear e colecionar</small>
+          </span>
+        </a>
+        @if (showScoreBoard()){
+          <a mat-button routerLink="/score-board" class="score-board-button" routerLinkActive="active-link" aria-label="Abrir a score-board">
+            <mat-icon class="score-board-icon">emoji_events</mat-icon>
+            <span class="score-board-text">Score-Board</span>
+          </a>
+        }
+      </div>
       <nav class="topnav" aria-label="Navegação principal">
         <a
           mat-button

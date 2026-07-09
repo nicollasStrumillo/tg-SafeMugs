@@ -8,6 +8,11 @@
 	grid-template-rows: auto 1fr auto;
 }
 
+.home-icon {
+	font-size: 1.7rem;
+	color: var(--sm-ink);
+}
+
 .shell-header {
 	padding: 1rem clamp(1rem, 2vw, 2rem) 0;
 }
@@ -19,11 +24,18 @@
 	height: auto;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	gap: 1rem;
 	border: 1px solid var(--sm-border);
 	border-radius: 0.7rem;
 	background: rgba(13, 23, 40, 0.94);
 	box-shadow: var(--sm-shadow-soft);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
 }
 
 .brand {
@@ -72,14 +84,34 @@
 	gap: 0.35rem;
 }
 
-.topnav a {
+
+.score-board-button {
+  display: flex;
+  align-items: center;
+}
+
+.score-board-icon {
+  font-size: 1.5rem !important;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  line-height: 1.5rem !important;
+  color: var(--sm-ink)
+}
+
+.score-board-text {
+  font-size: 1rem;
+  color: var(--sm-ink);
+}
+
+
+a {
 	border: 1px solid transparent;
 	border-radius: 0.5rem;
-	color: var(--sm-muted);
+	color: var(--sm-ink);
 	text-decoration: none;
 }
 
-.topnav a:hover {
+a:hover {
 	background: rgba(255, 255, 255, 0.03);
 	color: var(--sm-ink);
 }

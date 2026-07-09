@@ -18,6 +18,10 @@ export class ScoreBoardService {
 		return this.http.get<string[]>(`/api/desafios/categorias`);
 	}
 
+	public buscarDesafioPorNome(nomeDesafio: string): Observable<DesafioResponse | null> {
+		return this.http.get<DesafioResponse | null>(`/api/desafios/${nomeDesafio}`);
+	}
+
 	public gerarBackupDesafios(): Observable<string | null> {
 		return this.http.get('/api/desafios/backup', {responseType: 'text'}) as Observable<string>;
 	}

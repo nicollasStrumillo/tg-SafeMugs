@@ -4,7 +4,7 @@ export const routes: Routes = [
 	{
 		path: '',
 		pathMatch: 'full',
-		redirectTo: 'login',
+		redirectTo: 'catalogo',
 	},
 	{
 		path: 'login',
@@ -29,6 +29,6 @@ export const routes: Routes = [
 	},
 	{
 		path: '**',
-		redirectTo: 'login',
+		redirectTo: 'catalogo',
 	}
 ];
