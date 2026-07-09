@@ -52,6 +52,9 @@ builder.Services.AddSingleton<INotificationService, NotificationService>();
 
 builder.Services.AddSignalR();
 
+// DesafiosBackupService
+builder.Services.AddScoped<IDesafiosBackupService, DesafiosBackupService>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

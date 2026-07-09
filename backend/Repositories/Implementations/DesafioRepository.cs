@@ -48,6 +48,13 @@ public class DesafioRepository : IDesafioRepository
             .FirstOrDefaultAsync(d => d.Nome == nomeDesafio);
     }
 
+    public async Task<List<Desafio>> FindByIdsAsync(int[] ids)
+    {
+        return await _dbContext.Desafios
+            .Where(d => ids.Contains(d.Id))
+            .ToListAsync();
+    }
+
     public async Task ResolverDesafioAsync(Desafio desafio)
     {
         desafio.Resolvido = true;

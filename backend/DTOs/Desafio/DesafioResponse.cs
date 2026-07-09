@@ -15,5 +15,7 @@ public class DesafioResponse
     public string UrlMitigacao { get; set; } = string.Empty;
     public bool Resolvido { get; set; }
 
+    public bool IsRestored { get; set; } = false;
+
     public List<DicaDesafioDTO> DicasDesafio { get; set; } = new List<DicaDesafioDTO>();
 }
