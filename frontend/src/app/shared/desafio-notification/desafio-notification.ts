@@ -1,14 +1,20 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, type OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { SignalRService } from '../signalR/signalr.service';
 import { DesafioResponse } from '../../pages/score-board/score-board.models';
+
+import { SignalRService } from '../../services/signalR/signalr.service';
+import { BrowserCookieService } from '../../services/cookies/browser-cookies.service';
+import { ScoreBoardService } from '../../pages/score-board/score-board.service';
+import { NotificationService } from '../notification/notification.service';
+
 
 interface DesafioSolvedNotification {
   id: number
   nomeDesafio: string
   descricaoDesafio: string
   dificuldade: number
+  restored?: boolean
 }
 
 @Component({
@@ -24,15 +30,33 @@ interface DesafioSolvedNotification {
 })
 export class DesafioNotification implements OnInit {
   private readonly signalRService = inject(SignalRService);
+  private readonly cookieService = inject(BrowserCookieService);
+  private readonly scoreBoardService = inject(ScoreBoardService);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly notifications = signal<DesafioSolvedNotification[]>([]);
   protected readonly indiceAtual = signal(0);
   protected readonly notificacaoAtual = computed(() => this.notifications()[this.indiceAtual()] ?? null);
   
   ngOnInit(): void {
+    const backupString = this.cookieService.getBackupDesafiosCookie(); 
+    if (backupString) {
+      this.scoreBoardService.restaurarDesafios(backupString).subscribe(restoredCount => {
+        if (restoredCount > 0) {
+          console.log(`Restaurados ${restoredCount} desafios a partir do backup.`);
+        } else {
+          console.log("Nenhum desafio foi restaurado a partir do backup.");
+        }
+      });
+    }
+
     this.signalRService.desafioSolved$.subscribe(async desafio => {
       this.showNotification(desafio);
-    });
+
+      if (!desafio.isRestored) {
+        await this.saveProgress();
+      }
+    }); 
   }
 
   public showNotification(desafio: DesafioResponse): void {
@@ -40,8 +64,19 @@ export class DesafioNotification implements OnInit {
         id: desafio.id,
         nomeDesafio: desafio.nome,
         descricaoDesafio: desafio.descricao,
-        dificuldade: desafio.dificuldade
+        dificuldade: desafio.dificuldade,
+        restored: desafio.isRestored ?? false
     }, ...notifications, ]);
+  }
+
+  private async saveProgress() : Promise<void> {
+    this.scoreBoardService.gerarBackupDesafios().subscribe(backup => {
+      if (backup) {
+        this.cookieService.setBackupDesafiosCookie(backup);
+      }else {
+        console.error("Erro ao gerar backup dos desafios.");
+      }
+    });
   }
 
   protected async fecharNotificacao(): Promise<void> {
@@ -73,6 +108,14 @@ export class DesafioNotification implements OnInit {
     }
     this.notifications.set([]);
     this.indiceAtual.set(0);
+  }
+
+  protected async limparCookies(): Promise<void> {
+    this.cookieService.clear();
+
+    await this.fecharTodasNotificacoes();
+
+    this.notificationService.info('Cookies limpos com sucesso: manualmente reinicie a aplicação para começar de novo.', {durationMs: 90000});
   }
 
   protected anteriorNotificacao(): void {

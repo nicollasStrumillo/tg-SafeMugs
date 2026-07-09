@@ -4,12 +4,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { FooterComponent } from './shared/footer/footer';
+import { CookieNotification } from './shared/cookie-notification/cookie-notification';
 import { NotificationHostComponent } from './shared/notification/notification-host';
 import { DesafioNotification } from './shared/desafio-notification/desafio-notification';
 
 @Component({
   selector: 'sm-root',
   imports: [
+    CookieNotification,
     FooterComponent,
     DesafioNotification,
     MatButtonModule,

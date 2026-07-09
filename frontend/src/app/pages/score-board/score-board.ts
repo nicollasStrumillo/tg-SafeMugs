@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NotificationService } from '../../shared/notification/notification.service';
 import { DesafioResponse, DicaDesafioDto } from './score-board.models';
 import { ScoreBoardService } from './score-board.service';
-import { SignalRService } from '../../shared/signalR/signalr.service';
+import { SignalRService } from '../../services/signalR/signalr.service';
 
 @Component({
 	selector: 'sm-score-board',

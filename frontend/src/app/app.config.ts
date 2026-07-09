@@ -11,7 +11,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
-import { SignalRService } from './shared/signalR/signalr.service';
+import { SignalRService } from './services/signalR/signalr.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

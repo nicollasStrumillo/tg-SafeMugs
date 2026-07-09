@@ -13,4 +13,6 @@ export interface DesafioResponse {
 	urlMitigacao: string;
 	resolvido: boolean;
 	dicasDesafio: DicaDesafioDto[];
+
+	isRestored: boolean | null;
 }

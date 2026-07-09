@@ -17,4 +17,12 @@ export class ScoreBoardService {
 	public listarCategorias(): Observable<string[]> {
 		return this.http.get<string[]>(`/api/desafios/categorias`);
 	}
+
+	public gerarBackupDesafios(): Observable<string | null> {
+		return this.http.get('/api/desafios/backup', {responseType: 'text'}) as Observable<string>;
+	}
+
+	public restaurarDesafios(backupDesafios: string): Observable<number> {
+		return this.http.post<number>(`/api/desafios/restore`, {backupDesafios});
+	}
 }

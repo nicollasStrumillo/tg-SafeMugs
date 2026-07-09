@@ -1,0 +1,21 @@
+@if (showNotification()) {
+  <section class="cookie-toast" animate.enter="cookie-toast-enter" animate.leave="cookie-toast-exit" aria-live="polite" aria-atomic="true">
+    <article class="cookie-toast__card" role="status">
+      <div class="cookie-toast__content">
+        <h2 class="cookie-toast__title">Cookies</h2>
+        <p class="cookie-toast__text">
+          Este site utiliza cookies para salvar o seu progresso durante a busca por desafios.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        class="cookie-toast__close"
+        (click)="fecharNotificacao()"
+        aria-label="Fechar aviso de cookies"
+      >
+        Ok
+      </button>
+    </article>
+  </section>
+}

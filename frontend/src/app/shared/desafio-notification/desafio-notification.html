@@ -1,8 +1,23 @@
 @if (notificacaoAtual(); as notification) {
-    <section class="toast-shell" aria-live="polite" aria-atomic="true">
-        <article class="toast-card" role="status">
+    <section class="toast-shell" animate.enter="toast-shell-enter" animate.leave="toast-shell-exit" aria-live="polite" aria-atomic="true">
+        @if (notification.restored) {
+            <article class="toast-card-restored" [class.toast-card-no-border]="notification.restored" role="status">
+                <div class="toast-accent-restored" aria-hidden="true"></div>
+                    <header class="toast-card-header-restored">
+                            <span class="toast-card-title-restored">Restaurado automaticamente de seu último progresso salvo.</span>
+                            <button
+                                mat-button
+                                type="button"
+                                (click)="limparCookies()"
+                                aria-label="Fechar notificação de desafio restaurado">
+                                <mat-icon>delete</mat-icon>
+                                <span>Deletar cookies e limpar progresso.</span>
+                            </button>
+                    </header>
+            </article>
+        }
+        <article class="toast-card" [class.toast-card-no-border]="notification.restored" role="status">
             <div class="toast-accent" aria-hidden="true"></div>
-
             <header class="toast-header">
                 <div class="toast-badge">
                     <mat-icon class="toast-badge-icon">check</mat-icon>
