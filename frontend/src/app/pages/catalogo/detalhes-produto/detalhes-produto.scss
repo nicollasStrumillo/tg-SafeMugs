@@ -129,6 +129,10 @@ details[open] .toggle-icon {
 }
 
 .comments-list {
+    max-height: 300px;     
+    overflow-y: auto;
+    overflow-x: hidden;
+
     margin: 0;
     padding: 0 1rem 1rem;
     list-style: none;

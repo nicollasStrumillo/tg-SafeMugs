@@ -115,7 +115,7 @@ export class DesafioNotification implements OnInit {
 
     await this.fecharTodasNotificacoes();
 
-    this.notificationService.info('Cookies limpos com sucesso: manualmente reinicie a aplicação para começar de novo.', {durationMs: 90000});
+    this.notificationService.info('Cookies limpos com sucesso. Reinicie a aplicação para começar de novo.', {durationMs: 90000});
   }
 
   protected anteriorNotificacao(): void {
