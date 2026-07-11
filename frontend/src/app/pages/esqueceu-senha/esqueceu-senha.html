@@ -1,0 +1,108 @@
+<div class="reset-container">
+  <mat-card class="reset-card">
+
+    <mat-card-header>
+      <mat-card-title>Criar Nova Senha</mat-card-title>
+      <mat-card-subtitle>
+        Insira e confirme sua nova senha de acesso.
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <form [formGroup]="resetForm" (ngSubmit)="onSubmit()">
+
+      <mat-card-content>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Digite seu email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            placeholder="exemplo@gmail.com">
+
+          <mat-error *ngIf="resetForm.get('email')?.hasError('required')">
+            O email é obrigatório.
+          </mat-error>
+
+          <mat-error *ngIf="resetForm.get('email')?.hasError('email')">
+            Email inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nova Senha</mat-label>
+
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            placeholder="Digite a nova senha">
+
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword">
+
+            <mat-icon>
+              {{ hidePassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+
+          </button>
+
+          <mat-error *ngIf="resetForm.get('password')?.hasError('required')">
+            A senha é obrigatória.
+          </mat-error>
+
+          <mat-error *ngIf="resetForm.get('password')?.hasError('minlength')">
+            A senha deve ter no mínimo 6 caracteres.
+          </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+
+          <mat-label>Confirmar Nova Senha</mat-label>
+
+          <input
+            matInput
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            placeholder="Confirme a nova senha">
+
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hideConfirmPassword = !hideConfirmPassword">
+
+            <mat-icon>
+              {{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+
+          </button>
+
+          <mat-error *ngIf="resetForm.get('confirmPassword')?.hasError('required')">
+            A confirmação de senha é obrigatória.
+          </mat-error>
+
+          <mat-error *ngIf="resetForm.get('confirmPassword')?.hasError('passwordMismatch')">
+            As senhas não coincidem.
+          </mat-error>
+
+        </mat-form-field>
+
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit">
+          Alterar Senha
+        </button>
+      </mat-card-actions>
+
+    </form>
+
+  </mat-card>
+</div>
