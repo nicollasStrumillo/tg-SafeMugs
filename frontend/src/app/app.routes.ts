@@ -5,6 +5,10 @@ export const routes: Routes = [
 		path: '',
 		pathMatch: 'full',
 		redirectTo: 'catalogo',
+	},{
+		path: 'senha',
+		loadComponent: () =>
+			import('./pages/esqueceu-senha/esqueceu-senha').then((module) =>module.SenhaPage),
 	},
 	{
 		path: 'login',
@@ -30,5 +34,5 @@ export const routes: Routes = [
 	{
 		path: '**',
 		redirectTo: 'catalogo',
-	}
+	},
 ];
