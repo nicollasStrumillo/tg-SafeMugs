@@ -1,4 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, signal } from '@angular/core';
+import { ApiError } from './erro-api.model';
 
 export type NotificationVariant = 'info' | 'success' | 'error';
 
@@ -44,6 +46,12 @@ export class NotificationService {
 		if (durationMs > 0) {
 			this.timeoutId = setTimeout(() => this.fechar(), durationMs);
 		}
+	}
+
+	public notificarErroApi(error: HttpErrorResponse): void {
+		const apiError = error.error as ApiError;
+
+		this.erro(apiError?.detail ?? 'Ocorreu um erro inesperado.');
 	}
 
 	public sucesso(message: string, options: Omit<NotificationOptions, 'variant'> = {}): void {

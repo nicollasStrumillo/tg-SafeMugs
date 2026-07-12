@@ -10,7 +10,8 @@ import { Router, RouterLink } from '@angular/router';
 
 import { AuthApiService } from '../../shared/auth/auth-api.service';
 import { AuthSessionService } from '../../shared/auth/auth-session.service';
-import { obterMensagemErroAuth } from '../../shared/auth/auth-error.utils';
+import { ApiError } from '../../shared/notification/erro-api.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'sm-login',
@@ -68,13 +69,9 @@ export class LoginPage {
           this.authSessionService.salvarLogin(usuario);
           void this.router.navigate(['/catalogo']);
         },
-        error: (error) => {
-          this.mensagemErro.set(
-            obterMensagemErroAuth(
-              error,
-              'Não foi possível entrar. Confira seus dados e tente novamente.',
-            ),
-          );
+        error: (erro: HttpErrorResponse) => {
+          const apiError = erro.error as ApiError;
+          this.mensagemErro.set(apiError?.detail ?? 'Falha ao efetuar login. Verifique suas credenciais e tente novamente.');
         },
       });
   }

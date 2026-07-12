@@ -11,7 +11,9 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthApiService } from '../../shared/auth/auth-api.service';
 import { AuthSessionService } from '../../shared/auth/auth-session.service';
 import { CadastroRequest } from '../../shared/auth/auth.models';
-import { obterMensagemErroAuth } from '../../shared/auth/auth-error.utils';
+import { HttpErrorResponse } from '@angular/common/http';
+import { NotificationService } from '../../shared/notification/notification.service';
+import { ApiError } from '../../shared/notification/erro-api.model';
 
 function passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
   const passwordControl = control.get('password');
@@ -37,11 +39,11 @@ function passwordsMatchValidator(control: AbstractControl): ValidationErrors | n
     if (!confirmPasswordControl.hasError('passwordMismatch')) {
       confirmPasswordControl.setErrors({
         ...(confirmPasswordControl.errors ?? {}),
-        passwordMismatch: true,
+        passwordMismatch: false,
       });
     }
 
-    return { passwordMismatch: true };
+    return { passwordMismatch: false };
   }
 
   if (confirmPasswordControl.hasError('passwordMismatch')) {
@@ -73,6 +75,7 @@ export class RegisterPage {
   private readonly authApiService = inject(AuthApiService);
   private readonly authSessionService = inject(AuthSessionService);
   private readonly router = inject(Router);
+  private readonly notificationService = inject(NotificationService);
 
   protected readonly formSubmitted = signal(false);
   protected readonly passwordHidden = signal(true);
@@ -92,8 +95,7 @@ export class RegisterPage {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
-    },
-    { validators: [passwordsMatchValidator] },
+    }
   );
 
   protected submitRegister(): void {
@@ -130,13 +132,10 @@ export class RegisterPage {
         next: () => {
           void this.router.navigate(['/catalogo']);
         },
-        error: (error) => {
-          this.mensagemErro.set(
-            obterMensagemErroAuth(
-              error,
-              'Não foi possível concluir o cadastro. Verifique os dados e tente novamente.',
-            ),
-          );
+        error: (error: HttpErrorResponse) => {
+          const apiError = error.error as ApiError;
+
+          this.mensagemErro.set(apiError?.detail ?? 'Falha ao efetuar cadastro. Verifique seus dados e tente novamente.');
         },
       });
   }
