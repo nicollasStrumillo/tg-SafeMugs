@@ -30,6 +30,10 @@ yarn-error.log*
 # IA Agent
 .claude
 docs
+opencode.json
+skills-lock.json
+.agents
+
 
 # .NET Build outputs
 bin/
