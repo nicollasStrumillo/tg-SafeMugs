@@ -39,11 +39,11 @@ function passwordsMatchValidator(control: AbstractControl): ValidationErrors | n
     if (!confirmPasswordControl.hasError('passwordMismatch')) {
       confirmPasswordControl.setErrors({
         ...(confirmPasswordControl.errors ?? {}),
-        passwordMismatch: false,
+        passwordMismatch: true,
       });
     }
 
-    return { passwordMismatch: false };
+    return { passwordMismatch: true };
   }
 
   if (confirmPasswordControl.hasError('passwordMismatch')) {
@@ -95,7 +95,8 @@ export class RegisterPage {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]],
-    }
+    },
+    { validators: [passwordsMatchValidator] },
   );
 
   protected submitRegister(): void {
