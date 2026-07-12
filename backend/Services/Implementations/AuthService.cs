@@ -27,8 +27,10 @@ public class AuthService : IAuthService
         if (request.Senha.Length < 8)
             throw new ValidationException("A senha deve ter pelo menos 8 caracteres.");
 
-        
-        
+        var usuarioExistente = await _usuarioRepository.BuscaPorEmailAsync(request.Email);
+        if (usuarioExistente != null)
+            throw new BusinessException("Já existe um usuário cadastrado com este e-mail.");
+
         //Gerar o hash da senha antes de salvar no banco de dados
         string hashSenha = HashHelper.GerarMD5(request.Senha); 
         request.HashSenha = hashSenha;
