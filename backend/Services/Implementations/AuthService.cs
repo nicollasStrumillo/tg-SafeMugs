@@ -1,4 +1,5 @@
 using backend.DTOs.Auth;
+using backend.Exceptions;
 using backend.Helpers;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
@@ -16,12 +17,12 @@ public class AuthService : IAuthService
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
     {
-        if (request.Senha != request.ConfirmarSenha)
-            throw new ArgumentException("As senhas não coincidem.");
-        
         if (string.IsNullOrWhiteSpace(request.NomeCompleto) || string.IsNullOrWhiteSpace(request.Email) || 
             string.IsNullOrWhiteSpace(request.Senha) || string.IsNullOrWhiteSpace(request.ConfirmarSenha))
-            throw new ArgumentException("Todos os campos são obrigatórios.");
+            throw new ValidationException("Todos os campos são obrigatórios.");
+
+        if (request.Senha != request.ConfirmarSenha)
+            throw new ValidationException("As senhas não coincidem.");
         
         //Gerar o hash da senha antes de salvar no banco de dados
         string hashSenha = HashHelper.GerarMD5(request.Senha); 

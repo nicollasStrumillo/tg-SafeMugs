@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using backend.Data;
+using backend.Exceptions;
 using backend.Hubs;
 using backend.Repositories.Implementations;
 using backend.Repositories.Interfaces;
@@ -66,6 +67,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 app.UseStaticFiles();
+app.UseMiddleware<GlobalExceptionsHandler>();
 app.UseHttpsRedirection();
 app.UseCors("Frontend");
 app.MapControllers();

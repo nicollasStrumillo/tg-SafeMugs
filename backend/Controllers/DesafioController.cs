@@ -44,29 +44,15 @@ public class DesafioController : ControllerBase
     [HttpGet("backup")]
     public async Task<ActionResult<string?>> BackupDesafiosGenerateAsync()
     {
-        try
-        {
-            var backupCode = await _desafiosBackupService.BackupDesafiosGenerateAsync();
+        var backupCode = await _desafiosBackupService.BackupDesafiosGenerateAsync();
 
-            return Ok(backupCode);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest("Não foi possível gerar o backup dos desafios. Erro: " + ex.Message);
-        }
+        return Ok(backupCode);
     }
 
     [HttpPost("restore")]
     public async Task<ActionResult<int>> RestoreDesafiosAsync([FromBody] RestoreDesafiosRequest request)
     {
-        try
-        {
-            var restoredCount = await _desafiosBackupService.RestoreAsync(request.BackupDesafios);
-            return Ok(restoredCount);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest("Não foi possível restaurar os desafios. Erro: " + ex.Message);
-        }
+        var restoredCount = await _desafiosBackupService.RestoreAsync(request.BackupDesafios);
+        return Ok(restoredCount);
     }
 }

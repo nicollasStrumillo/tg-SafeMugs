@@ -18,25 +18,7 @@ public class AuthController : ControllerBase
     [HttpPost("cadastro")]
     public async Task<IActionResult> Cadastro([FromBody] CadastroRequest request)
     {
-        try
-        {
-            await _authService.CadastrarUsuarioAsync(request);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, new
-            {
-                message = "Erro interno do servidor."
-            });
-        }
-        
+        await _authService.CadastrarUsuarioAsync(request);    
         return Ok();
     }
 
