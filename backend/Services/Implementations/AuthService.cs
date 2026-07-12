@@ -8,11 +8,11 @@ namespace backend.Services.Implementations;
 
 public class AuthService : IAuthService
 {
-    private readonly IAuthRepository _authRepository;
+    private readonly IUsuarioRepository _usuarioRepository;
 
-    public AuthService(IAuthRepository authRepository)
+    public AuthService(IUsuarioRepository usuarioRepository)
     {
-        _authRepository = authRepository;
+        _usuarioRepository = usuarioRepository;
     }
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
@@ -23,12 +23,17 @@ public class AuthService : IAuthService
 
         if (request.Senha != request.ConfirmarSenha)
             throw new ValidationException("As senhas não coincidem.");
+
+        if (request.Senha.Length < 8)
+            throw new ValidationException("A senha deve ter pelo menos 8 caracteres.");
+
+        
         
         //Gerar o hash da senha antes de salvar no banco de dados
         string hashSenha = HashHelper.GerarMD5(request.Senha); 
         request.HashSenha = hashSenha;
 
-        await _authRepository.CadastrarUsuarioAsync(request);        
+        await _usuarioRepository.CadastrarUsuarioAsync(request);        
     }
 
     public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
@@ -36,6 +41,6 @@ public class AuthService : IAuthService
         //Gerar o hash da senha antes de procurar no banco de dados
         request.HashSenha = HashHelper.GerarMD5(request.Senha);
         
-        return await _authRepository.RealizarLoginAsync(request);
+        return await _usuarioRepository.RealizarLoginAsync(request);
     }
 }
