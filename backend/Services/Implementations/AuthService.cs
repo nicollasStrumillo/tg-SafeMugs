@@ -9,10 +9,12 @@ namespace backend.Services.Implementations;
 public class AuthService : IAuthService
 {
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IDesafioService _desafioService;
 
-    public AuthService(IUsuarioRepository usuarioRepository)
+    public AuthService(IUsuarioRepository usuarioRepository, IDesafioService desafioService)
     {
         _usuarioRepository = usuarioRepository;
+        _desafioService = desafioService;
     }
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
@@ -43,6 +45,10 @@ public class AuthService : IAuthService
         //Gerar o hash da senha antes de procurar no banco de dados
         request.HashSenha = HashHelper.GerarMD5(request.Senha);
         
-        return await _usuarioRepository.RealizarLoginAsync(request);
+        var usuario = await _usuarioRepository.RealizarLoginAsync(request);
+
+        await _desafioService.SolveIfAsync("Login como Admin", () => usuario?.Perfil == "Administrador");
+
+        return usuario;
     }
 }
