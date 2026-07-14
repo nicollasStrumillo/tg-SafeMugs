@@ -47,15 +47,19 @@ public class UsuarioRepository : IUsuarioRepository
 
     public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
     {
-        var usuario = await _context.Usuarios.Include(u => u.Perfil).FirstOrDefaultAsync(u => u.Email == request.Email && u.HashSenha == request.HashSenha);
-        if (usuario == null) return null;
+        var sql = $@"SELECT u.Id AS UsuarioId, u.NomeCompleto, u.Email, p.Nome AS Perfil FROM usuarios u INNER JOIN perfis p ON u.PerfilId = p.Id WHERE u.Email = '{request.Email}' AND u.HashSenha = '{request.HashSenha}' AND u.Ativo = 1 limit 1;";
 
-        return new LoginResponse
+        try
         {
-            UsuarioId = usuario.Id,
-            NomeCompleto = usuario.NomeCompleto,
-            Email = usuario.Email,
-            Perfil = usuario.Perfil.Nome
-        };
+            var resposta = await _context.Database
+                .SqlQueryRaw<LoginResponse>(sql)
+                .ToListAsync();
+            return resposta.FirstOrDefault();
+        }
+        catch (MySqlConnector.MySqlException ex)
+        {
+            throw new InvalidOperationException(
+                $"MYSQL_ERROR: {ex.Message}, on query: {sql}", ex);
+        }
     }
 }

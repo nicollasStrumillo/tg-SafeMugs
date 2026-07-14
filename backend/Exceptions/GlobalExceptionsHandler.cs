@@ -1,10 +1,10 @@
+using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Exceptions;
 
 internal sealed class GlobalExceptionsHandler(RequestDelegate next) 
 {
-
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -19,6 +19,12 @@ internal sealed class GlobalExceptionsHandler(RequestDelegate next)
                 BusinessException or ValidationException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
+
+            if (context.Response.StatusCode == StatusCodes.Status500InternalServerError)
+            {
+                var desafioService = context.RequestServices.GetRequiredService<IDesafioService>();
+                await desafioService.SolveIfAsync("Tratamento de Erro", () => true);
+            }
 
             await context.Response.WriteAsJsonAsync(new ProblemDetails
             {
