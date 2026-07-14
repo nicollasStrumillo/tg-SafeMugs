@@ -22,7 +22,7 @@ public class DesafiosBackupService : IDesafiosBackupService
 
     public async Task<string?> BackupDesafiosGenerateAsync()
     {   
-        var desafios = await _desafioService.ObterTodosAsync();
+        var desafios = await _desafioService.ObterTodosAsync(resolverScoreBoard: false);
         var ids = desafios.Where(d => d.Resolvido).Select(d => d.Id).ToArray();
 
         if (ids.Length == 0)

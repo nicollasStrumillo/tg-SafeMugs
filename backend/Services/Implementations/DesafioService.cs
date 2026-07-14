@@ -19,11 +19,11 @@ public class DesafioService : IDesafioService
         _notificationService = notificationService;
     }
 
-    public async Task<IEnumerable<DesafioResponse>> ObterTodosAsync()
+    public async Task<IEnumerable<DesafioResponse>> ObterTodosAsync(bool resolverScoreBoard = true)
     {
         var desafios = await _desafioRepository.ObterTodosAsync();
 
-        await SolveIfAsync("Encontrar a Score-Board", () => true);
+        if (resolverScoreBoard) await SolveIfAsync("Encontrar a Score-Board", () => true);
         
         return desafios.Select(d => MapToDesafioResponse(d));
     }

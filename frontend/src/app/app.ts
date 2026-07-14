@@ -45,7 +45,7 @@ export class App implements OnInit {
     });
 
     this.signalRService.desafioSolved$.subscribe(async desafio => {
-      if (desafio && desafio.resolvido) {
+      if (desafio && desafio.resolvido && desafio.nome === "Encontrar a Score-Board") {
         this.showScoreBoard.set(true);
       }
     });
