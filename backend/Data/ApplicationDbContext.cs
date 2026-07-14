@@ -775,9 +775,9 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 1,
                 Nome = "Login como Admin",
-                Descricao = "Acesse a conta administrativa usando o fluxo de login.",
+                Descricao = "Acesse uma conta administrativa.",
                 Categoria = CategoriaDesafio.SqlInjection,
-                Dificuldade = 3,
+                Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
@@ -815,7 +815,7 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 5,
                 Nome = "Manipular cadastro",
-                Descricao = "Altere os dados enviados antes que eles cheguem ao servidor e crie uma conta de administrador.",
+                Descricao = "Crie uma conta de administrador.",
                 Categoria = CategoriaDesafio.ParameterTampering,
                 Dificuldade = 3,
                 UrlMitigacao = "url_placeholder",
@@ -890,6 +890,16 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 1,
                 UrlMitigacao = "url_placeholder",
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 13,
+                Nome = "Tratamento de Erro",
+                Descricao = "Provoque um erro que o retorno da API não trata corretamente.",
+                Categoria = CategoriaDesafio.SecurityMisconfiguration,
+                Dificuldade = 1,
+                UrlMitigacao = "url_placeholder",
+                Resolvido = false
             }
         );
 
@@ -898,21 +908,21 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 1,
                 NrDica = 1,
-                Texto = "Primeiro, identifique qual é o e-mail do administrador.",
+                Texto = "Utilize SQL Injection para provocar um erro e observe a resposta da API.",
                 DesafioId = 1
             },
             new DicaDesafio
             {
                 Id = 2,
                 NrDica = 2,
-                Texto = "A falha está no fluxo de autenticação.",
+                Texto = "Tente identificar o e-mail de um administrador para fazer um ataque direcionado.",
                 DesafioId = 1
             },
             new DicaDesafio
             {
                 Id = 3,
                 NrDica = 3,
-                Texto = "Teste SQL Injection em entradas no campo de e-mail ou senha.",
+                Texto = "Também é possível resolver utilizando outra coluna da tabela Usuários que não seja o e-mail.",
                 DesafioId = 1
             },
 
@@ -965,27 +975,34 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 10,
                 NrDica = 1,
-                Texto = "Primeiro, identifique um campo que compõe um usuário mas não devia ser enviado pelo formulário de cadastro.",
+                Texto = "Identifique as colunas que compõem um usuário.",
                 DesafioId = 5
             },
             new DicaDesafio
             {
                 Id = 11,
                 NrDica = 2,
-                Texto = "O payload pode ser alterado antes de chegar ao servidor.",
+                Texto = "Observar a resposta de uma requisição de login bem-sucedida é uma maneira de identificar as colunas que compõem um usuário.",
+                DesafioId = 5
+            },
+            new DicaDesafio
+            {
+                Id = 12,
+                NrDica = 3,
+                Texto = "Você pode interceptar a requisição de cadastro e mudar o seu corpo.",
                 DesafioId = 5
             },
 
             new DicaDesafio
             {
-                Id = 12,
+                Id = 13,
                 NrDica = 1,
                 Texto = "A busca do catálogo é a superfície de ataque.",
                 DesafioId = 6
             },
             new DicaDesafio
             {
-                Id = 13,
+                Id = 14,
                 NrDica = 2,
                 Texto = "O nome do desafio aponta para SQL Injection.",
                 DesafioId = 6
@@ -993,14 +1010,14 @@ public class ApplicationDBContext : DbContext
 
             new DicaDesafio
             {
-                Id = 14,
+                Id = 15,
                 NrDica = 1,
                 Texto = "A busca reflete sua entrada na interface de resposta.",
                 DesafioId = 7
             },
             new DicaDesafio
             {
-                Id = 15,
+                Id = 16,
                 NrDica = 2,
                 Texto = "Teste inserir um payload malicioso no termo de pesquisa.",
                 DesafioId = 7
@@ -1008,14 +1025,14 @@ public class ApplicationDBContext : DbContext
 
             new DicaDesafio
             {
-                Id = 16,
+                Id = 17,
                 NrDica = 1,
                 Texto = "Filtros e ordenação costumam vir por query string.",
                 DesafioId = 8
             },
             new DicaDesafio
             {
-                Id = 17,
+                Id = 18,
                 NrDica = 2,
                 Texto = "O backend pode estar ordenando por qualquer parâmetro que ele receber.",
                 DesafioId = 8
@@ -1023,14 +1040,14 @@ public class ApplicationDBContext : DbContext
 
             new DicaDesafio
             {
-                Id = 18,
+                Id = 19,
                 NrDica = 1,
                 Texto = "O desafio está na página de detalhes do produto.",
                 DesafioId = 9
             },
             new DicaDesafio
             {
-                Id = 19,
+                Id = 20,
                 NrDica = 2,
                 Texto = "Comentários podem ser renderizados sem sanitização.",
                 DesafioId = 9
@@ -1038,14 +1055,14 @@ public class ApplicationDBContext : DbContext
 
             new DicaDesafio
             {
-                Id = 20,
+                Id = 21,
                 NrDica = 1,
                 Texto = "O payload enviado ao backend pode estar transmitindo dados de forma insegura.",
                 DesafioId = 10
             },
             new DicaDesafio
             {
-                Id = 21,
+                Id = 22,
                 NrDica = 2,
                 Texto = "Tente interceptar e modificar a requisição.",
                 DesafioId = 10
@@ -1053,17 +1070,39 @@ public class ApplicationDBContext : DbContext
 
             new DicaDesafio
             {
-                Id = 22,
+                Id = 23,
                 NrDica = 1,
                 Texto = "Dica 1 placeholder",
                 DesafioId = 11
             },
             new DicaDesafio
             {
-                Id = 23,
+                Id = 24,
                 NrDica = 2,
                 Texto = "Dica 2 placeholder",
                 DesafioId = 11
+            },
+
+            new DicaDesafio
+            {
+                Id = 25,
+                NrDica = 1,
+                Texto = "Este desafio pode ser resolvido a partir de diferentes telas.",
+                DesafioId = 13
+            },
+            new DicaDesafio
+            {
+                Id = 26,
+                NrDica = 2,
+                Texto = "Tente inserir valores inesperados em formulários que possam provocar um erro no backend.",
+                DesafioId = 13
+            },
+            new DicaDesafio
+            {
+                Id = 27,
+                NrDica = 3,
+                Texto = "Tente quebrar a consulta SQL realizada a partir da tela de Login.",
+                DesafioId = 13
             }
         );
 
