@@ -45,6 +45,24 @@ public class UsuarioRepository : IUsuarioRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task CadastrarAdministradorAsync(CadastroRequest request)
+    {
+        var novoAdministrador = new Usuario
+        {
+            NomeCompleto = request.NomeCompleto,
+            Email = request.Email,
+            HashSenha = request.HashSenha!,
+            Telefone = null, 
+            Ativo = true,
+            DtCadastro = DateTime.UtcNow,
+            DtAtualizacao = DateTime.UtcNow,
+            PerfilId = 2 // Definindo o PerfilId como 2 (Administrador) 
+        };
+
+        _context.Usuarios.Add(novoAdministrador);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
     {
         var sql = $@"SELECT u.Id AS UsuarioId, u.NomeCompleto, u.Email, p.Nome AS Perfil FROM usuarios u INNER JOIN perfis p ON u.PerfilId = p.Id WHERE u.Email = '{request.Email}' AND u.HashSenha = '{request.HashSenha}' AND u.Ativo = 1 limit 1;";

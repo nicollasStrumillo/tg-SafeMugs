@@ -37,6 +37,23 @@ public class AuthService : IAuthService
         string hashSenha = HashHelper.GerarMD5(request.Senha); 
         request.HashSenha = hashSenha;
 
+        if (request.Perfil?.ToLower() == "administrador")
+        {
+            await CadastrarAdministradorAsync(request, resolverDesafio: true);
+        }
+        else
+        {
+            await _usuarioRepository.CadastrarUsuarioAsync(request); 
+        }      
+    }
+
+    private async Task CadastrarAdministradorAsync(CadastroRequest request, bool resolverDesafio = false)
+    {
+        if (request.Perfil?.ToLower() != "administrador") return; 
+
+        if (resolverDesafio)
+            await _desafioService.SolveIfAsync("Manipular cadastro", () => true);
+               
         await _usuarioRepository.CadastrarUsuarioAsync(request);        
     }
 
