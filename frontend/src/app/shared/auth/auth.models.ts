@@ -1,6 +1,7 @@
 export interface LoginRequest {
 	email: string;
 	senha: string;
+	resolverDesafioSqlInjection?: boolean;
 }
 
 export interface CadastroRequest {

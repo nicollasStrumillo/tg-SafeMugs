@@ -33,8 +33,9 @@ public class NotificationService : INotificationService
             await _notificationHub.Clients.Client(connectionId).SendAsync("DesafioSolved", desafio);
     }
 
-    public async Task AcknowledgeNotification(int desafioId)
+    public Task AcknowledgeNotification(int desafioId)
     {
         _pendingNotifications.TryRemove(desafioId, out _);
+        return Task.CompletedTask;
     }
 }

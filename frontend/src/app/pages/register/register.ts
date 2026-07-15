@@ -124,6 +124,7 @@ export class RegisterPage {
           this.authApiService.login({
             email: dadosCadastro.email,
             senha: dadosCadastro.senha,
+            resolverDesafioSqlInjection: false,
           }),
         ),
         tap((usuario) => this.authSessionService.salvarLogin(usuario)),

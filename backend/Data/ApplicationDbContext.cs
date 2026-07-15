@@ -775,7 +775,7 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 1,
                 Nome = "Login como Admin",
-                Descricao = "Acesse uma conta administrativa.",
+                Descricao = "Acesse uma conta administrativa utilizando SQL Injection.",
                 Categoria = CategoriaDesafio.SqlInjection,
                 Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",
