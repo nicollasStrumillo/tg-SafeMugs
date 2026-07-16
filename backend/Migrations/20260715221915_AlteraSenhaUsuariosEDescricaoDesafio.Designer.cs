@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260715221915_AlteraSenhaUsuariosEDescricaoDesafio")]
+    partial class AlteraSenhaUsuariosEDescricaoDesafio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1372,20 +1375,8 @@ namespace backend.Migrations
                             Email = "marina.alves@safemugs.com",
                             HashSenha = "8afa847f50a716e64932d995c8e7435a",
                             NomeCompleto = "Marina Alves",
-                            PerfilId = 1,
-                            Telefone = "11990000007"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Ativo = true,
-                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "admin@email.com",
-                            HashSenha = "df49d9fce01a137041d6d89e6629abbf",
-                            NomeCompleto = "Admin",
                             PerfilId = 2,
-                            Telefone = "11990000008"
+                            Telefone = "11990000007"
                         });
                 });
 

@@ -35,7 +35,7 @@ public class DesafioService : IDesafioService
             Id = desafio.Id,
             Nome = desafio.Nome,
             Descricao = desafio.Descricao,
-            Categoria = desafio.Categoria.GetDisplayName(),
+            Categoria = desafio.Categoria.GetNomeDisplay(),
             Dificuldade = desafio.Dificuldade,
             UrlMitigacao = desafio.UrlMitigacao,
             Resolvido = desafio.Resolvido,
@@ -52,7 +52,7 @@ public class DesafioService : IDesafioService
     public IEnumerable<string> ObterCategorias()
     {
         var categorias = Enum.GetValues(typeof(CategoriaDesafio)).Cast<CategoriaDesafio>();
-        return categorias.Select(c => c.GetDisplayName());
+        return categorias.Select(c => c.GetNomeDisplay());
     }
 
     public async Task<DesafioResponse?> ObterPorNomeAsync(string nomeDesafio)

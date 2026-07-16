@@ -1,6 +1,7 @@
 using backend.DTOs.Auth;
 using backend.Exceptions;
 using backend.Helpers;
+using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 
@@ -64,8 +65,26 @@ public class AuthService : IAuthService
         
         var usuario = await _usuarioRepository.RealizarLoginAsync(request);
 
-        await _desafioService.SolveIfAsync("Login como Admin", () => usuario?.Perfil == "Administrador");
+        await _desafioService.SolveIfAsync("Login como Admin", () => usuario?.Perfil == "Administrador" && request.ResolverDesafioSqlInjection);
+        await ResolverDesafiosBruteForceAsync(request.Email, request.HashSenha);
 
         return usuario;
+    }
+
+
+    private async Task ResolverDesafiosBruteForceAsync(string email, string hashSenha)
+    {
+        bool resolvido = new[]
+        {
+            EmailsESenhasUsuarios.AnaLopes,
+            EmailsESenhasUsuarios.BrunoCosta,
+            EmailsESenhasUsuarios.CarlaMendes,
+            EmailsESenhasUsuarios.DiegoSouza,
+            EmailsESenhasUsuarios.ElisaMartins,
+            EmailsESenhasUsuarios.FelipeRocha,
+            EmailsESenhasUsuarios.MarinaAlves,
+        }.Any(u => email == u.GetNomeDisplay() && hashSenha == u.GetHashSenha().ToUpper());;
+
+        await _desafioService.SolveIfAsync("Brute force de login", () => resolvido);
     }
 }

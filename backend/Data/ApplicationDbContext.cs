@@ -283,8 +283,8 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 1,
                 NomeCompleto = "Ana Lopes",
-                Email = "ana.lopes@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.AnaLopes.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.AnaLopes.GetHashSenha(),
                 Telefone = "11990000001",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -295,8 +295,8 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 2,
                 NomeCompleto = "Bruno Costa",
-                Email = "bruno.costa@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.BrunoCosta.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.BrunoCosta.GetHashSenha(),
                 Telefone = "11990000002",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -307,8 +307,8 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 3,
                 NomeCompleto = "Carla Mendes",
-                Email = "carla.mendes@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.CarlaMendes.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.CarlaMendes.GetHashSenha(),
                 Telefone = "11990000003",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -319,8 +319,8 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 4,
                 NomeCompleto = "Diego Souza",
-                Email = "diego.souza@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.DiegoSouza.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.DiegoSouza.GetHashSenha(),
                 Telefone = "11990000004",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -331,8 +331,8 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 5,
                 NomeCompleto = "Elisa Martins",
-                Email = "elisa.martins@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.ElisaMartins.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.ElisaMartins.GetHashSenha(),
                 Telefone = "11990000005",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -343,8 +343,8 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 6,
                 NomeCompleto = "Felipe Rocha",
-                Email = "felipe.rocha@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.FelipeRocha.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.FelipeRocha.GetHashSenha(),
                 Telefone = "11990000006",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -355,14 +355,27 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 7,
                 NomeCompleto = "Marina Alves",
-                Email = "marina.alves@safermugs.com",
-                HashSenha = "1b13939cd7d77f68bac85931bfbb0a36", // --> Seed@12345
+                Email = EmailsESenhasUsuarios.MarinaAlves.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.MarinaAlves.GetHashSenha(),
                 Telefone = "11990000007",
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
+                PerfilId = 1
+            },
+            new Usuario
+            {
+                Id = 8,
+                NomeCompleto = "Admin",
+                Email = EmailsESenhasUsuarios.Admin.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.Admin.GetHashSenha(),
+                Telefone = "11990000008",
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
                 PerfilId = 2
-            });
+            }
+            );
 
         modelBuilder.Entity<Produto>().HasData(
             new Produto
@@ -794,8 +807,8 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 3,
-                Nome = "Brute force login",
-                Descricao = "Utilize uma 'wordlist' para encontrar a senha de um usuário por força bruta.",
+                Nome = "Brute force de login",
+                Descricao = "Acesse a conta de um dos usuários do domínio @safemugs.com utilizando força bruta.",
                 Categoria = CategoriaDesafio.BrokenAntiAutomation,
                 Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",

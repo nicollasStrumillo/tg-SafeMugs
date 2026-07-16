@@ -43,18 +43,3 @@ public enum CategoriaDesafio
     [Display(Name = "Outros")]
     Outros
 }
-
-public static class EnumExtensions
-{
-    public static string GetDisplayName(this Enum value)
-    {
-        var field = value.GetType().GetField(value.ToString());
-
-        var attribute = field?
-            .GetCustomAttributes(typeof(DisplayAttribute), false)
-            .Cast<DisplayAttribute>()
-            .FirstOrDefault();
-
-        return attribute?.Name ?? value.ToString();
-    }
-}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260715211056_MudaDescricaoDesafioLoginAdmin")]
+    partial class MudaDescricaoDesafioLoginAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -506,9 +509,9 @@ namespace backend.Migrations
                         {
                             Id = 3,
                             Categoria = "BrokenAntiAutomation",
-                            Descricao = "Acesse a conta de um dos usuários do domínio @safemugs.com utilizando força bruta.",
+                            Descricao = "Utilize uma 'wordlist' para encontrar a senha de um usuário por força bruta.",
                             Dificuldade = 2,
-                            Nome = "Brute force de login",
+                            Nome = "Brute force login",
                             Resolvido = false,
                             UrlMitigacao = "url_placeholder"
                         },
@@ -1297,8 +1300,8 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "ana.lopes@safemugs.com",
-                            HashSenha = "5858ea228cc2edf88721699b2c8638e5",
+                            Email = "ana.lopes@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Ana Lopes",
                             PerfilId = 1,
                             Telefone = "11990000001"
@@ -1309,8 +1312,8 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "bruno.costa@safemugs.com",
-                            HashSenha = "482c811da5d5b4bc6d497ffa98491e38",
+                            Email = "bruno.costa@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Bruno Costa",
                             PerfilId = 1,
                             Telefone = "11990000002"
@@ -1321,8 +1324,8 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "carla.mendes@safemugs.com",
-                            HashSenha = "37b4e2d82900d5e94b8da524fbeb33c0",
+                            Email = "carla.mendes@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Carla Mendes",
                             PerfilId = 1,
                             Telefone = "11990000003"
@@ -1333,8 +1336,8 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "diego.souza@safemugs.com",
-                            HashSenha = "cc25c0f861a83f5efadc6e1ba9d1269e",
+                            Email = "diego.souza@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Diego Souza",
                             PerfilId = 1,
                             Telefone = "11990000004"
@@ -1345,8 +1348,8 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "elisa.martins@safemugs.com",
-                            HashSenha = "3fc0a7acf087f549ac2b266baf94b8b1",
+                            Email = "elisa.martins@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Elisa Martins",
                             PerfilId = 1,
                             Telefone = "11990000005"
@@ -1357,8 +1360,8 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "felipe.rocha@safemugs.com",
-                            HashSenha = "0571749e2ac330a7455809c6b0e7af90",
+                            Email = "felipe.rocha@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Felipe Rocha",
                             PerfilId = 1,
                             Telefone = "11990000006"
@@ -1369,23 +1372,11 @@ namespace backend.Migrations
                             Ativo = true,
                             DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
                             DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "marina.alves@safemugs.com",
-                            HashSenha = "8afa847f50a716e64932d995c8e7435a",
+                            Email = "marina.alves@safermugs.com",
+                            HashSenha = "1b13939cd7d77f68bac85931bfbb0a36",
                             NomeCompleto = "Marina Alves",
-                            PerfilId = 1,
-                            Telefone = "11990000007"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Ativo = true,
-                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "admin@email.com",
-                            HashSenha = "df49d9fce01a137041d6d89e6629abbf",
-                            NomeCompleto = "Admin",
                             PerfilId = 2,
-                            Telefone = "11990000008"
+                            Telefone = "11990000007"
                         });
                 });
 
