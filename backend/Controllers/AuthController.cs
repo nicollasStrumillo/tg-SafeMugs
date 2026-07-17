@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+    public async Task<ActionResult<AuthTokenResponse>> Login([FromBody] LoginRequest request)
     {
         var response = await _authService.RealizarLoginAsync(request);
         if (response == null)

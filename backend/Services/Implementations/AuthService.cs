@@ -1,3 +1,4 @@
+using backend.Authentication.Interfaces;
 using backend.DTOs.Auth;
 using backend.Exceptions;
 using backend.Helpers;
@@ -11,11 +12,16 @@ public class AuthService : IAuthService
 {
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IDesafioService _desafioService;
+    private readonly IJwtService _jwtService;
 
-    public AuthService(IUsuarioRepository usuarioRepository, IDesafioService desafioService)
+    public AuthService(
+        IUsuarioRepository usuarioRepository,
+        IDesafioService desafioService,
+        IJwtService jwtService)
     {
         _usuarioRepository = usuarioRepository;
         _desafioService = desafioService;
+        _jwtService = jwtService;
     }
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
@@ -58,17 +64,19 @@ public class AuthService : IAuthService
         await _usuarioRepository.CadastrarUsuarioAsync(request);        
     }
 
-    public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
+    public async Task<AuthTokenResponse?> RealizarLoginAsync(LoginRequest request)
     {
-        //Gerar o hash da senha antes de procurar no banco de dados
         request.HashSenha = HashHelper.GerarMD5(request.Senha);
-        
+
         var usuario = await _usuarioRepository.RealizarLoginAsync(request);
 
-        await _desafioService.SolveIfAsync("Login como Admin", () => usuario?.Perfil == "Administrador" && request.ResolverDesafioSqlInjection);
+        if (usuario == null)
+            return null;
+
+        await _desafioService.SolveIfAsync("Login como Admin", () => usuario.Perfil == "Administrador" && request.ResolverDesafioSqlInjection);
         await ResolverDesafiosBruteForceAsync(request.Email, request.HashSenha);
 
-        return usuario;
+        return _jwtService.GenerateToken(usuario);
     }
 
 

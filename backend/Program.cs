@@ -1,4 +1,8 @@
+using System.Text;
 using System.Text.Json.Serialization;
+using backend.Authentication;
+using backend.Authentication.Implementations;
+using backend.Authentication.Interfaces;
 using backend.Data;
 using backend.Exceptions;
 using backend.Hubs;
@@ -8,7 +12,9 @@ using backend.Services.Implementations;
 using backend.Services.Implementations.Util;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +23,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.ReferenceHandler =
             ReferenceHandler.IgnoreCycles;
-    });;
+    });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -41,6 +47,51 @@ var serverVersion = ServerVersion.AutoDetect(connectionString);
 
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseMySql(connectionString, serverVersion));
+
+// JWT
+var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName);
+builder.Services.Configure<JwtSettings>(jwtSettings);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!)),
+        ClockSkew = TimeSpan.Zero,
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/notifications"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>();
 
 // Services e Repositories
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
@@ -71,6 +122,10 @@ app.UseStaticFiles();
 app.UseMiddleware<GlobalExceptionsHandler>();
 app.UseHttpsRedirection();
 app.UseCors("Frontend");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.MapHub<NotificationHub>("/notifications");
