@@ -12,6 +12,8 @@ export interface CadastroRequest {
 }
 
 export interface LoginResponse {
+	token: string;
+	expiresAt: string;
 	usuarioId: number;
 	nomeCompleto: string;
 	email: string;
@@ -23,5 +25,16 @@ export interface UsuarioLogado {
 	nomeCompleto: string;
 	email: string;
 	perfil: string;
-	autenticadoEm: string;
+}
+
+export interface TokenPayload {
+	sub: string;
+	email: string;
+	name: string;
+	role: string;
+	perfil: string;
+	jti: string;
+	exp: number;
+	iat: number;
+	nbf?: number;
 }

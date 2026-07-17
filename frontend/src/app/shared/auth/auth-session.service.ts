@@ -1,71 +1,97 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { LoginResponse, UsuarioLogado } from './auth.models';
+import { LoginResponse, TokenPayload, UsuarioLogado } from './auth.models';
+import { BrowserCookieService } from '../../services/cookies/browser-cookies.service';
 
-const CHAVE_STORAGE_USUARIO = 'safemugs.usuario-logado';
+const TOKEN_COOKIE = 'safemugs.token';
+
+function base64UrlDecode(str: string): string {
+	str = str.replace(/-/g, '+').replace(/_/g, '/');
+	switch (str.length % 4) {
+		case 0: break;
+		case 2: str += '=='; break;
+		case 3: str += '='; break;
+	}
+	return atob(str);
+}
+
+function decodeToken(token: string): TokenPayload | null {
+	try {
+		const payload = token.split('.')[1];
+		return JSON.parse(base64UrlDecode(payload)) as TokenPayload;
+	} catch {
+		return null;
+	}
+}
+
+function isTokenExpired(token: string): boolean {
+	const payload = decodeToken(token);
+	if (!payload) return true;
+	const now = Math.floor(Date.now() / 1000);
+	return payload.exp <= now;
+}
 
 @Injectable({
 	providedIn: 'root',
 })
 export class AuthSessionService {
-	private readonly usuarioLogadoSignal = signal<UsuarioLogado | null>(this.carregarUsuarioSalvo());
+	private readonly cookieService = inject(BrowserCookieService);
 
-	public readonly usuarioLogado = this.usuarioLogadoSignal.asReadonly();
-	public readonly autenticado = computed(() => this.usuarioLogadoSignal() !== null);
+	private readonly tokenSignal = signal<string | null>(null);
+	private readonly usuarioLogadoSignal = signal<UsuarioLogado | null>(null);
 
-	public salvarLogin(resposta: LoginResponse): void {
-		const usuarioLogado: UsuarioLogado = {
+	readonly token = this.tokenSignal.asReadonly();
+	readonly usuarioLogado = this.usuarioLogadoSignal.asReadonly();
+	readonly autenticado = computed(() => this.tokenSignal() !== null);
+
+	constructor() {
+		this.carregarSessaoSalva();
+	}
+
+	salvarLogin(resposta: LoginResponse): void {
+		this.tokenSignal.set(resposta.token);
+		this.usuarioLogadoSignal.set({
 			usuarioId: resposta.usuarioId,
 			nomeCompleto: resposta.nomeCompleto,
 			email: resposta.email,
 			perfil: resposta.perfil,
-			autenticadoEm: new Date().toISOString(),
-		};
-
-		this.usuarioLogadoSignal.set(usuarioLogado);
-		this.persistirUsuario(usuarioLogado);
+		});
+		this.persistirToken(resposta.token);
 	}
 
-	public limparSessao(): void {
+	limparSessao(): void {
+		this.tokenSignal.set(null);
 		this.usuarioLogadoSignal.set(null);
-		this.removerUsuarioPersistido();
+		this.removerTokenPersistido();
 	}
 
-	public obterUsuarioLogado(): UsuarioLogado | null {
-		return this.usuarioLogadoSignal();
-	}
-
-	private carregarUsuarioSalvo(): UsuarioLogado | null {
-		if (typeof window === 'undefined') {
-			return null;
-		}
-
-		const usuarioSalvo = window.localStorage.getItem(CHAVE_STORAGE_USUARIO);
-		if (!usuarioSalvo) {
-			return null;
-		}
-
-		try {
-			return JSON.parse(usuarioSalvo) as UsuarioLogado;
-		} catch {
-			this.removerUsuarioPersistido();
-			return null;
-		}
-	}
-
-	private persistirUsuario(usuario: UsuarioLogado): void {
-		if (typeof window === 'undefined') {
+	private carregarSessaoSalva(): void {
+		const token = this.cookieService.get(TOKEN_COOKIE);
+		if (!token || isTokenExpired(token)) {
+			if (token) this.removerTokenPersistido();
 			return;
 		}
 
-		window.localStorage.setItem(CHAVE_STORAGE_USUARIO, JSON.stringify(usuario));
-	}
-
-	private removerUsuarioPersistido(): void {
-		if (typeof window === 'undefined') {
+		const payload = decodeToken(token);
+		if (!payload) {
+			this.removerTokenPersistido();
 			return;
 		}
 
-		window.localStorage.removeItem(CHAVE_STORAGE_USUARIO);
+		this.tokenSignal.set(token);
+		this.usuarioLogadoSignal.set({
+			usuarioId: Number(payload.sub),
+			nomeCompleto: payload.name,
+			email: payload.email,
+			perfil: payload.perfil,
+		});
+	}
+
+	private persistirToken(token: string): void {
+		this.cookieService.set(TOKEN_COOKIE, token);
+	}
+
+	private removerTokenPersistido(): void {
+		this.cookieService.remove(TOKEN_COOKIE);
 	}
 }

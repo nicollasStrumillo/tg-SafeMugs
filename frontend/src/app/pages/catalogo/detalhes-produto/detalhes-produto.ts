@@ -47,6 +47,7 @@ export class DetalhesProduto implements OnInit {
 
     ngOnInit(): void {
         this.carregarComentarios();
+        console.log('Usuairo logado:', this.authSessionService.usuarioLogado());
     }
 
     fechar(): void {
@@ -73,7 +74,7 @@ export class DetalhesProduto implements OnInit {
     }
 
     enviarComentario(produtoId: number): void {
-        const usuarioLogado: UsuarioLogado | null = this.authSessionService.obterUsuarioLogado();
+        const usuarioLogado: UsuarioLogado | null = this.authSessionService.usuarioLogado();
         const comentario = this.comentarioRascunho().trim();
 
         if (!comentario || this.enviandoComentario()) {
