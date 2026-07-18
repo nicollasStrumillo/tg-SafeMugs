@@ -867,8 +867,8 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 9,
-                Nome = "Comentar com HTML",
-                Descricao = "Insira conteúdo malicioso nos comentários do produto.",
+                Nome = "Stored XSS",
+                Descricao = "Utilize o payload \"<iframe src=\"javascript:alert(`XSS`)\">\" para causar um ataque de Stored XSS na página do catalogo",
                 Categoria = CategoriaDesafio.StoredXSS,
                 Dificuldade = 3,
                 UrlMitigacao = "url_placeholder",
@@ -1055,7 +1055,7 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 19,
                 NrDica = 1,
-                Texto = "O desafio está na página de detalhes do produto.",
+                Texto = "O desafio está na seção de detalhes do produto.",
                 DesafioId = 9
             },
             new DicaDesafio

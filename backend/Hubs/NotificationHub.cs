@@ -31,4 +31,9 @@ public sealed class NotificationHub : Hub
     {
         await _desafioService.SolveIfAsync("DOM XSS", () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
     }
+
+    public async Task SolveDesafioStoredXss(string payload)
+    {
+        await _desafioService.SolveIfAsync("Stored XSS", () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
+    }
 }

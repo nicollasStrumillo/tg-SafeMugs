@@ -15,6 +15,16 @@ import { ComentarioProdutoDto, ComentarioRequest, ProdutoCardViewModel } from '.
 import { CatalogoService } from '../catalogo.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
 
+// Parte da vulnerabilidade de Stored XSS
+import {SignalRService} from '../../../services/signalR/signalr.service';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
+
+const STOREDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
+
+interface ComentarioProdutoViewModel extends ComentarioProdutoDto {
+  comentarioInseguro: SafeHtml;
+}
+
 @Component({
   selector: 'sm-detalhes-produto',
   imports: [
@@ -35,8 +45,12 @@ export class DetalhesProduto implements OnInit {
     private readonly catalogoService = inject(CatalogoService);
     private readonly notificationService = inject(NotificationService);
 
+    // Parte da vulnerabilidade de Stored XSS
+    private readonly signalRService = inject(SignalRService);
+    private readonly sanitizer = inject(DomSanitizer)
+
     protected readonly comentarioRascunho = signal('');
-    protected readonly comentarios = signal<ComentarioProdutoDto[]>([]);
+    protected readonly comentarios = signal<ComentarioProdutoViewModel[]>([]);
     protected readonly carregandoComentarios = signal(true);
     protected readonly enviandoComentario = signal(false);
 
@@ -54,14 +68,18 @@ export class DetalhesProduto implements OnInit {
         this.dialogRef.close();
     }
 
-    private carregarComentarios(): void {
+    private async carregarComentarios(): Promise<void> {
         this.carregandoComentarios.set(true);
 
-        this.catalogoService.obterComentarios(this.data.produto.id)
+        await this.catalogoService.obterComentarios(this.data.produto.id)
             .pipe(finalize(() => this.carregandoComentarios.set(false)))
             .subscribe({
-                next: (comentarios) => {
-                    this.comentarios.set(comentarios);
+                next: async (comentarios) => {
+                    // Parte da vulnerabilidade de Stored XSS
+                    const comenatariosVuln : ComentarioProdutoViewModel[] = comentarios.map(c => ({...c, comentarioInseguro: this.sanitizer.bypassSecurityTrustHtml(c.comentario.trim())}));
+                    
+                    await this.VerificarPayloadXSS(comenatariosVuln);
+                    this.comentarios.set(comenatariosVuln);
                 },
                 error: (erro: unknown) => {
                     console.error('Erro ao carregar comentários:', erro);
@@ -71,6 +89,16 @@ export class DetalhesProduto implements OnInit {
                     });
                 }
             });
+    }
+
+    // Parte da vulnerabilidade de Stored XSS
+    private async VerificarPayloadXSS(comentarios: ComentarioProdutoViewModel[]): Promise<void> {
+        for (const comentario of comentarios) {
+            if (comentario.comentario === STOREDXSS_PAYLOAD) {
+                await this.signalRService.SolveDesafioStoredXss(STOREDXSS_PAYLOAD);
+                break;
+            }
+        }
     }
 
     enviarComentario(produtoId: number): void {
