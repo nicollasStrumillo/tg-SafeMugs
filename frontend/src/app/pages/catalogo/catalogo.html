@@ -5,21 +5,32 @@
       <h1>Escolha sua próxima caneca.</h1>
     </div>
 
-    <mat-form-field class="catalogo-search" appearance="outline">
-      <mat-label>Pesquisar produtos</mat-label>
-      <input
-        matInput
-        type="search"
-        [value]="termoBusca()"
-        (input)="atualizarBusca($event)"
-        placeholder="Nome, descricao ou categoria"
-      />
-      @if (termoBusca()) {
-        <button mat-icon-button matSuffix type="button" (click)="limparBusca()" aria-label="Limpar busca" class="clear-button">
-          <mat-icon>close_small</mat-icon>
-        </button>
-      }
-    </mat-form-field>
+    <div class="search-wrapper">
+      <mat-form-field class="catalogo-search" appearance="outline">
+        <mat-label>Pesquisar produtos</mat-label>
+        <input
+          matInput
+          type="search"
+          [value]="termoBusca()"
+          (input)="atualizarBusca($event)"
+          (keyup.enter)="buscar()"
+          placeholder="Nome, descricao ou categoria"
+        />
+        @if (termoBusca()) {
+          <button mat-icon-button matSuffix type="button" (click)="limparBusca()" aria-label="Limpar busca" class="clear-button">
+            <mat-icon>close_small</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <button
+        mat-icon-button
+        class="search-button"
+        aria-label="Buscar"
+        (click)="buscar()">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
   </header>
 
   @if (carregando()) {
@@ -28,7 +39,8 @@
     <div class="catalogo-state catalogo-state-error">{{ erroCarregamento() }}</div>
   } @else if (produtosFiltrados().length === 0) {
     <div class="catalogo-state">
-      Nenhum produto encontrado para "{{ termoBusca() }}".
+      <!-- Parte da vulnerabilidade de DOM XSS-->
+      Nenhum produto encontrado para <span [innerHtml]="termoBuscaInseguro()"></span>.
     </div>
   } @else {
     <section class="product-grid">

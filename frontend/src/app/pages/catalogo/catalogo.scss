@@ -41,8 +41,53 @@ h1 {
   line-height: 1.8;
 }
 
+.search-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
 .catalogo-search {
   width: 100%;
+
+  .mdc-notched-outline__trailing {
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+}
+
+.search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55px;
+  height: 55px;
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: rgba(104, 147, 212, 0.9);
+  letter-spacing: 0.02em;
+  transition: filter 180ms ease, transform 120ms ease;
+
+  &:hover {
+    background: rgb(104, 147, 212);
+    filter: none;
+    transform: translateX(1px);
+  }
+
+  &:active {
+    transform: translateX(0);
+  }
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    color: black;
+    padding: 0 0 0 0;
+  }
 }
 
 .clear-button {

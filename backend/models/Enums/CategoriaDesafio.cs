@@ -13,6 +13,9 @@ public enum CategoriaDesafio
     [Display(Name = "Stored XSS")]
     StoredXSS,
 
+    [Display(Name = "DOM XSS")]
+    DomXSS,
+
     [Display(Name = "Broken Anti-Automation")]
     BrokenAntiAutomation,
 

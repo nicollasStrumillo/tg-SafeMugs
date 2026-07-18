@@ -51,4 +51,14 @@ export class SignalRService {
 			return Promise.reject("SignalR connection is not established.");
 		}
 	}
+
+	public async SolveDesafioDomXss(payload: string): Promise<void> {
+		if (this.connection && this.connection.state === signalR.HubConnectionState.Connected) {
+			await this.connection.invoke("SolveDesafioDomXss", payload)
+				.catch((err) => console.error("Error invoking SolveDesafioDomXss:", err));
+		} else {
+			console.warn("SignalR connection is not established. Cannot invoke SolveDesafioDomXss.");
+			return Promise.reject("SignalR connection is not established.");
+		}
+	}
 }

@@ -797,9 +797,9 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 2,
-                Nome = "Encontrar usuários válidos",
-                Descricao = "Enumere alguns e-mails de usuários existentes.",
-                Categoria = CategoriaDesafio.ExcessiveDataExposure,
+                Nome = "DOM XSS",
+                Descricao = "Utilize o payload \"<iframe src=\"javascript:alert(`XSS`)\">\" para causar um ataque de DOM XSS na página do catalogo",
+                Categoria = CategoriaDesafio.DomXSS,
                 Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",
                 Resolvido = false
@@ -943,14 +943,14 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 4,
                 NrDica = 1,
-                Texto = "O desafio pode ser resolvido na página de detalhes do produto.",
+                Texto = "Procure por campos que reflitam sua entrada na interface.",
                 DesafioId = 2
             },
             new DicaDesafio
             {
                 Id = 5,
                 NrDica = 2,
-                Texto = "Observe o retorno da chamada que lista comentários do produto.",
+                Texto = "Tente pesquisar por produtos que não existem e observe a resposta.",
                 DesafioId = 2
             },
 
