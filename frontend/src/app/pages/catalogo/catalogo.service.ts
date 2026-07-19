@@ -66,4 +66,9 @@ export class CatalogoService {
 	public fazerComentario(produtoId: number, comentarioRequest: ComentarioRequest): Observable<void>{
 		return this.http.post<void>(`/api/produtos/comentarios/${produtoId}`, comentarioRequest);
 	}
+
+	public atualizarComentario(comentarioId: number, comentario: string): Observable<void> {
+		const requestBody = { comentarioId, comentario };
+		return this.http.patch<void>(`/api/produtos/comentarios`, requestBody);
+	}
 }

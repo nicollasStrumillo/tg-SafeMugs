@@ -53,6 +53,12 @@ export class DetalhesProduto implements OnInit {
     protected readonly comentarios = signal<ComentarioProdutoViewModel[]>([]);
     protected readonly carregandoComentarios = signal(true);
     protected readonly enviandoComentario = signal(false);
+    protected readonly enviandoEdicao = signal(false);
+
+    protected readonly comentarioEditandoId = signal<number | null>(null);
+    protected readonly comentarioEditandoTexto = signal('');
+
+    protected usuarioLogado: UsuarioLogado | null = null;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { produto: ProdutoCardViewModel },
@@ -61,7 +67,8 @@ export class DetalhesProduto implements OnInit {
 
     ngOnInit(): void {
         this.carregarComentarios();
-        console.log('Usuairo logado:', this.authSessionService.usuarioLogado());
+        this.usuarioLogado = this.authSessionService.usuarioLogado();
+        console.log('Usuairo logado:', this.usuarioLogado);
     }
 
     fechar(): void {
@@ -129,6 +136,43 @@ export class DetalhesProduto implements OnInit {
                 error: (erro: unknown) => {
                     console.error('Erro ao enviar comentário:', erro);
                     this.notificationService.erro('Erro ao enviar comentario.', {
+                        icon: 'error',
+                    });
+                }
+            });
+    }
+
+    iniciarEdicao(comentario: ComentarioProdutoViewModel): void {
+        this.comentarioEditandoId.set(comentario.id);
+        this.comentarioEditandoTexto.set(comentario.comentario);
+    }
+
+    cancelarEdicao(): void {
+        this.comentarioEditandoId.set(null);
+        this.comentarioEditandoTexto.set('');
+    }
+
+    salvarEdicao(produtoId: number, comentarioId: number): void {
+        const texto = this.comentarioEditandoTexto().trim();
+        if (!texto || this.enviandoEdicao()) {
+            return;
+        }
+
+        this.enviandoEdicao.set(true);
+
+        this.catalogoService.atualizarComentario(comentarioId, texto)
+            .pipe(finalize(() => this.enviandoEdicao.set(false)))
+            .subscribe({
+                next: () => {
+                    this.cancelarEdicao();
+                    this.carregarComentarios();
+                    this.notificationService.sucesso('Comentario atualizado.', {
+                        icon: 'check_circle',
+                    });
+                },
+                error: (erro: unknown) => {
+                    console.error('Erro ao atualizar comentário:', erro);
+                    this.notificationService.erro('Erro ao atualizar comentario.', {
                         icon: 'error',
                     });
                 }

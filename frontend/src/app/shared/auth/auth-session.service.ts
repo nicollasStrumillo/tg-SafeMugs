@@ -80,8 +80,8 @@ export class AuthSessionService {
 
 		this.tokenSignal.set(token);
 		this.usuarioLogadoSignal.set({
-			usuarioId: Number(payload.sub),
-			nomeCompleto: payload.name,
+			usuarioId: Number(payload.nameid),
+			nomeCompleto: payload.unique_name,
 			email: payload.email,
 			perfil: payload.perfil,
 		});

@@ -28,9 +28,9 @@ export interface UsuarioLogado {
 }
 
 export interface TokenPayload {
-	sub: string;
+	nameid: string;
 	email: string;
-	name: string;
+	unique_name: string;
 	role: string;
 	perfil: string;
 	jti: string;

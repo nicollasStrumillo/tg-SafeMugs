@@ -55,8 +55,53 @@
                         <ul class="comments-list">
                             @for (comentario of comentarios(); track comentario.id) {
                                 <li class="comment-item">
-                                    <p class="comment-text" [innerHTML]="comentario.comentarioInseguro"></p>                          
-                                    <span class="comment-author">{{ comentario.usuario?.nomeCompleto ?? 'Anônimo' }}</span>  
+                                    <div class="comment-header">
+                                        <span class="comment-author">{{ comentario.usuario?.nomeCompleto ?? 'Anônimo' }}</span>
+                                        @if (usuarioLogado && comentario.usuario?.id === usuarioLogado.usuarioId && comentarioEditandoId() !== comentario.id) {
+                                            <button
+                                                mat-icon-button
+                                                type="button"
+                                                class="comment-edit-btn"
+                                                (click)="iniciarEdicao(comentario)"
+                                                aria-label="Editar comentario"
+                                            >
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        }
+                                    </div>
+
+                                    @if (comentarioEditandoId() === comentario.id) {
+                                        <mat-form-field appearance="outline" class="comment-edit-field">
+                                            <mat-label>Editar comentario</mat-label>
+                                            <textarea
+                                                matInput
+                                                rows="3"
+                                                [value]="comentarioEditandoTexto()"
+                                                (input)="comentarioEditandoTexto.set($any($event.target).value)"
+                                                maxlength="220"
+                                            ></textarea>
+                                        </mat-form-field>
+                                        <div class="comment-edit-actions">
+                                            <button
+                                                mat-flat-button
+                                                type="button"
+                                                [disabled]="!comentarioEditandoTexto().trim() || enviandoEdicao()"
+                                                (click)="salvarEdicao(data.produto.id, comentario.id)"
+                                            >
+                                                Salvar
+                                            </button>
+                                            <button
+                                                mat-stroked-button
+                                                type="button"
+                                                [disabled]="enviandoEdicao()"
+                                                (click)="cancelarEdicao()"
+                                            >
+                                                Cancelar
+                                            </button>
+                                        </div>
+                                    } @else {
+                                        <p class="comment-text" [innerHTML]="comentario.comentarioInseguro"></p>
+                                    }
                                 </li>
                             }
                         </ul>

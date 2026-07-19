@@ -145,6 +145,24 @@ details[open] .toggle-icon {
     border-top: 1px solid rgba(147, 162, 191, 0.16);
 }
 
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+}
+
+.comment-edit-btn {
+    .mat-icon {
+        font-size: 18px;
+        color: var(--sm-muted);
+    }
+
+    &:hover .mat-icon {
+        color: var(--sm-accent-strong);
+    }
+}
+
 .comment-text {
     margin: 0;
     color: var(--sm-ink);
@@ -152,10 +170,18 @@ details[open] .toggle-icon {
 }
 
 .comment-author {
-    display: inline-block;
-    margin-top: 0.35rem;
     color: var(--sm-muted);
     font-size: 0.82rem;
+}
+
+.comment-edit-field {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.comment-edit-actions {
+    display: flex;
+    gap: 0.5rem;
 }
 
 .empty-comments {
