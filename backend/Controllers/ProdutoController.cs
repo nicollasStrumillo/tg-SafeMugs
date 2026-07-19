@@ -36,4 +36,11 @@ public class ProdutoController : ControllerBase
         await _produtoService.FazerComentarioAsync(produtoId, request.UsuarioId, request.Comentario);
         return Ok(new { mensagem = "Comentário realizado com sucesso."});
     }
+
+    [HttpPatch("comentarios")]
+    public async Task<IActionResult> AtualizarComentario([FromBody] EdicaoComentarioRequest request)
+    {
+        await _produtoService.AtualizarComentarioAsync(request.ComentarioId, request.Comentario);
+        return Ok(new { mensagem = "Comentário atualizado com sucesso."});
+    }
 }

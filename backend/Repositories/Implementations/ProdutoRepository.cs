@@ -81,4 +81,15 @@ public class ProdutoRepository : IProdutoRepository
         _dbContext.ComentariosProduto.Add(novoComentario);
         await _dbContext.SaveChangesAsync();       
     }
+    public async Task AtualizarComentarioAsync(ComentarioProduto comentario, string novaDescricao)
+    {
+        comentario.Comentario = novaDescricao;
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<ComentarioProduto?> ProcurarComentarioPorIdAsync(int comentarioId)
+    {
+        var comentario = await _dbContext.ComentariosProduto.FindAsync(new object[] { comentarioId });
+        return comentario;
+    }
 }

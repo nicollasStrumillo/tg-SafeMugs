@@ -1,4 +1,5 @@
 using backend.Authentication.Interfaces;
+using backend.Exceptions;
 using backend.models;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
@@ -31,5 +32,15 @@ public class ProdutoService : IProdutoService
         Console.WriteLine($"Nome token: {_user.NomeCompleto}, Email token: {_user.Email}, Perfil token: {_user.Perfil}, IsAuthenticated: {_user.IsAuthenticated}");
 
         await _produtoRepository.FazerComentarioAsync(produtoId, usuarioId, comentario);
+    }
+
+    public async Task AtualizarComentarioAsync(int comentarioId, string comentario)
+    {
+        var comentarioEditado = await _produtoRepository.ProcurarComentarioPorIdAsync(comentarioId);
+
+        if (comentarioEditado == null)
+            throw new NotFoundException($"Comentário com ID {comentarioId} não encontrado.");
+        
+        await _produtoRepository.AtualizarComentarioAsync(comentarioEditado, comentario);
     }
 }
