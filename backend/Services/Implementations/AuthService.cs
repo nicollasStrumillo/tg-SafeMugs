@@ -5,6 +5,7 @@ using backend.Helpers;
 using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
+using System.Net.Mail;
 
 namespace backend.Services.Implementations;
 
@@ -52,6 +53,8 @@ public class AuthService : IAuthService
         {
             await _usuarioRepository.CadastrarUsuarioAsync(request); 
         }      
+
+        await _desafioService.SolveIfAsync("Cadastro inválido", () => !IsValidEmail(request.Email));
     }
 
     private async Task CadastrarAdministradorAsync(CadastroRequest request, bool resolverDesafio = false)
@@ -94,5 +97,18 @@ public class AuthService : IAuthService
         }.Any(u => email == u.GetNomeDisplay() && hashSenha == u.GetHashSenha().ToUpper());;
 
         await _desafioService.SolveIfAsync("Brute force de login", () => resolvido);
+    }
+
+    private static bool IsValidEmail(string email)
+    {
+        try
+        {
+            var _ = new MailAddress(email);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

@@ -817,8 +817,8 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 4,
-                Nome = "Validar cadastro",
-                Descricao = "Teste a validação do formulário de cadastro.",
+                Nome = "Cadastro inválido",
+                Descricao = "Tente burlar a validação do formulário de cadastro.",
                 Categoria = CategoriaDesafio.ImproperInputValidation,
                 Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",
@@ -950,7 +950,7 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 9,
                 NrDica = 2,
-                Texto = "A validação dos campos pode ser insuficiente.",
+                Texto = "A validação dos campos pode ser insuficiente no lado do servidor.",
                 DesafioId = 4
             },
 
