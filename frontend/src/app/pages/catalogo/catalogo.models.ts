@@ -60,6 +60,6 @@ export interface ComentarioProdutoDto {
 }
 
 export interface ComentarioRequest {
-	usuarioId: number | null;
+	nomeCompleto: string | null;
 	comentario: string;
 }

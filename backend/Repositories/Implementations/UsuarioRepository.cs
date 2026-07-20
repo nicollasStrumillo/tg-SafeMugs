@@ -21,6 +21,12 @@ public class UsuarioRepository : IUsuarioRepository
             .FirstOrDefaultAsync(u => u.Email == email);
     }
 
+    public async Task<Usuario?> BuscarPorNomeAsync(string nomeCompleto)
+    {
+        return await _context.Usuarios
+            .FirstOrDefaultAsync(u => u.NomeCompleto == nomeCompleto);
+    }
+
     public async Task AtualizarAsync(Usuario usuario)
     {
         _context.Usuarios.Update(usuario);

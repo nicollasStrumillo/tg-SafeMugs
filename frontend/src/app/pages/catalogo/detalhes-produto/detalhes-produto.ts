@@ -117,7 +117,7 @@ export class DetalhesProduto implements OnInit {
         }
 
         const comentarioRequest: ComentarioRequest = {
-            usuarioId: usuarioLogado ? usuarioLogado.usuarioId : null,
+            nomeCompleto: usuarioLogado ? usuarioLogado.nomeCompleto : null,
             comentario,
         };
 

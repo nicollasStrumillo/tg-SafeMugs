@@ -9,12 +9,15 @@ namespace backend.Services.Implementations;
 public class ProdutoService : IProdutoService
 {
     private readonly IProdutoRepository _produtoRepository;
+    private readonly IUsuarioRepository _usuarioReprository;
+
     private readonly IAuthenticatedUserService _user;
     private readonly IDesafioService _desafioService;
 
-    public ProdutoService(IProdutoRepository produtoRepository, IAuthenticatedUserService user, IDesafioService desafioService)
+    public ProdutoService(IProdutoRepository produtoRepository, IAuthenticatedUserService user, IDesafioService desafioService, IUsuarioRepository usuarioRepository)
     {
         _produtoRepository = produtoRepository;
+        _usuarioReprository = usuarioRepository;
         _user = user;
         _desafioService = desafioService;
     }
@@ -29,9 +32,20 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.ObterComentariosPorProdutoIdAsync(produtoId);
     }
 
-    public async Task FazerComentarioAsync(int produtoId, int? usuarioId, string comentario)
+    public async Task FazerComentarioAsync(int produtoId, string? nomeCompleto, string comentario)
     {
-        await _produtoRepository.FazerComentarioAsync(produtoId, usuarioId, comentario);
+        Usuario? usuario = null;
+
+        if (!string.IsNullOrEmpty(nomeCompleto))
+        {
+            usuario = await _usuarioReprository.BuscarPorNomeAsync(nomeCompleto);
+            if (usuario == null)
+                throw new NotFoundException($"Usuário {nomeCompleto} não encontrado");
+        }
+            
+        await _produtoRepository.FazerComentarioAsync(produtoId, usuario?.Id, comentario);
+
+        await _desafioService.SolveIfAsync("Crie um comentário por outro usuário", () => (usuario == null ? 0 : usuario.Id) != _user.UsuarioId);
     }
 
     public async Task AtualizarComentarioAsync(int comentarioId, string comentario)

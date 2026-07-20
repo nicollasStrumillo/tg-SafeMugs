@@ -837,9 +837,9 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 6,
-                Nome = "Buscar por SQL Injection",
-                Descricao = "Use a busca do catálogo para injetar uma consulta.",
-                Categoria = CategoriaDesafio.SqlInjection,
+                Nome = "Altere o comentário de outro usuário",
+                Descricao = "Edite um comentário que não pertence ao seu usuário.",
+                Categoria = CategoriaDesafio.IDOR,
                 Dificuldade = 3,
                 UrlMitigacao = "url_placeholder",
                 Resolvido = false
@@ -847,26 +847,6 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 7,
-                Nome = "Buscar com script",
-                Descricao = "Explore a busca do catálogo com payload de XSS refletido.",
-                Categoria = CategoriaDesafio.ReflectedXSS,
-                Dificuldade = 2,
-                UrlMitigacao = "url_placeholder",
-                Resolvido = false
-            },
-            new Desafio
-            {
-                Id = 8,
-                Nome = "Altere o comentário de outro usuário",
-                Descricao = "Edite um comentário que não pertence ao seu usuário.",
-                Categoria = CategoriaDesafio.ParameterTampering,
-                Dificuldade = 3,
-                UrlMitigacao = "url_placeholder",
-                Resolvido = false
-            },
-            new Desafio
-            {
-                Id = 9,
                 Nome = "Stored XSS",
                 Descricao = "Utilize o payload \"<iframe src=\"javascript:alert(`XSS`)\">\" para causar um ataque de Stored XSS na página do catalogo",
                 Categoria = CategoriaDesafio.StoredXSS,
@@ -876,27 +856,17 @@ public class ApplicationDBContext : DbContext
             },
             new Desafio
             {
-                Id = 10,
-                Nome = "Criar um comentário por outro usuário",
+                Id = 8,
+                Nome = "Crie um comentário por outro usuário",
                 Descricao = "Escreva um comentário que não pertence ao seu usuário.",
-                Categoria = CategoriaDesafio.IDOR,
-                Dificuldade = 3,
-                UrlMitigacao = "url_placeholder",
-                Resolvido = false
-            },
-            new Desafio
-            {
-                Id = 11,
-                Nome = "Recuperar senha insegura",
-                Descricao = "Explore o fluxo de esqueci minha senha sem proteção suficiente.",
                 Categoria = CategoriaDesafio.BrokenAuthentication,
-                Dificuldade = 3,
+                Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
             {
-                Id = 12,
+                Id = 9,
                 Nome = "Encontrar a Score-Board",
                 Descricao = "Localize a página de score-board.",
                 Categoria = CategoriaDesafio.Outros,
@@ -906,7 +876,7 @@ public class ApplicationDBContext : DbContext
             },
             new Desafio
             {
-                Id = 13,
+                Id = 10,
                 Nome = "Tratamento de Erro",
                 Descricao = "Provoque um erro que o retorno da API não trata corretamente.",
                 Categoria = CategoriaDesafio.SecurityMisconfiguration,
@@ -1010,14 +980,14 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 13,
                 NrDica = 1,
-                Texto = "A busca do catálogo é a superfície de ataque.",
+                Texto = "Observe o corpo da requisição de editar comentário.",
                 DesafioId = 6
             },
             new DicaDesafio
             {
                 Id = 14,
                 NrDica = 2,
-                Texto = "O nome do desafio aponta para SQL Injection.",
+                Texto = "Intercepte a requisição de editar comentário para mudar o seu payload.",
                 DesafioId = 6
             },
 
@@ -1025,14 +995,14 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 15,
                 NrDica = 1,
-                Texto = "A busca reflete sua entrada na interface de resposta.",
+                Texto = "O desafio está na seção de detalhes do produto.",
                 DesafioId = 7
             },
             new DicaDesafio
             {
                 Id = 16,
                 NrDica = 2,
-                Texto = "Teste inserir um payload malicioso no termo de pesquisa.",
+                Texto = "Comentários podem ser renderizados sem sanitização.",
                 DesafioId = 7
             },
 
@@ -1040,14 +1010,14 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 17,
                 NrDica = 1,
-                Texto = "Observe o corpo da requisição de editar comentário.",
+                Texto = "O payload enviado ao backend pode estar transmitindo dados de forma insegura.",
                 DesafioId = 8
             },
             new DicaDesafio
             {
                 Id = 18,
                 NrDica = 2,
-                Texto = "Intercepte a requisição de editar comentário para mudar o seu payload.",
+                Texto = "Tente interceptar e modificar a requisição.",
                 DesafioId = 8
             },
 
@@ -1055,67 +1025,22 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 19,
                 NrDica = 1,
-                Texto = "O desafio está na seção de detalhes do produto.",
-                DesafioId = 9
+                Texto = "Este desafio pode ser resolvido a partir de diferentes telas.",
+                DesafioId = 10
             },
             new DicaDesafio
             {
                 Id = 20,
                 NrDica = 2,
-                Texto = "Comentários podem ser renderizados sem sanitização.",
-                DesafioId = 9
+                Texto = "Tente inserir valores inesperados em formulários que possam provocar um erro no backend.",
+                DesafioId = 10
             },
-
             new DicaDesafio
             {
                 Id = 21,
-                NrDica = 1,
-                Texto = "O payload enviado ao backend pode estar transmitindo dados de forma insegura.",
-                DesafioId = 10
-            },
-            new DicaDesafio
-            {
-                Id = 22,
-                NrDica = 2,
-                Texto = "Tente interceptar e modificar a requisição.",
-                DesafioId = 10
-            },
-
-            new DicaDesafio
-            {
-                Id = 23,
-                NrDica = 1,
-                Texto = "Dica 1 placeholder",
-                DesafioId = 11
-            },
-            new DicaDesafio
-            {
-                Id = 24,
-                NrDica = 2,
-                Texto = "Dica 2 placeholder",
-                DesafioId = 11
-            },
-
-            new DicaDesafio
-            {
-                Id = 25,
-                NrDica = 1,
-                Texto = "Este desafio pode ser resolvido a partir de diferentes telas.",
-                DesafioId = 13
-            },
-            new DicaDesafio
-            {
-                Id = 26,
-                NrDica = 2,
-                Texto = "Tente inserir valores inesperados em formulários que possam provocar um erro no backend.",
-                DesafioId = 13
-            },
-            new DicaDesafio
-            {
-                Id = 27,
                 NrDica = 3,
                 Texto = "Tente quebrar a consulta SQL realizada a partir da tela de Login.",
-                DesafioId = 13
+                DesafioId = 10
             }
         );
 

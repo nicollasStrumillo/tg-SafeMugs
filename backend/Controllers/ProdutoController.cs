@@ -33,7 +33,7 @@ public class ProdutoController : ControllerBase
     [HttpPost("comentarios/{produtoId}")]
     public async Task<IActionResult> FazerComentario(int produtoId, [FromBody] ComentarioRequest request)
     {
-        await _produtoService.FazerComentarioAsync(produtoId, request.UsuarioId, request.Comentario);
+        await _produtoService.FazerComentarioAsync(produtoId, request.NomeCompleto, request.Comentario);
         return Ok(new { mensagem = "Comentário realizado com sucesso."});
     }
 
