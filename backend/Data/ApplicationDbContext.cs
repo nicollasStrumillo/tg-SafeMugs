@@ -857,10 +857,10 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 8,
-                Nome = "Alterar ordenação do catálogo",
-                Descricao = "Modifique os parâmetros de filtro e ordenação da listagem para encontrar informações sensíveis.",
+                Nome = "Altere o comentário de outro usuário",
+                Descricao = "Edite um comentário que não pertence ao seu usuário.",
                 Categoria = CategoriaDesafio.ParameterTampering,
-                Dificuldade = 2,
+                Dificuldade = 3,
                 UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
@@ -1040,14 +1040,14 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 17,
                 NrDica = 1,
-                Texto = "Filtros e ordenação costumam vir por query string.",
+                Texto = "Observe o corpo da requisição de editar comentário.",
                 DesafioId = 8
             },
             new DicaDesafio
             {
                 Id = 18,
                 NrDica = 2,
-                Texto = "O backend pode estar ordenando por qualquer parâmetro que ele receber.",
+                Texto = "Intercepte a requisição de editar comentário para mudar o seu payload.",
                 DesafioId = 8
             },
 
