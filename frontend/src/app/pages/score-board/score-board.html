@@ -188,7 +188,22 @@
               <h2>{{ desafio.nome }}</h2>
             </div>
             
-            <p class="challenge-description">{{ desafio.descricao }}</p>
+            <p class="challenge-description">
+              @for (fragmento of dividirDescricaoEPaylaod(desafio.descricao); track $index) {
+                @if(!fragmento.payload){
+                  {{ fragmento.texto }}
+                }@else{
+                  <span
+                    class="payload-chip"
+                    (click)="copiar(fragmento.texto)"
+                    (keydown.enter)="copiar(fragmento.texto)"
+                    (keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+                    matTooltip="Clique para copiar"
+                    role="button"
+                    tabindex="0">{{ fragmento.texto }}</span>
+                }
+              }
+            </p>
 
             <div class="challenge-footer">
               <div class="difficulty-inline" [attr.aria-label]="'Dificuldade ' + desafio.dificuldade">

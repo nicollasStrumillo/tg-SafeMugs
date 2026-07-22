@@ -13,6 +13,11 @@ import { DesafioResponse, DicaDesafioDto } from './score-board.models';
 import { ScoreBoardService } from './score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 
+interface FragmentoTexto{
+	texto: string;
+	payload: boolean;
+} 
+
 @Component({
 	selector: 'sm-score-board',
 	imports: [
@@ -241,5 +246,17 @@ export class ScoreBoard implements OnInit {
 			.normalize('NFD')
 			.replace(/[\u0300-\u036f]/g, '')
 			.toLowerCase();
+	}
+
+	protected dividirDescricaoEPaylaod(descricao: string): FragmentoTexto[]{
+		return descricao.split("|")
+			.map((texto, index) => ({texto, payload: index % 2 === 1}));
+	}
+
+	protected async copiar(texto: string){
+		await navigator.clipboard.writeText(texto);
+		
+		this.notificationService.info("Payload copiado!");
+		
 	}
 }

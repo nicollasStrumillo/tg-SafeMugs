@@ -44,7 +44,20 @@
                         }
                     </span>
                     <p class="toast-description">
-                        {{ notification.descricaoDesafio }}
+                        @for (fragmento of dividirDescricaoEPaylaod(notification.descricaoDesafio); track $index) {
+                            @if(!fragmento.payload){
+                            {{ fragmento.texto }}
+                            }@else{
+                            <span
+                                class="payload-chip"
+                                (click)="copiar(fragmento.texto)"
+                                (keydown.enter)="copiar(fragmento.texto)"
+                                (keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+                                matTooltip="Clique para copiar"
+                                role="button"
+                                tabindex="0">{{ fragmento.texto }}</span>
+                            }
+                        }
                     </p>
                 </div>
             </div>

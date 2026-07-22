@@ -798,7 +798,7 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 2,
                 Nome = "DOM XSS",
-                Descricao = "Utilize o payload \"<iframe src=\"javascript:alert(`XSS`)\">\" para causar um ataque de DOM XSS na página do catalogo",
+                Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de DOM XSS na página do catalogo",
                 Categoria = CategoriaDesafio.DomXSS,
                 Dificuldade = 2,
                 UrlMitigacao = "url_placeholder",
@@ -848,7 +848,7 @@ public class ApplicationDBContext : DbContext
             {
                 Id = 7,
                 Nome = "Stored XSS",
-                Descricao = "Utilize o payload \"<iframe src=\"javascript:alert(`XSS`)\">\" para causar um ataque de Stored XSS na página do catalogo",
+                Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página do catalogo",
                 Categoria = CategoriaDesafio.StoredXSS,
                 Dificuldade = 3,
                 UrlMitigacao = "url_placeholder",

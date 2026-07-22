@@ -17,6 +17,11 @@ interface DesafioSolvedNotification {
   restored?: boolean
 }
 
+interface FragmentoTexto{
+	texto: string;
+	payload: boolean;
+} 
+
 @Component({
   selector: 'sm-desafio-notification',
   imports: [
@@ -137,4 +142,16 @@ export class DesafioNotification implements OnInit {
   trackById(_: number, notification: DesafioSolvedNotification): number {
     return notification.id;
   }
+
+  protected dividirDescricaoEPaylaod(descricao: string): FragmentoTexto[]{
+		return descricao.split("|")
+			.map((texto, index) => ({texto, payload: index % 2 === 1}));
+	}
+
+	protected async copiar(texto: string){
+		await navigator.clipboard.writeText(texto);
+		
+		this.notificationService.info("Payload copiado!");
+		
+	}
 }

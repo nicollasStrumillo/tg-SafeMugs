@@ -444,6 +444,24 @@ h1 {
 	color: rgba(238, 244, 255, 0.35);
 }
 
+.payload-chip {
+    display: inline;
+    white-space: nowrap;
+    font-family: Consolas, monospace;
+	font-size: 0.9rem;
+    background: #232323;
+    color: #8df18d;
+    border: 1px solid #4caf50;
+    border-radius: 6px;
+    padding: 0 4px;
+    cursor: pointer;
+    transition: .15s;
+}
+
+.payload-chip:hover {
+    background: #2d2d2d;
+}
+
 
 @media (max-width: 980px) {
 	.scoreboard-hero {
