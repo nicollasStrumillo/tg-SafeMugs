@@ -14,6 +14,14 @@
         <strong [class.is-solved]="totalResolvidos() === totalDesafios()">{{ totalResolvidos() }}/{{ totalDesafios() }}</strong>
       </div>
 
+      <div class="summary-progress" aria-hidden="true">
+        <span
+          class="summary-progress-fill"
+          [class.is-complete]="totalResolvidos() === totalDesafios()"
+          [style.width.%]="totalDesafios() ? (totalResolvidos() / totalDesafios()) * 100 : 0"
+        ></span>
+      </div>
+
       <div class="summary-breakdown">
         @for (item of resolvidosPorDificuldade(); track trackByNivel($index, item)) {
           <article class="summary-tile">
@@ -147,7 +155,7 @@
             (keyup.space)="abrirDesafio(desafio)"
             tabindex="0"
             role="button"
-            [attr.aria-label]="'Abrir desafio ' + desafio.nome"
+            [attr.aria-label]="(desafio.resolvido ? 'Desafio resolvido: ' : 'Abrir desafio ') + desafio.nome"
             [class.is-resolved]="desafio.resolvido"
           >
             <div class="challenge-topline">
@@ -186,6 +194,9 @@
 
             <div class="challenge-title-row">
               <h2>{{ desafio.nome }}</h2>
+              @if (desafio.resolvido) {
+                <mat-icon class="resolved-mark" aria-label="Resolvido">check_circle</mat-icon>
+              }
             </div>
             
             <p class="challenge-description">
