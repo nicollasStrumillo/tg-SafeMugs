@@ -1,6 +1,7 @@
 using backend.Authentication.Interfaces;
 using backend.Exceptions;
 using backend.models;
+using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 
@@ -45,7 +46,7 @@ public class ProdutoService : IProdutoService
             
         await _produtoRepository.FazerComentarioAsync(produtoId, usuario?.Id, comentario);
 
-        await _desafioService.SolveIfAsync("Crie um comentário por outro usuário", () => (usuario == null ? 0 : usuario.Id) != _user.UsuarioId);
+        await _desafioService.SolveIfAsync(DesafiosEnum.CriarComentarioOutroUsuario, () => (usuario == null ? 0 : usuario.Id) != _user.UsuarioId);
     }
 
     public async Task AtualizarComentarioAsync(int comentarioId, string comentario)
@@ -54,7 +55,7 @@ public class ProdutoService : IProdutoService
         if (comentarioEditado == null)
             throw new NotFoundException($"Comentário com ID {comentarioId} não encontrado.");
 
-        await _desafioService.SolveIfAsync("Altere o comentário de outro usuário", () => comentarioEditado.UsuarioId != _user.UsuarioId);
+        await _desafioService.SolveIfAsync(DesafiosEnum.AlterarComentarioOutroUsuario, () => comentarioEditado.UsuarioId != _user.UsuarioId);
         
         await _produtoRepository.AtualizarComentarioAsync(comentarioEditado, comentario);
     }

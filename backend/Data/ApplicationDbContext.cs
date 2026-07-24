@@ -787,7 +787,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 1,
-                Nome = "Login como Admin",
+                Nome = DesafiosEnum.LoginAdmin.GetNomeDisplay(),
                 Descricao = "Acesse uma conta administrativa utilizando SQL Injection.",
                 Categoria = CategoriaDesafio.SqlInjection,
                 Dificuldade = 2,
@@ -797,7 +797,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 2,
-                Nome = "DOM XSS",
+                Nome = DesafiosEnum.DomXss.GetNomeDisplay(),
                 Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de DOM XSS na página do catalogo",
                 Categoria = CategoriaDesafio.DomXSS,
                 Dificuldade = 2,
@@ -807,7 +807,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 3,
-                Nome = "Brute force de login",
+                Nome = DesafiosEnum.BruteForceLogin.GetNomeDisplay(),
                 Descricao = "Acesse a conta de um dos usuários do domínio @safemugs.com utilizando força bruta.",
                 Categoria = CategoriaDesafio.BrokenAntiAutomation,
                 Dificuldade = 2,
@@ -817,7 +817,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 4,
-                Nome = "Cadastro inválido",
+                Nome = DesafiosEnum.CadastroInvalido.GetNomeDisplay(),
                 Descricao = "Tente burlar a validação do formulário de cadastro.",
                 Categoria = CategoriaDesafio.ImproperInputValidation,
                 Dificuldade = 2,
@@ -827,7 +827,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 5,
-                Nome = "Manipular cadastro",
+                Nome = DesafiosEnum.ManipularCadastro.GetNomeDisplay(),
                 Descricao = "Crie uma conta de administrador.",
                 Categoria = CategoriaDesafio.ParameterTampering,
                 Dificuldade = 3,
@@ -837,7 +837,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 6,
-                Nome = "Altere o comentário de outro usuário",
+                Nome = DesafiosEnum.AlterarComentarioOutroUsuario.GetNomeDisplay(),
                 Descricao = "Edite um comentário que não pertence ao seu usuário.",
                 Categoria = CategoriaDesafio.IDOR,
                 Dificuldade = 3,
@@ -847,7 +847,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 7,
-                Nome = "Stored XSS",
+                Nome = DesafiosEnum.StoredXss.GetNomeDisplay(),
                 Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página do catalogo",
                 Categoria = CategoriaDesafio.StoredXSS,
                 Dificuldade = 3,
@@ -857,7 +857,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 8,
-                Nome = "Crie um comentário por outro usuário",
+                Nome = DesafiosEnum.CriarComentarioOutroUsuario.GetNomeDisplay(),
                 Descricao = "Escreva um comentário que não pertence ao seu usuário.",
                 Categoria = CategoriaDesafio.BrokenAuthentication,
                 Dificuldade = 2,
@@ -867,7 +867,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 9,
-                Nome = "Encontrar a Score-Board",
+                Nome = DesafiosEnum.EncontrarScoreBoard.GetNomeDisplay(),
                 Descricao = "Localize a página de score-board.",
                 Categoria = CategoriaDesafio.Outros,
                 Dificuldade = 1,
@@ -877,7 +877,7 @@ public class ApplicationDBContext : DbContext
             new Desafio
             {
                 Id = 10,
-                Nome = "Tratamento de Erro",
+                Nome = DesafiosEnum.TratamentoErro.GetNomeDisplay(),
                 Descricao = "Provoque um erro que o retorno da API não trata corretamente.",
                 Categoria = CategoriaDesafio.SecurityMisconfiguration,
                 Dificuldade = 1,

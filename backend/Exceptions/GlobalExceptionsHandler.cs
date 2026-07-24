@@ -1,3 +1,4 @@
+using backend.models.Enums;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ internal sealed class GlobalExceptionsHandler(RequestDelegate next)
             if (context.Response.StatusCode == StatusCodes.Status500InternalServerError)
             {
                 var desafioService = context.RequestServices.GetRequiredService<IDesafioService>();
-                await desafioService.SolveIfAsync("Tratamento de Erro", () => true);
+                await desafioService.SolveIfAsync(DesafiosEnum.TratamentoErro, () => true);
             }
 
             await context.Response.WriteAsJsonAsync(new ProblemDetails

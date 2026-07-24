@@ -23,7 +23,7 @@ public class DesafioService : IDesafioService
     {
         var desafios = await _desafioRepository.ObterTodosAsync();
 
-        if (resolverScoreBoard) await SolveIfAsync("Encontrar a Score-Board", () => true);
+        if (resolverScoreBoard) await SolveIfAsync(DesafiosEnum.EncontrarScoreBoard, () => true);
         
         return desafios.Select(d => MapToDesafioResponse(d));
     }
@@ -64,14 +64,16 @@ public class DesafioService : IDesafioService
     }
 
     // Resolucao de Desafios
-    public async Task SolveIfAsync(string nomeDesafio, Func<bool> criteria)
+    public async Task SolveIfAsync(DesafiosEnum desafio, Func<bool> criteria)
     {
+        string nomeDesafio = desafio.GetNomeDisplay();
+
         if (!criteria()) return;
 
-        Desafio? desafio = await _desafioRepository.FindByNameAsync(nomeDesafio);
+        Desafio? _desafio = await _desafioRepository.FindByNameAsync(nomeDesafio);
 
-        if (desafio != null && !desafio.Resolvido)
-            await SolveAsync(desafio);
+        if (_desafio != null && !_desafio.Resolvido)
+            await SolveAsync(_desafio);
     }
 
     private async Task SolveAsync(Desafio desafio, bool isRestored = false)

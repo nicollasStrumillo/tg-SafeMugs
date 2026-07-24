@@ -54,7 +54,7 @@ public class AuthService : IAuthService
             await _usuarioRepository.CadastrarUsuarioAsync(request); 
         }      
 
-        await _desafioService.SolveIfAsync("Cadastro inválido", () => !IsValidEmail(request.Email));
+        await _desafioService.SolveIfAsync(DesafiosEnum.CadastroInvalido, () => !IsValidEmail(request.Email));
     }
 
     private async Task CadastrarAdministradorAsync(CadastroRequest request, bool resolverDesafio = false)
@@ -62,7 +62,7 @@ public class AuthService : IAuthService
         if (request.Perfil?.ToLower() != "administrador") return; 
 
         if (resolverDesafio)
-            await _desafioService.SolveIfAsync("Manipular cadastro", () => true);
+            await _desafioService.SolveIfAsync(DesafiosEnum.ManipularCadastro, () => true);
                
         await _usuarioRepository.CadastrarUsuarioAsync(request);        
     }
@@ -76,7 +76,7 @@ public class AuthService : IAuthService
         if (usuario == null)
             return null;
 
-        await _desafioService.SolveIfAsync("Login como Admin", () => usuario.Perfil == "Administrador" && request.ResolverDesafioSqlInjection);
+        await _desafioService.SolveIfAsync(DesafiosEnum.LoginAdmin, () => usuario.Perfil == "Administrador" && request.ResolverDesafioSqlInjection);
         await ResolverDesafiosBruteForceAsync(request.Email, request.HashSenha);
 
         return _jwtService.GenerateToken(usuario);
@@ -96,7 +96,7 @@ public class AuthService : IAuthService
             EmailsESenhasUsuarios.MarinaAlves,
         }.Any(u => email == u.GetNomeDisplay() && hashSenha == u.GetHashSenha().ToUpper());;
 
-        await _desafioService.SolveIfAsync("Brute force de login", () => resolvido);
+        await _desafioService.SolveIfAsync(DesafiosEnum.BruteForceLogin, () => resolvido);
     }
 
     private static bool IsValidEmail(string email)

@@ -1,3 +1,4 @@
+using backend.models.Enums;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
 using Microsoft.AspNetCore.SignalR;
@@ -29,11 +30,11 @@ public sealed class NotificationHub : Hub
 
     public async Task SolveDesafioDomXss(string payload)
     {
-        await _desafioService.SolveIfAsync("DOM XSS", () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
+        await _desafioService.SolveIfAsync(DesafiosEnum.DomXss, () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
     }
 
     public async Task SolveDesafioStoredXss(string payload)
     {
-        await _desafioService.SolveIfAsync("Stored XSS", () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
+        await _desafioService.SolveIfAsync(DesafiosEnum.StoredXss, () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
     }
 }
