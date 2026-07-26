@@ -22,4 +22,24 @@ public static class HashHelper
 
         return hashGerado.Equals(hash, StringComparison.OrdinalIgnoreCase);
     }
+
+    public static string GerarMD5PorData()
+    {
+        string data = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        
+        byte[] inputBytes = Encoding.UTF8.GetBytes(data);
+
+        using (MD5 md5 = MD5.Create())
+        {
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                sb.Append(hashBytes[i].ToString("x2"));
+            }
+
+            return sb.ToString();
+        }
+    }
 }

@@ -1,4 +1,5 @@
 using backend.DTOs.Auth;
+using backend.Services.Implementations;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,21 +9,30 @@ namespace backend.Controllers
     [Route("api/senha")]
     public class SenhaController:Controller
     {
-    private readonly ISenhaService senhaService;
+    private readonly IAuthService authService;
 
-    public SenhaController(ISenhaService senhaService)
+    public SenhaController(IAuthService authService)
     {
-        this.senhaService = senhaService;
+        this.authService = authService;
     }
 
+    [HttpPost("token")]
+    public async Task<IActionResult> EnvioToken([FromBody] string email)
+    {
+        authService.EnviarTokenSenha(email);
+        
+        return Ok();
+    }
+    
     [HttpPost("reset")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetSenhaRequestDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
         
-        await senhaService.TrocarSenhaAsync(dto);
+        await authService.TrocarSenhaAsync(dto);
         return NoContent();
     }
+
 }
 }

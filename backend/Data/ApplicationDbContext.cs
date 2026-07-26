@@ -20,6 +20,7 @@ public class ApplicationDBContext : DbContext
     public DbSet<ItemPedido> ItensPedido => Set<ItemPedido>();
     public DbSet<Desafio> Desafios => Set<Desafio>();
     public DbSet<DicaDesafio> DicasDesafio => Set<DicaDesafio>();
+    public DbSet<SenhaToken> SenhaTokens => Set<SenhaToken>();
 
     public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
         : base(options)

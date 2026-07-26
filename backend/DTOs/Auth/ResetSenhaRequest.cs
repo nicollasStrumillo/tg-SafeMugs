@@ -11,6 +11,9 @@ namespace backend.DTOs.Auth
 
         [Required]
         public string NovaSenha { get; set; } = string.Empty;
+        
+        [Required]
+        public string Token { get; set; } = string.Empty;
 
     }
 }

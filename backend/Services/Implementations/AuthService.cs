@@ -2,9 +2,12 @@ using backend.Authentication.Interfaces;
 using backend.DTOs.Auth;
 using backend.Exceptions;
 using backend.Helpers;
+using backend.models;
 using backend.models.Enums;
+using backend.Repositories.Implementations;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
+using System.Net;
 using System.Net.Mail;
 
 namespace backend.Services.Implementations;
@@ -14,15 +17,18 @@ public class AuthService : IAuthService
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IDesafioService _desafioService;
     private readonly IJwtService _jwtService;
+    private readonly ISenhaTokenRepository _senhaTokenRepository;
 
     public AuthService(
         IUsuarioRepository usuarioRepository,
         IDesafioService desafioService,
-        IJwtService jwtService)
+        IJwtService jwtService,
+        ISenhaTokenRepository senhaTokenRepository)
     {
         _usuarioRepository = usuarioRepository;
         _desafioService = desafioService;
         _jwtService = jwtService;
+        _senhaTokenRepository = senhaTokenRepository;
     }
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
@@ -110,5 +116,56 @@ public class AuthService : IAuthService
         {
             return false;
         }
+    }
+
+    public async Task EnviarTokenSenhaAsync(string email)
+    {
+        var usuario = await _usuarioRepository.BuscaPorEmailAsync(email);
+        if (usuario == null) return;
+        string tokenGerado = HashHelper.GerarMD5PorData();
+        var senhaToken = new SenhaToken
+        {
+            UsuarioId = usuario.Id,
+            Token = tokenGerado,
+            ExpiraEm = DateTimeOffset.UtcNow.AddMinutes(15) // Token vale por 15 min
+        };
+        await _senhaTokenRepository.SalvarAsync(senhaToken);
+        
+        MailMessage mensagem = new MailMessage();
+        mensagem.From = new MailAddress("SafeMugs@gmail.com");
+        mensagem.To.Add(email);
+        mensagem.Subject = "Recuperação da conta do SafeMugs";
+        mensagem.Body = $"Olá,Você solicitou uma redefinição de senha em sua conta!. Aqui está seu token: {senhaToken}";
+
+        SmtpClient smtp = new SmtpClient("smtp.exemplo.com", 587);
+            smtp.Credentials = new NetworkCredential("seuemail@exemplo.com", "sua_senha");
+            smtp.EnableSsl = true;
+
+            smtp.Send(mensagem);
+    }
+
+    public async Task TrocarSenhaAsync(ResetSenhaRequestDto dto)
+    {
+        var usuario = await _usuarioRepository.BuscaPorEmailAsync(dto.Email);
+
+        var tokenBanco = await _senhaTokenRepository.ObterPorTokenEUsuarioAsync(dto.Token, usuario.Id);
+
+        if (usuario == null)
+            throw new Exception("Usuário não encontrado.");
+        
+        var tokenBanco = await _senhaTokenRepository.ObterPorTokenEUsuarioAsync(dto.Token, usuario.Id);
+
+        if (tokenBanco == null)
+            throw new Exception("Token inválido ou inexistente.");
+
+        if (tokenBanco.ExpiraEm < DateTimeOffset.UtcNow)
+            throw new Exception("Token expirado.");
+
+        usuario.HashSenha = HashHelper.GerarMD5(dto.NovaSenha);
+        await _usuarioRepository.AtualizarAsync(usuario);
+
+        // DELETAR/CONSUMIR O TOKEN (Garante uso único)
+        await _senhaTokenRepository.DeletarAsync(tokenBanco);
+
     }
 }

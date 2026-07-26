@@ -99,8 +99,8 @@ builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDesafioRepository, DesafioRepository>();
 builder.Services.AddScoped<IDesafioService, DesafioService>();
-builder.Services.AddScoped<ISenhaService, SenhaService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ISenhaTokenRepository, SenhaTokenRepository>();
 
 //NotificationService e SignalR
 builder.Services.AddSingleton<INotificationService, NotificationService>();
