@@ -161,36 +161,45 @@
             <div class="challenge-topline">
               <span class="category-pill">{{ desafio.categoria }}</span>
 
-              <button
-                mat-icon-button
-                type="button"
-                class="hint-button"
-                matTooltip="Ver dicas"
-                [attr.aria-label]="'Ver dicas de ' + desafio.nome"
-                [matMenuTriggerFor]="dicasMenu"
-                (click)="verDicas(desafio, $event)"
-                [disabled]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0"
-              >
-                <mat-icon class="icon-tip" [class.no-tips]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0">tips_and_updates</mat-icon>
-              </button>
-              <mat-menu class="menu-tip" panelClass="menu-tip-panel" #dicasMenu="matMenu" xPosition="after">
-                <div class="menu-tittle-tip">Dica {{ dicaAtual()?.nrDica }}:</div> 
-
-                  <div class="menu-content-tip">{{ dicaAtual()?.texto }}</div>
-
-                <div class="menu-navigation-tip">
-                  <button mat-icon-button type="button"  aria-label="Dica anterior" (click)="mudarDica(desafio, false, $event)">
-                    <mat-icon class="arrow-tip" [class.arrow-tip-disabled]="dicaAtual()?.nrDica === 1">chevron_left</mat-icon>
-                  </button>
-
-                  <span class="menu-count-tip">{{ dicaAtual()?.nrDica }}/{{ desafio.dicasDesafio.length}}</span>
-
-                  <button mat-icon-button type="button" aria-label="Próxima dica" (click)="mudarDica(desafio, true, $event)">
-                    <mat-icon class="arrow-tip" [class.arrow-tip-disabled]="dicaAtual()?.nrDica === desafio.dicasDesafio.length">chevron_right</mat-icon>
-                  </button>
-                </div>
-              </mat-menu>
+              <div class="topline-right">
+                @if (!desafio.resolvido) {
+                  <mat-icon
+                    class="lock-mark"
+                    aria-label="Desafio bloqueado"
+                    matTooltip="Resolva o desafio para ver detalhes"
+                  >lock</mat-icon>
+                }
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="hint-button"
+                  matTooltip="Ver dicas"
+                  [attr.aria-label]="'Ver dicas de ' + desafio.nome"
+                  [matMenuTriggerFor]="dicasMenu"
+                  (click)="verDicas(desafio, $event)"
+                  [disabled]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0"
+                >
+                  <mat-icon class="icon-tip" [class.no-tips]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0">tips_and_updates</mat-icon>
+                </button>
+              </div>
             </div>
+            <mat-menu class="menu-tip" panelClass="menu-tip-panel" #dicasMenu="matMenu" xPosition="after">
+              <div class="menu-tittle-tip">Dica {{ dicaAtual()?.nrDica }}:</div>
+
+                <div class="menu-content-tip">{{ dicaAtual()?.texto }}</div>
+
+              <div class="menu-navigation-tip">
+                <button mat-icon-button type="button"  aria-label="Dica anterior" (click)="mudarDica(desafio, false, $event)">
+                  <mat-icon class="arrow-tip" [class.arrow-tip-disabled]="dicaAtual()?.nrDica === 1">chevron_left</mat-icon>
+                </button>
+
+                <span class="menu-count-tip">{{ dicaAtual()?.nrDica }}/{{ desafio.dicasDesafio.length}}</span>
+
+                <button mat-icon-button type="button" aria-label="Próxima dica" (click)="mudarDica(desafio, true, $event)">
+                  <mat-icon class="arrow-tip" [class.arrow-tip-disabled]="dicaAtual()?.nrDica === desafio.dicasDesafio.length">chevron_right</mat-icon>
+                </button>
+              </div>
+            </mat-menu>
 
             <div class="challenge-title-row">
               <h2>{{ desafio.nome }}</h2>
@@ -206,7 +215,7 @@
                 }@else{
                   <span
                     class="payload-chip"
-                    (click)="copiar(fragmento.texto)"
+                    (click)="copiar(fragmento.texto, $event)"
                     (keydown.enter)="copiar(fragmento.texto)"
                     (keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
                     matTooltip="Clique para copiar"
@@ -223,10 +232,20 @@
                 }
               </div>
 
-              <span class="hint-count">
-                <mat-icon class="icon-tip-qt">help_outline</mat-icon>
-                {{ desafio.dicasDesafio.length }} dicas
-              </span>
+              <div class="footer-right">
+                @if (desafio.possuiQuiz) {
+                  <mat-icon
+                    class="quiz-indicator"
+                    [class.quiz-pending]="!desafio.quizResolvido"
+                    [class.quiz-solved]="desafio.quizResolvido"
+                    [attr.aria-label]="desafio.quizResolvido ? 'Quiz resolvido' : 'Quiz pendente'"
+                  >code</mat-icon>
+                }
+                <span class="hint-count">
+                  <mat-icon class="icon-tip-qt">help_outline</mat-icon>
+                  {{ desafio.dicasDesafio.length }} dicas
+                </span>
+              </div>
             </div>
           </mat-card>
         }

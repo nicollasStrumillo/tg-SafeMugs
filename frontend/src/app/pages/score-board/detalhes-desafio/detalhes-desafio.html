@@ -1,0 +1,216 @@
+<mat-card class="detalhes-card">
+	<div class="listra-verde" aria-hidden="true"></div>
+
+	<button
+		mat-icon-button
+		type="button"
+		class="btn-fechar"
+		(click)="fechar()"
+		aria-label="Fechar detalhes do desafio"
+	>
+		<mat-icon>close</mat-icon>
+	</button>
+
+	<div class="detalhes-container">		
+		<section class="bloco-destaque">
+			<header class="bloco-header">
+				<h1 class="titulo-desafio">{{ desafio().nome }}</h1>
+
+				<div class="meta-info-row">
+					<div class="dificuldade-row" [attr.aria-label]="'Dificuldade ' + desafio().dificuldade + ' de 5'">
+						@for (nivel of niveisDificuldade; track nivel) {
+							<mat-icon class="star">{{ nivel <= desafio().dificuldade ? 'star' : 'star_border' }}</mat-icon>
+						}
+					</div>
+
+					<span class="hint-count" [class.sem-dicas]="!temDicas()">
+						<mat-icon class="icon-tip-qt">help_outline</mat-icon> {{ quantidadeDicas() }} dicas
+					</span>
+
+					<button
+						mat-icon-button
+						type="button"
+						class="hint-button"
+						matTooltip="Ver dicas"
+						[attr.aria-label]="'Ver dicas de ' + desafio().nome"
+						[matMenuTriggerFor]="dicasMenu"
+						(click)="mostrarDicas()"
+						[disabled]="!temDicas()"
+					>
+						<mat-icon class="icon-tip" [class.no-tips]="!temDicas()">tips_and_updates</mat-icon>
+					</button>
+					<mat-menu class="menu-dicas" #dicasMenu="matMenu" xPosition="after">
+						<div class="menu-dicas-titulo">Dica {{ dicaAtual()?.nrDica }}:</div>
+						<div class="menu-dicas-conteudo">{{ dicaAtual()?.texto }}</div>
+						<div class="menu-dicas-navegacao">
+							<button
+								mat-icon-button
+								type="button"
+								aria-label="Dica anterior"
+								(click)="mudarDica(false, $event)"
+							>
+								<mat-icon [class.arrow-disabled]="dicaAtual()?.nrDica === 1">chevron_left</mat-icon>
+							</button>
+							<span class="menu-dicas-contador">{{ dicaAtual()?.nrDica }}/{{ quantidadeDicas() }}</span>
+							<button
+								mat-icon-button
+								type="button"
+								aria-label="Próxima dica"
+								(click)="mudarDica(true, $event)"
+							>
+								<mat-icon [class.arrow-disabled]="dicaAtual()?.nrDica === quantidadeDicas()">chevron_right</mat-icon>
+							</button>
+						</div>
+					</mat-menu>
+				</div>
+
+				<p class="descricao">
+					@for (fragmento of dividirDescricaoEPayload(desafio().descricao); track $index) {
+						@if (!fragmento.payload) {
+							{{ fragmento.texto }}
+						} @else {
+							<span
+								class="payload-chip"
+								(click)="copiar(fragmento.texto)"
+								(keydown.enter)="copiar(fragmento.texto)"
+								(keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+								matTooltip="Clique para copiar"
+								role="button"
+								tabindex="0"
+							>{{ fragmento.texto }}</span>
+						}
+					}
+				</p>
+			</header>
+		</section>
+
+		<!--Categoria + Descrição da Categoria -->
+		<section class="bloco-categoria">
+			<div class="categoria-box">
+				<h2 class="categoria-titulo">{{ desafio().categoria }}</h2>
+				<p class="categoria-descricao">{{ desafio().descricaoCategoria }}</p>
+			</div>
+		</section>
+
+		<!-- Descrição Detalhes -->
+		@if (desafio().descricaoDetalhes) {
+			<section class="bloco-detalhes">
+				<p class="descricao-detalhes">
+					@for (fragmento of dividirDescricaoEPayload(desafio().descricaoDetalhes); track $index) {
+						@if (!fragmento.payload) {
+							{{ fragmento.texto }}
+						} @else {
+							<span
+								class="payload-chip"
+								(click)="copiar(fragmento.texto)"
+								(keydown.enter)="copiar(fragmento.texto)"
+								(keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+								matTooltip="Clique para copiar"
+								role="button"
+								tabindex="0"
+							>{{ fragmento.texto }}</span>
+						}
+					}
+				</p>
+			</section>
+		}
+
+		<!--Quiz -->
+
+		@if (possuiQuiz()) {
+			<section class="quiz-shell" [class.resolvido]="quizResolvido()">
+				<div class="bloco-quiz">
+					<h2 class="subtitulo-secao">Encontre o trecho vulnerável</h2>
+					<p class="instrucao-quiz">
+						Clique nas linhas que você identifica como vulneráveis.
+					</p>
+
+					<div
+						class="code-block"
+						[class.resolvido]="quizResolvido()"
+						[class.erro]="tentouResolver() && mensagemResultadoQuiz()"
+					>
+						<div class="code-titlebar" aria-hidden="true">
+							<span class="dot dot-red"></span>
+							<span class="dot dot-yellow"></span>
+							<span class="dot dot-green"></span>
+						</div>
+						<div class="code-content">
+							@for (linha of linhasQuiz(); track trackByLinha($index); let idx = $index) {
+								<div
+									class="code-line"
+									[class.selecionada]="estaSelecionada(idx + 1)"
+									[class.correta]="quizResolvido() && estaCorreta(idx + 1)"
+									[class.readonly]="quizResolvido()"
+									(click)="toggleLinha(idx + 1)"
+									role="button"
+									[attr.aria-pressed]="estaSelecionada(idx + 1)"
+									[attr.aria-label]="'Linha ' + (idx + 1) + (estaSelecionada(idx + 1) ? ' selecionada' : '')"
+									tabindex="0"
+									(keydown.enter)="toggleLinha(idx + 1)"
+									(keydown.space)="toggleLinha(idx + 1); $event.preventDefault()"
+								>
+									<span class="line-number">{{ idx + 1 }}</span>
+									<span class="line-content" [innerHTML]="highlightCodigo(linha || ' ')"></span>
+								</div>
+							}
+						</div>
+					</div>
+
+					@if (mensagemResultadoQuiz() && !quizResolvido()) {
+						<div class="feedback-erro" role="alert">
+							<mat-icon class="icon-erro">error_outline</mat-icon>
+							<span>{{ mensagemResultadoQuiz() }}</span>
+						</div>
+					}
+
+					@if (!quizResolvido()) {
+						<button
+							mat-flat-button
+							type="button"
+							class="btn-resolver"
+							[disabled]="carregandoResolucao() || linhasSelecionadas().size === 0"
+							(click)="resolverQuiz()"
+						>
+							@if (carregandoResolucao()) {
+								Validando...
+							} @else {
+								Resolver
+							}
+						</button>
+					}
+				</div>
+
+				@if (quizResolvido()) {
+					<div class="bloco-sucesso">
+						<div class="header-sucesso">
+							<mat-icon class="icon-sucesso">check_circle</mat-icon>
+							<h2 class="subtitulo-sucesso">Desafio resolvido!</h2>
+						</div>
+
+						@if (mensagemSeguro()) {
+							<p class="mensagem-seguro">{{ mensagemSeguro() }}</p>
+							<p class="mensagem-seguro">Veja um exemplo de código seguro:</p>
+						}
+
+						<div class="code-block code-block-seguro">
+							<div class="code-titlebar" aria-hidden="true">
+								<span class="dot dot-red"></span>
+								<span class="dot dot-yellow"></span>
+								<span class="dot dot-green"></span>
+							</div>
+							<div class="code-content">
+								@for (linha of linhasSeguro(); track trackByLinha($index); let idx = $index) {
+									<div class="code-line readonly">
+										<span class="line-number">{{ idx + 1 }}</span>
+										<span class="line-content" [innerHTML]="highlightCodigo(linha || ' ')"></span>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+				}
+			</section>
+		}
+	</div>
+</mat-card>

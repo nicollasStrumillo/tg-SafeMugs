@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DesafioResponse } from './score-board.models';
+import { DesafioResponse, DetalhesDesafioModel } from './score-board.models';
 
 @Injectable({
 	providedIn: 'root',
@@ -28,5 +28,13 @@ export class ScoreBoardService {
 
 	public restaurarDesafios(backupDesafios: string): Observable<number> {
 		return this.http.post<number>(`/api/desafios/restore`, {backupDesafios});
+	}
+
+	public detalhesDesafio(id: number): Observable<DetalhesDesafioModel> {
+		return this.http.get<DetalhesDesafioModel>(`/api/desafios/detalhes/${id}`);
+	}
+
+	public resolverQuizDesafio(id: number, linhasSelecionadas: number[]): Observable<{ sucesso: boolean; mensagem: string }> {
+		return this.http.post<{ sucesso: boolean; mensagem: string }>(`/api/desafios/resolver-quiz/${id}`, linhasSelecionadas);
 	}
 }

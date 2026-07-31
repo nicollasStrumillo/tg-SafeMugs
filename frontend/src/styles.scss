@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@import 'highlight.js/styles/github-dark.css';
 
 html {
 	color-scheme: dark;
@@ -148,6 +149,11 @@ body .sm-elevated-panel {
 	border-radius: 0.7rem;
 	background: rgba(17, 28, 50, 0.84);
 	box-shadow: var(--sm-shadow-soft);
+}
+
+.detalhes-desafio-dialog .mdc-dialog__surface {
+	border-radius: 0.25rem;
+	overflow: hidden;
 }
 
 body .mat-mdc-form-field {

@@ -7,11 +7,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
 
 import { NotificationService } from '../../shared/notification/notification.service';
-import { DesafioResponse, DicaDesafioDto } from './score-board.models';
+import { DesafioResponse, DetalhesDesafioModel, DicaDesafioDto } from './score-board.models';
 import { ScoreBoardService } from './score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
+import { DetalhesDesafio } from './detalhes-desafio/detalhes-desafio';
 
 interface FragmentoTexto{
 	texto: string;
@@ -92,7 +94,9 @@ export class ScoreBoard implements OnInit {
 
 	protected readonly dicaAtual = signal<DicaDesafioDto | null>(null);
 
-	private readonly mudancasPendentes: number[] = []; //variavel criada exclusivamente para lidar com a rece condition entre o WebSocket e a requisição HTTP
+	private readonly mudancasPendentes: number[] = []; //variavel criada exclusivamente para lidar com a race condition entre o WebSocket e a requisição HTTP
+
+	constructor(private readonly dialog: MatDialog) {}
 
 	ngOnInit(): void {
 		this.carregarDesafios();
@@ -150,7 +154,22 @@ export class ScoreBoard implements OnInit {
 	}
 
 	protected abrirDesafio(desafio: DesafioResponse): void {
-		console.log(desafio.id);
+		if (!desafio.resolvido) return;
+		this.scoreBoardService.detalhesDesafio(desafio.id).subscribe({
+			next: (detalhesDesafio) => {
+				this.dialog.open(DetalhesDesafio, {
+					data: { detalhesDesafio },
+					width: '1200px',
+					maxWidth: 'none',
+					maxHeight: '92vh',
+					panelClass: 'detalhes-desafio-dialog'
+				});
+			},
+			error: () => {
+				this.notificationService.erro('Erro ao carregar detalhes do desafio');
+				return;
+			}
+		});
 	}
 
 	protected verDicas(desafio: DesafioResponse, event?: Event): void {
@@ -253,7 +272,8 @@ export class ScoreBoard implements OnInit {
 			.map((texto, index) => ({texto, payload: index % 2 === 1}));
 	}
 
-	protected async copiar(texto: string){
+	protected async copiar(texto: string, event?: Event): Promise<void>{
+		event?.stopPropagation();
 		await navigator.clipboard.writeText(texto);
 		
 		this.notificationService.info("Payload copiado!");
