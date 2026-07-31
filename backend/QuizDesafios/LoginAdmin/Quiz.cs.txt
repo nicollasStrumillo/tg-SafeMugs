@@ -1,0 +1,19 @@
+public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
+{
+    var sql = $@"SELECT // neutra
+                u.Id AS UsuarioId, u.NomeCompleto, u.Email, // neutra
+                p.Nome AS Perfil // neutra
+                FROM usuarios u INNER JOIN perfis p ON u.PerfilId = p.Id // neutra
+                WHERE u.Email = '{request.Email}' AND u.HashSenha = '{request.HashSenha}' AND u.Ativo = 1 limit 1;"; // correta
+    try 
+    { 
+        var resposta = await _context.Database 
+            .SqlQueryRaw<LoginResponse>(sql) 
+            .ToListAsync(); 
+        return resposta.FirstOrDefault(); 
+    } 
+    catch (MySqlConnector.MySqlException ex)
+    {
+        throw new InvalidOperationException($"MYSQL_ERROR: {ex.Message});
+    }
+}

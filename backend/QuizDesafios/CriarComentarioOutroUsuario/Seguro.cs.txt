@@ -1,0 +1,7 @@
+public async Task FazerComentarioAsync(int produtoId, string? nomeCompleto, string comentario)
+{
+    // O autor deriva sempre da sessão autenticada, nunca de um campo controlável pelo cliente.
+    var autorId = _user.UsuarioId;
+
+    await _produtoRepository.FazerComentarioAsync(produtoId, autorId, comentario);
+}

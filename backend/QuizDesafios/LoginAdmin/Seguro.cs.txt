@@ -1,0 +1,26 @@
+public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
+{
+    const string sql = @"
+        SELECT
+            u.Id AS UsuarioId, u.NomeCompleto, u.Email,
+            p.Nome AS Perfil
+        FROM usuarios u INNER JOIN perfis p ON u.PerfilId = p.Id
+        WHERE u.Email = @email
+          AND u.HashSenha = @hashSenha
+          AND u.Ativo = 1
+        LIMIT 1;";
+    try
+    {   
+        var resposta = await _context.Database
+            .SqlQueryRaw<LoginResponse>(sql,   
+                // passa os parâmetros da forma correta:             
+                new MySqlConnector.MySqlParameter("@email", request.Email),
+                new MySqlConnector.MySqlParameter("@hashSenha", request.HashSenha))
+            .ToListAsync();
+        return resposta.FirstOrDefault();
+    }
+    catch (MySqlConnector.MySqlException ex)
+    {
+        throw new InvalidOperationException($"MYSQL_ERROR: {ex.Message}", ex);
+    }
+}

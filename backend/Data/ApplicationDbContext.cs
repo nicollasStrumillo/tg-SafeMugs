@@ -220,10 +220,9 @@ public class ApplicationDBContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Nome).IsRequired().HasMaxLength(150);
             entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);
+            entity.Property(e => e.DescricaoDetalhes).IsRequired().HasMaxLength(800);
             entity.Property(e => e.Categoria).IsRequired().HasConversion<string>().HasMaxLength(100);
             entity.Property(e => e.Dificuldade).IsRequired();
-            entity.Property(e => e.UrlMitigacao).IsRequired().HasMaxLength(500);
-
             entity.HasIndex(e => e.Nome).IsUnique();
         });
 
@@ -284,7 +283,7 @@ public class ApplicationDBContext : DbContext
                 Id = 1,
                 NomeCompleto = "Ana Lopes",
                 Email = EmailsESenhasUsuarios.AnaLopes.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.AnaLopes.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.AnaLopes.GetDescription(),
                 Telefone = "11990000001",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -296,7 +295,7 @@ public class ApplicationDBContext : DbContext
                 Id = 2,
                 NomeCompleto = "Bruno Costa",
                 Email = EmailsESenhasUsuarios.BrunoCosta.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.BrunoCosta.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.BrunoCosta.GetDescription(),
                 Telefone = "11990000002",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -308,7 +307,7 @@ public class ApplicationDBContext : DbContext
                 Id = 3,
                 NomeCompleto = "Carla Mendes",
                 Email = EmailsESenhasUsuarios.CarlaMendes.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.CarlaMendes.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.CarlaMendes.GetDescription(),
                 Telefone = "11990000003",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -320,7 +319,7 @@ public class ApplicationDBContext : DbContext
                 Id = 4,
                 NomeCompleto = "Diego Souza",
                 Email = EmailsESenhasUsuarios.DiegoSouza.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.DiegoSouza.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.DiegoSouza.GetDescription(),
                 Telefone = "11990000004",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -332,7 +331,7 @@ public class ApplicationDBContext : DbContext
                 Id = 5,
                 NomeCompleto = "Elisa Martins",
                 Email = EmailsESenhasUsuarios.ElisaMartins.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.ElisaMartins.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.ElisaMartins.GetDescription(),
                 Telefone = "11990000005",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -344,7 +343,7 @@ public class ApplicationDBContext : DbContext
                 Id = 6,
                 NomeCompleto = "Felipe Rocha",
                 Email = EmailsESenhasUsuarios.FelipeRocha.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.FelipeRocha.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.FelipeRocha.GetDescription(),
                 Telefone = "11990000006",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -356,7 +355,7 @@ public class ApplicationDBContext : DbContext
                 Id = 7,
                 NomeCompleto = "Marina Alves",
                 Email = EmailsESenhasUsuarios.MarinaAlves.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.MarinaAlves.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.MarinaAlves.GetDescription(),
                 Telefone = "11990000007",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -368,7 +367,7 @@ public class ApplicationDBContext : DbContext
                 Id = 8,
                 NomeCompleto = "Admin",
                 Email = EmailsESenhasUsuarios.Admin.GetNomeDisplay(),
-                HashSenha = EmailsESenhasUsuarios.Admin.GetHashSenha(),
+                HashSenha = EmailsESenhasUsuarios.Admin.GetDescription(),
                 Telefone = "11990000008",
                 Ativo = true,
                 DtCadastro = seedDate,
@@ -789,9 +788,9 @@ public class ApplicationDBContext : DbContext
                 Id = 1,
                 Nome = DesafiosEnum.LoginAdmin.GetNomeDisplay(),
                 Descricao = "Acesse uma conta administrativa utilizando SQL Injection.",
+                DescricaoDetalhes = "A consulta SQL que busca o usuário no banco de dados não trata corretamente a entrada de parâmetros, permitindo que seja possível injetar código SQL malicioso. O payload |' OR p.Nome = \"Administrador\";-- |, por exemplo, utiliza a aspas simples para quebrar a string da consulta, o operador OR adiciona mais uma condição ao Select e \";-- \" finaliza a consulta e transforma o restante da linha em um comentário. Isso permite que você acesse a conta de um usuário com perfil administrativo sem precisar conhecer a senha.",
                 Categoria = CategoriaDesafio.SqlInjection,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -799,9 +798,9 @@ public class ApplicationDBContext : DbContext
                 Id = 2,
                 Nome = DesafiosEnum.DomXss.GetNomeDisplay(),
                 Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de DOM XSS na página do catalogo",
+                DescricaoDetalhes = "O campo de busca do catálogo reflete, no próprio DOM do navegador, o termo digitado sem qualquer tratamento. A entrada do usuário é inserida diretamente no HTML da página, permitindo que tags e atributos perigosos sejam interpretados pelo navegador. Como a manipulação acontece inteiramente no lado do cliente, nenhum dado malicioso precisa trafegar pelo servidor: tudo ocorre no DOM. O payload |<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, é interpretado ao ser renderizado no catálogo, comprovando uma injeção de HTML tipicamente conhecida como DOM XSS.",
                 Categoria = CategoriaDesafio.DomXSS,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -809,9 +808,9 @@ public class ApplicationDBContext : DbContext
                 Id = 3,
                 Nome = DesafiosEnum.BruteForceLogin.GetNomeDisplay(),
                 Descricao = "Acesse a conta de um dos usuários do domínio @safemugs.com utilizando força bruta.",
+                DescricaoDetalhes = "O fluxo de login do SafeMugs não implementa nenhum mecanismo de antiautomação: não há limite de tentativas por conta, bloqueio temporário, captcha nem atraso entre requisições. Conhecendo um e-mail válido do domínio |@safemugs.com|, é possível automatizar tentativas consecutivas de senha até acertar. As senhas dos usuários comuns são fracas e baseadas em padrões conhecidos (como 'welcome123' ou 'password123'), o que torna viável um ataque usando uma lista de palavras. Sem qualquer controle de velocidade, um script consegue testar milhares de combinações em poucos segundos, obtendo acesso a uma conta legítima.",
                 Categoria = CategoriaDesafio.BrokenAntiAutomation,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -819,9 +818,9 @@ public class ApplicationDBContext : DbContext
                 Id = 4,
                 Nome = DesafiosEnum.CadastroInvalido.GetNomeDisplay(),
                 Descricao = "Tente burlar a validação do formulário de cadastro.",
+                DescricaoDetalhes = "O formulário de cadastro valida os dados apenas no navegador. No servidor, a checagem de formato do e-mail é insuficiente e não impede registros com valores malformados. Ao interceptar a requisição de cadastro e enviar um e-mail em formato inválido (como |ana@@safemugs..com|), o servidor aceita o registro. Isso demonstra que a validação do front-end pode ser facilmente contornada e que o servidor não deve confiar nos dados recebidos, precisando aplicar regras de formato e sanitização por conta própria.",
                 Categoria = CategoriaDesafio.ImproperInputValidation,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -829,9 +828,9 @@ public class ApplicationDBContext : DbContext
                 Id = 5,
                 Nome = DesafiosEnum.ManipularCadastro.GetNomeDisplay(),
                 Descricao = "Crie uma conta de administrador.",
+                DescricaoDetalhes = "O cadastro de um novo usuário é definido, em parte, por um parâmetro que indica o perfil da conta. Embora esse campo não apareça no formulário visível, ele trafega na requisição. Ao interceptar o cadastro e incluir |\"perfil\":\"Administrador\"| no corpo enviado, a conta é criada com privilégios administrativos, sem que o servidor questione o nível solicitado. Confiam-se cegamente nos parâmetros informados pelo cliente, o que permite a escalação de privilégio direta via adulteração de parâmetro.",
                 Categoria = CategoriaDesafio.ParameterTampering,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -839,9 +838,9 @@ public class ApplicationDBContext : DbContext
                 Id = 6,
                 Nome = DesafiosEnum.AlterarComentarioOutroUsuario.GetNomeDisplay(),
                 Descricao = "Edite um comentário que não pertence ao seu usuário.",
+                DescricaoDetalhes = "A requisição que atualiza um comentário recebe apenas o identificador do comentário e o novo texto, sem verificar se ele pertence ao usuário autenticado. Ao interceptar a edição e trocar o identificador informado pelo de um comentário alheio, é possível alterá-lo livremente. O servidor não valida a posse do recurso, confiando apenas no parâmetro recebido, o que caracteriza uma Insecure Direct Object Reference (IDOR).",
                 Categoria = CategoriaDesafio.IDOR,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -849,9 +848,9 @@ public class ApplicationDBContext : DbContext
                 Id = 7,
                 Nome = DesafiosEnum.StoredXss.GetNomeDisplay(),
                 Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página do catalogo",
+                DescricaoDetalhes = "Na tela de detalhes do produto, os comentários deixados pelos usuários são renderizados diretamente no HTML, sem qualquer sanitização. Como o comentário é salvo no banco de dados e exibido a todos que abrem o produto, enviar o payload |<iframe src=\"javascript:alert(`XSS`)\">| como texto do comentário faz com que o código seja armazenado e, posteriormente, interpretado no navegador de qualquer pessoa que visualize a página. Diferente do DOM XSS, aqui o conteúdo malicioso persiste no servidor, atingindo múltiplas vítimas.",
                 Categoria = CategoriaDesafio.StoredXSS,
                 Dificuldade = 3,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -859,9 +858,9 @@ public class ApplicationDBContext : DbContext
                 Id = 8,
                 Nome = DesafiosEnum.CriarComentarioOutroUsuario.GetNomeDisplay(),
                 Descricao = "Escreva um comentário que não pertence ao seu usuário.",
+                DescricaoDetalhes = "Todo comentário enviado ao servidor carrega um campo que identifica o autor a ser atribuído a ele. O servidor não valida se esse nome corresponde ao usuário autenticado: ele apenas procura o usuário pelo nome informado e o vincula ao comentário. Interceptando a requisição de criação e alterando o nome pelo de outro usuário (por exemplo |Bruno Costa|), é possível registrar um comentário em nome de outra pessoa, simulando uma identidade indevida.",
                 Categoria = CategoriaDesafio.BrokenAuthentication,
                 Dificuldade = 2,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -869,9 +868,9 @@ public class ApplicationDBContext : DbContext
                 Id = 9,
                 Nome = DesafiosEnum.EncontrarScoreBoard.GetNomeDisplay(),
                 Descricao = "Localize a página de score-board.",
+                DescricaoDetalhes = "O SafeMugs possui uma página oculta que concentra o acompanhamento dos desafios e o progresso do jogador, sem estar referenciada em nenhum menu ou link visível. Para localizá-la, é preciso explorar nomes de rotas comuns e deduzir a URL por força bruta, ou inspecionar o código javascript da página. O objetivo aqui é treinar a descoberta do domínio sendo testado, prática comum em avaliações de segurança.",
                 Categoria = CategoriaDesafio.Outros,
                 Dificuldade = 1,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             },
             new Desafio
@@ -879,9 +878,9 @@ public class ApplicationDBContext : DbContext
                 Id = 10,
                 Nome = DesafiosEnum.TratamentoErro.GetNomeDisplay(),
                 Descricao = "Provoque um erro que o retorno da API não trata corretamente.",
+                DescricaoDetalhes = "Quando ocorre um erro inesperado no SafeMugs, a API retorna ao cliente uma resposta contendo o nome da classe da exceção e a mensagem original, frequentemente acompanhada de detalhes internos como nomes de tabelas, consultas SQL e trechos de código. Ao provocar uma falha no backend, é possível extrair dessa resposta informações sensíveis sobre a implementação. Um exemplo é inserir uma aspa simples no e-mail do login (|'|) para quebrar a consulta SQL e forçar uma exceção não tratada, expondo os detalhes técnicos no corpo retornado.",
                 Categoria = CategoriaDesafio.SecurityMisconfiguration,
                 Dificuldade = 1,
-                UrlMitigacao = "url_placeholder",
                 Resolvido = false
             }
         );

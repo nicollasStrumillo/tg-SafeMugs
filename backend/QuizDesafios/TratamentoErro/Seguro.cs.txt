@@ -1,0 +1,26 @@
+catch (Exception ex)
+{
+    context.Response.StatusCode = ex switch
+    {
+        NotFoundException => StatusCodes.Status404NotFound,
+        BusinessException or ValidationException => StatusCodes.Status400BadRequest,
+        _ => StatusCodes.Status500InternalServerError
+    };
+
+    // Exceções de negócio conhecidas têm mensagens voltadas ao usuário.
+    // Erros inesperados (500) não devem expor detalhes internos ao cliente.
+    var detail = context.Response.StatusCode == StatusCodes.Status500InternalServerError
+        ? "Ocorreu um erro interno. Tente novamente mais tarde."
+        : ex.Message;
+
+    // Registra os detalhes técnicos no servidor, não na resposta.
+    Console.Error.WriteLine($"{ex.GetType().Name}: {ex.Message}");
+
+    await context.Response.WriteAsJsonAsync(new ProblemDetails
+    {
+        Type = ex.GetType().Name,
+        Status = context.Response.StatusCode,
+        Title = "Ocorreu um erro.",
+        Detail = detail
+    });
+}

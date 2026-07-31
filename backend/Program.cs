@@ -12,6 +12,8 @@ using backend.Services.Implementations;
 using backend.Services.Implementations.Util;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
+using backend.Services.Interfaces.Util.QuizDesafios;
+using backend.Utils.QuizDesafios;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -110,9 +112,16 @@ builder.Services.AddSignalR();
 // DesafiosBackupService
 builder.Services.AddScoped<IDesafiosBackupService, DesafiosBackupService>();
 
+// QuizDesafioService
+builder.Services.AddSingleton<IQuizDesafioService, QuizDesafioService>();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Incializa e monta o dicionário do QuizDesafioService
+var quizDesafioService = app.Services.GetRequiredService<IQuizDesafioService>();
+await quizDesafioService.MontarDicionario();
 
 if (app.Environment.IsDevelopment())
 {

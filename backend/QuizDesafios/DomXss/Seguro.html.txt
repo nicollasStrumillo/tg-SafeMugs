@@ -1,0 +1,12 @@
+<section class="catalogo">
+  <input [value]="termoBusca()" (input)="atualizarBusca($event)" placeholder="Pesquisar produtos" />
+
+  <button (click)="buscar()">Buscar</button>
+
+  @if (produtos().length === 0) {
+    <p>
+      Nenhum produto encontrado para
+      <span>{{ termoBusca() }}</span>
+    </p>
+  }
+</section>

@@ -1,0 +1,20 @@
+[HttpPost("login")]
+public async Task<ActionResult<AuthTokenResponse>> Login([FromBody] LoginRequest request)
+{
+    // Bloqueia temporariamente o identificador após muitas tentativas falhas
+    if (await _autenticacaoService.ExcedeuLimiteAsync(request.Email))
+    {
+        return StatusCode(429, new { detail = "Muitas tentativas. Tente novamente mais tarde." });
+    }
+
+    var response = await _authService.RealizarLoginAsync(request);
+
+    if (response == null)
+    {
+        await _autenticacaoService.RegistrarFalhaAsync(request.Email);
+        return Unauthorized(new { detail = "Credenciais inválidas." });
+    }
+
+    await _autenticacaoService.ResetarAsync(request.Email);
+    return Ok(response);
+}

@@ -1,0 +1,12 @@
+public async Task AtualizarComentarioAsync(int comentarioId, string comentario)
+{
+    var comentarioEditado = await _produtoRepository.ProcurarComentarioPorIdAsync(comentarioId);
+
+    if (comentarioEditado == null)
+        throw new NotFoundException($"Comentário com ID {comentarioId} não encontrado.");
+
+    if (comentarioEditado.UsuarioId != _user.UsuarioId)
+        throw new UnauthorizedAccessException("Você não tem permissão para editar este comentário.");
+
+    await _produtoRepository.AtualizarComentarioAsync(comentarioEditado, comentario);
+}

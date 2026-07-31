@@ -1,9 +1,14 @@
+using System.ComponentModel;
+using System.Diagnostics;
 using backend.DTOs.Desafio;
+using backend.Exceptions;
 using backend.models;
 using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
+using backend.Services.Interfaces.Util.QuizDesafios;
+using backend.Utils.QuizDesafios;
 
 namespace backend.Services.Implementations;
 
@@ -12,11 +17,13 @@ public class DesafioService : IDesafioService
     private readonly IDesafioRepository _desafioRepository;
 
     private readonly INotificationService _notificationService;
+    private readonly IQuizDesafioService _quizDesafioService;
 
-    public DesafioService(IDesafioRepository desafioRepository, INotificationService notificationService)
+    public DesafioService(IDesafioRepository desafioRepository, INotificationService notificationService, IQuizDesafioService quizDesafioService)
     {
         _desafioRepository = desafioRepository;
         _notificationService = notificationService;
+        _quizDesafioService = quizDesafioService;
     }
 
     public async Task<IEnumerable<DesafioResponse>> ObterTodosAsync(bool resolverScoreBoard = true)
@@ -30,6 +37,10 @@ public class DesafioService : IDesafioService
 
     private DesafioResponse MapToDesafioResponse(Desafio desafio, bool isRestored = false)
     {
+        QuizDesafio? quiz = null;
+        if (EnumExtensions.TryGetEnumByNomeDisplay<DesafiosEnum>(desafio.Nome, out var enumDesafio))
+            quiz = _quizDesafioService.GetQuizDesafio(enumDesafio);
+        
         return new DesafioResponse
         {
             Id = desafio.Id,
@@ -37,9 +48,12 @@ public class DesafioService : IDesafioService
             Descricao = desafio.Descricao,
             Categoria = desafio.Categoria.GetNomeDisplay(),
             Dificuldade = desafio.Dificuldade,
-            UrlMitigacao = desafio.UrlMitigacao,
             Resolvido = desafio.Resolvido,
             IsRestored = isRestored,
+
+            PossuiQuiz = quiz != null,
+            QuizResolvido = quiz?.Resolvido ?? false,
+
             DicasDesafio = desafio.DicasDesafio.Select(di => new DicaDesafioDTO
             {
                 Id = di.Id,
@@ -61,6 +75,63 @@ public class DesafioService : IDesafioService
         if (desafio == null) return null;
 
         return MapToDesafioResponse(desafio);
+    }
+
+    public async Task<DesafioDetalhesResponse?> ObterDesafioDetalhesPorId(int id)
+    {
+        var desafio = await _desafioRepository.FindByIdAsync(id);
+        if (desafio == null) return null;
+
+        QuizDesafio? quiz = null;
+        if (EnumExtensions.TryGetEnumByNomeDisplay<DesafiosEnum>(desafio.Nome, out var enumDesafio))
+            quiz = _quizDesafioService.GetQuizDesafio(enumDesafio);
+
+        return new DesafioDetalhesResponse
+        {
+            Id = desafio.Id,
+            Nome = desafio.Nome,
+            Descricao = desafio.Descricao,
+            DescricaoDetalhes = desafio.DescricaoDetalhes,
+            Categoria = desafio.Categoria.GetNomeDisplay(),
+            DescricaoCategoria = desafio.Categoria.GetDescription(),
+            Dificuldade = desafio.Dificuldade,
+            Resolvido = desafio.Resolvido,
+
+            PossuiQuiz = quiz != null,
+            QuizResolvido = quiz?.Resolvido ?? false,
+
+            DicasDesafio = desafio.DicasDesafio.Select(di => new DicaDesafioDTO
+            {
+                Id = di.Id,
+                NrDica = di.NrDica,
+                Texto = di.Texto
+            }).ToList(),
+
+            QuizDesafio = quiz == null ? null : new QuizDesafioDTO
+            {
+                NomeDesafio = quiz.NomeDesafio,
+                Linguagem = quiz.Linguagem,
+                Resolvido = quiz.Resolvido,
+                LinhasQuiz = quiz.LinhasQuiz,
+                LinhasCorretas = quiz.Resolvido ? quiz.LinhasCorretas : new List<int>(),
+                LinhasCodigoSeguro = quiz.LinhasCodigoSeguro,
+                MensagemSeguro = quiz.MensagemSeguro
+            }
+        };
+    }
+
+    // Resolucao de QuizDesafio
+    public async Task<(bool sucesso, string mensagem)> TrySolveQuizDesafioAsync(int idDesafio, int[] linhasSelecionadas)
+    {
+        var desafio = await _desafioRepository.FindByIdAsync(idDesafio);
+        if (desafio == null)
+            return (false, "Desafio não encontrado.");
+        
+        if (!EnumExtensions.TryGetEnumByNomeDisplay<DesafiosEnum>(desafio.Nome, out var enumDesafio))
+            return (false, "Desafio Enum não encontrado.");
+        
+        var sucesso = _quizDesafioService.TrySolveQuizDesafio(enumDesafio, linhasSelecionadas, out string msg);
+        return (sucesso, msg);
     }
 
     // Resolucao de Desafios

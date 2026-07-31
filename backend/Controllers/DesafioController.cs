@@ -41,6 +41,27 @@ public class DesafioController : ControllerBase
         return Ok(desafio);
     }
 
+    [HttpGet("detalhes/{id}")]
+    public async Task<ActionResult<DesafioDetalhesResponse?>> ObterDesafioDetalhesPorId(int id)
+    {
+        var desafio = await _desafioService.ObterDesafioDetalhesPorId(id);
+        if (desafio == null) return NotFound();
+
+        return Ok(desafio);
+    }
+
+    [HttpPost("resolver-quiz/{id}")]
+    public async Task<ActionResult<ResolverQuizDesafioResponse>> ResolverQuizDesafioAsync(int id, [FromBody] int[] linhasSelecionadas)
+    {
+        var resposta = await _desafioService.TrySolveQuizDesafioAsync(id, linhasSelecionadas);
+
+        return Ok(new ResolverQuizDesafioResponse
+        {
+            Sucesso = resposta.sucesso,
+            Mensagem = resposta.mensagem
+        });
+    }
+
     [HttpGet("backup")]
     public async Task<ActionResult<string?>> BackupDesafiosGenerateAsync()
     {

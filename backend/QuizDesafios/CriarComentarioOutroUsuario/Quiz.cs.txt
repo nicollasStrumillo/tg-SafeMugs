@@ -1,0 +1,13 @@
+public async Task FazerComentarioAsync(int produtoId, string? nomeCompleto, string comentario) // neutra
+{
+    Usuario? usuario = null;
+
+    if (!string.IsNullOrEmpty(nomeCompleto))  // neutra
+    {
+        usuario = await _usuarioReprository.BuscarPorNomeAsync(nomeCompleto);  // correta
+        if (usuario == null)
+            throw new NotFoundException($"Usuário {nomeCompleto} não encontrado.");  // neutra
+    }
+
+    await _produtoRepository.FazerComentarioAsync(produtoId, usuario?.Id, comentario);  // neutra
+}

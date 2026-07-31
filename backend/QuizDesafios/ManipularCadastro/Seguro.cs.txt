@@ -1,0 +1,37 @@
+public async Task CadastrarUsuarioAsync(CadastroRequest request)
+{
+    if (string.IsNullOrWhiteSpace(request.NomeCompleto) || string.IsNullOrWhiteSpace(request.Email) ||
+        string.IsNullOrWhiteSpace(request.Senha) || string.IsNullOrWhiteSpace(request.ConfirmarSenha))
+        throw new ValidationException("Todos os campos são obrigatórios.");
+
+    if (request.Senha != request.ConfirmarSenha)
+        throw new ValidationException("As senhas não coincidem.");
+
+    if (request.Senha.Length < 8)
+        throw new ValidationException("A senha deve ter pelo menos 8 caracteres.");
+
+    var usuarioExistente = await _usuarioRepository.BuscaPorEmailAsync(request.Email);
+    if (usuarioExistente != null)
+        throw new BusinessException("Já existe um usuário cadastrado com este e-mail.");
+
+    string hashSenha = HashHelper.GerarMD5(request.Senha);
+    request.HashSenha = hashSenha;
+
+    // A atribuição de privilégio exige um administrador já autenticado.
+    var perfilSolicitado = request.Perfil?.ToLower();
+    var adminAutenticado = _user.UsuarioId != 0 && await EhAdministradorAsync(_user.UsuarioId);
+
+    if (perfilSolicitado == "administrador" && !adminAutenticado)
+        throw new ValidationException("A atribuição de perfil administrativo requer um administrador autenticado.");
+
+    if (perfilSolicitado == "administrador" && adminAutenticado)
+    {
+        await _usuarioRepository.CadastrarUsuarioAsync(request);
+    }
+    else
+    {
+        // Auto-cadastro público: sempre cria Cliente, ignorando o parâmetro recebido.
+        request.Perfil = null;
+        await _usuarioRepository.CadastrarUsuarioAsync(request);
+    }
+}

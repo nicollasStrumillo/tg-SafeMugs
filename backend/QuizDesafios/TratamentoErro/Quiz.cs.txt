@@ -1,0 +1,17 @@
+catch (Exception ex)
+{
+    context.Response.StatusCode = ex switch  // neutra
+    {
+        NotFoundException => StatusCodes.Status404NotFound,
+        BusinessException or ValidationException => StatusCodes.Status400BadRequest,
+        _ => StatusCodes.Status500InternalServerError
+    };
+
+    await context.Response.WriteAsJsonAsync(new ProblemDetails  // neutra
+    {
+        Type = ex.GetType().Name,  // neutra
+        Status = context.Response.StatusCode,  // neutra
+        Title = "Ocorreu um erro.",  // neutra
+        Detail = ex.Message  // correta
+    });
+}

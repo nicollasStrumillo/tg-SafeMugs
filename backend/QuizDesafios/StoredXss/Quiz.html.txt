@@ -1,0 +1,9 @@
+<ul class="comments-list">
+  @for (comentario of comentarios(); track comentario.id) {
+    <li class="comment-item">
+      <span class="comment-author">{{ comentario.usuario?.nomeCompleto ?? 'Anônimo' }}</span>  // neutra
+
+      <p class="comment-text" [innerHTML]="comentario.comentarioInseguro"></p>  // correta
+    </li>
+  }
+</ul>

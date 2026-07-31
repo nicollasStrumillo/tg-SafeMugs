@@ -1,0 +1,14 @@
+// Marque a linha onde você identifica que falta uma validação
+
+[HttpPost("login")]
+public async Task<ActionResult<AuthTokenResponse>> Login([FromBody] LoginRequest request)
+{
+    var response = await _authService.RealizarLoginAsync(request);  // correta
+
+    if (response == null)
+    {
+        return Unauthorized(new { detail = "Credenciais inválidas." });  
+    }
+
+    return Ok(response);  
+}

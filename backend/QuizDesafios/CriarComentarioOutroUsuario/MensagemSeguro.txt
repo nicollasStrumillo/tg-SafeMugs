@@ -1,0 +1,1 @@
+A identidade do autor de um recurso deve derivar da sessão autenticada no servidor, nunca de um campo controlável pelo cliente. Mesmo que o formulário envie o nome do usuário logado, esse valor pode ser adulterado na requisição, atribuindo a ação a outra pessoa. Para inputs anônimos, defina explicitamente ausência de autor no servidor, sem aceitar sugestões vindas do cliente.

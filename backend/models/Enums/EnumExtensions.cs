@@ -16,7 +16,7 @@ public static class EnumExtensions
         return attribute?.Name ?? value.ToString();
     }
 
-    public static string GetHashSenha(this Enum value)
+    public static string GetDescription(this Enum value)
     {
         var field = value.GetType().GetField(value.ToString());
 
@@ -26,5 +26,20 @@ public static class EnumExtensions
             .FirstOrDefault();
 
         return attribute?.Description ?? value.ToString();
+    }
+
+    public static bool TryGetEnumByNomeDisplay<T>(string nomeDisplay, out T enumValue)
+    where T : struct, Enum
+    {
+        foreach (var value in Enum.GetValues<T>())
+        {
+            if (string.Equals(value.GetNomeDisplay(), nomeDisplay, StringComparison.Ordinal))
+            {
+                enumValue = value;
+                return true;
+            }
+        }
+        enumValue = default;
+        return false;
     }
 }

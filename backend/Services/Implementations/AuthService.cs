@@ -94,7 +94,7 @@ public class AuthService : IAuthService
             EmailsESenhasUsuarios.ElisaMartins,
             EmailsESenhasUsuarios.FelipeRocha,
             EmailsESenhasUsuarios.MarinaAlves,
-        }.Any(u => email == u.GetNomeDisplay() && hashSenha == u.GetHashSenha().ToUpper());;
+        }.Any(u => email == u.GetNomeDisplay() && hashSenha == u.GetDescription().ToUpper());;
 
         await _desafioService.SolveIfAsync(DesafiosEnum.BruteForceLogin, () => resolvido);
     }

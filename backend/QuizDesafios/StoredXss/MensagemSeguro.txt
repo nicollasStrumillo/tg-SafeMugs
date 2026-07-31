@@ -1,0 +1,1 @@
+Conteúdo armazenado no servidor e exibido a outros usuários deve ser tratado como não confiável. A interpolação com chaves duplas ({{ }}) escapa automaticamente os caracteres especiais, tratando o valor como texto. Reserve [innerHTML] apenas para HTML confiável já sanitizado, evitando que comentários persistidos sejam interpretados no navegador de quem visualiza a página.

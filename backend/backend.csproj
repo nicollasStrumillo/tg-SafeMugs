@@ -16,5 +16,13 @@
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- QuizDesafios: arquivos de código didáticos, NÃO compilam -->
+    <Compile Remove="QuizDesafios\**\*" />
+    <!-- Mas são copiados para o output do publish, preservando a estrutura de pastas -->
+    <None Include="QuizDesafios\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

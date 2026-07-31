@@ -1,0 +1,1 @@
+No Angular, a interpolação com chaves duplas ({{ }}) escapa automaticamente caracteres especiais, tratando o valor como texto. Use-a sempre que precisar exibir conteúdo fornecido pelo usuário, reservando [innerHtml] apenas para HTML confiável já sanitizado.

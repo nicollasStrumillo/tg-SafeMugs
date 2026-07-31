@@ -1,0 +1,1 @@
+Campos de privilégio, como o perfil de um usuário, não devem ser definidos pelo cliente em fluxos de auto-cadastro. O servidor deve atribuir sempre o perfil padrão e exigir que a elevação para um perfil administrativo passe por um canal autenticado separado, em que um administrador já legitimado autorize a atribuição.

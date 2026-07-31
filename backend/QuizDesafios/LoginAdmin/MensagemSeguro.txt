@@ -1,0 +1,1 @@
+Toda ferramenta de acesso a banco de dados oferece uma forma segura de enviar parâmetros para uma consulta SQL, evitando que eles sejam concatenados diretamente na string da consulta.

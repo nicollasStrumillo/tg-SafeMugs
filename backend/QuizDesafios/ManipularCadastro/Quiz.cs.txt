@@ -1,0 +1,28 @@
+public async Task CadastrarUsuarioAsync(CadastroRequest request)
+{
+    if (string.IsNullOrWhiteSpace(request.NomeCompleto) || string.IsNullOrWhiteSpace(request.Email) ||
+        string.IsNullOrWhiteSpace(request.Senha) || string.IsNullOrWhiteSpace(request.ConfirmarSenha))
+        throw new ValidationException("Todos os campos são obrigatórios.");  // neutra
+
+    if (request.Senha != request.ConfirmarSenha)
+        throw new ValidationException("As senhas não coincidem.");  // neutra
+
+    if (request.Senha.Length < 8)
+        throw new ValidationException("A senha deve ter pelo menos 8 caracteres.");  // neutra
+
+    var usuarioExistente = await _usuarioRepository.BuscaPorEmailAsync(request.Email);
+    if (usuarioExistente != null)
+        throw new BusinessException("Já existe um usuário cadastrado com este e-mail.");  // neutra
+
+    string hashSenha = HashHelper.GerarMD5(request.Senha);
+    request.HashSenha = hashSenha;
+
+    if (request.Perfil?.ToLower() == "administrador")  // correta
+    { // neutra
+        await CadastrarAdministradorAsync(request, resolverDesafio: true);  // neutra
+    } // neutra
+    else
+    {
+        await _usuarioRepository.CadastrarUsuarioAsync(request);  // neutra
+    }
+}

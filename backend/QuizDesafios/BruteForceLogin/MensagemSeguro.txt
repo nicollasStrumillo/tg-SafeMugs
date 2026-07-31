@@ -1,0 +1,1 @@
+Um endpoint de autenticação deve rastrear as tentativas recentes por identificador (e-mail e/ou IP) e bloquear temporariamente a conta após um limite ser excedido, impedindo que scripts automatizados testem milhares de combinações em poucos segundos. Combinado a senhas fortes e armazenamento seguro, esse controle reduz drasticamente a viabilidade de ataques de força bruta.
