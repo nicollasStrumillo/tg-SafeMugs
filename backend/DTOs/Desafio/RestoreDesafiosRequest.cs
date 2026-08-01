@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace backend.DTOs.Desafio;
-public class RestoreDesafiosRequest
+public class RestoreRequest
 {
-    public string BackupDesafios { get; set; } = string.Empty;
+    public string BackupString { get; set; } = string.Empty;
 }

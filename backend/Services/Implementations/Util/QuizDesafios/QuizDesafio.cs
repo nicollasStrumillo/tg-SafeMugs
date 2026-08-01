@@ -1,4 +1,4 @@
-namespace backend.Utils.QuizDesafios;
+namespace backend.Services.Implementations.Util.QuizDesafios;
 
 public class QuizDesafio
 {

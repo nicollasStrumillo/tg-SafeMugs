@@ -1,5 +1,3 @@
-using backend.Utils.QuizDesafios;
-
 namespace backend.DTOs.Desafio;
 
 public class DesafioDetalhesResponse

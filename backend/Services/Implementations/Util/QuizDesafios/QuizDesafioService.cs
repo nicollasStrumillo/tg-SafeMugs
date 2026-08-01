@@ -2,7 +2,7 @@ using backend.models.Enums;
 using backend.Services.Interfaces.Util.QuizDesafios;
 using System.Text.RegularExpressions;
 
-namespace backend.Utils.QuizDesafios;
+namespace backend.Services.Implementations.Util.QuizDesafios;
 
 public class QuizDesafioService : IQuizDesafioService
 {
@@ -115,7 +115,12 @@ public class QuizDesafioService : IQuizDesafioService
         return quiz;
     }
 
-    public bool TrySolveQuizDesafio(DesafiosEnum desafio, int[] linhasSelecionadas, out string mensagem)
+    public IEnumerable<KeyValuePair<DesafiosEnum, QuizDesafio>> GetAllQuizDesafio()
+    {
+        return _quizDesafios;
+    }
+
+    public bool TrySolveQuizDesafio(DesafiosEnum desafio, int[] linhasSelecionadas, out string mensagem, bool isRestore = false)
     {
         if (!_quizDesafios.TryGetValue(desafio, out var quiz))
         {
@@ -127,6 +132,14 @@ public class QuizDesafioService : IQuizDesafioService
         {
             mensagem = "Quiz já resolvido.";
             return false;
+        }
+
+        // Para os casos de restauração, não é necessário validar as linhas selecionadas, apenas marcar como resolvido.
+        if (isRestore)
+        {
+            quiz.Resolvido = true;
+            mensagem = "Quiz resolvido via restauração.";
+            return true;
         }
 
         var setSelecionadas = linhasSelecionadas.ToHashSet(); // tira duplicatas

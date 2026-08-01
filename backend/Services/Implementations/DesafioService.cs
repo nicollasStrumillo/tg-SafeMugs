@@ -8,7 +8,7 @@ using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
 using backend.Services.Interfaces.Util.QuizDesafios;
-using backend.Utils.QuizDesafios;
+using backend.Services.Implementations.Util.QuizDesafios;
 
 namespace backend.Services.Implementations;
 

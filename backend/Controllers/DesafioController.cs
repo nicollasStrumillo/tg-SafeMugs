@@ -71,9 +71,24 @@ public class DesafioController : ControllerBase
     }
 
     [HttpPost("restore")]
-    public async Task<ActionResult<int>> RestoreDesafiosAsync([FromBody] RestoreDesafiosRequest request)
+    public async Task<ActionResult<int>> RestoreDesafiosAsync([FromBody] RestoreRequest request)
     {
-        var restoredCount = await _desafiosBackupService.RestoreAsync(request.BackupDesafios);
+        var restoredCount = await _desafiosBackupService.RestoreAsync(request.BackupString);
+        return Ok(restoredCount);
+    }
+
+    [HttpGet("backupQuizzes")]
+    public ActionResult<string?> BackupQuizzesGenerateAsync()
+    {
+        var backupCode = _desafiosBackupService.BackupQuizzesGenerateAsync();
+
+        return Ok(backupCode);
+    }
+
+    [HttpPost("restoreQuizzes")]
+    public ActionResult<int> RestoreQuizzesAsync([FromBody] RestoreRequest request)
+    {
+        var restoredCount = _desafiosBackupService.RestoreQuizzesAsync(request.BackupString);
         return Ok(restoredCount);
     }
 }
