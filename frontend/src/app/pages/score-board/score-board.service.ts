@@ -26,8 +26,8 @@ export class ScoreBoardService {
 		return this.http.get('/api/desafios/backup', {responseType: 'text'}) as Observable<string>;
 	}
 
-	public restaurarDesafios(backupDesafios: string): Observable<number> {
-		return this.http.post<number>(`/api/desafios/restore`, {backupDesafios});
+	public restaurarDesafios(backupString: string): Observable<number> {
+		return this.http.post<number>(`/api/desafios/restore`, {backupString});
 	}
 
 	public detalhesDesafio(id: number): Observable<DetalhesDesafioModel> {
@@ -36,5 +36,12 @@ export class ScoreBoardService {
 
 	public resolverQuizDesafio(id: number, linhasSelecionadas: number[]): Observable<{ sucesso: boolean; mensagem: string }> {
 		return this.http.post<{ sucesso: boolean; mensagem: string }>(`/api/desafios/resolver-quiz/${id}`, linhasSelecionadas);
+	}
+	public gerarBackupQuizzes(): Observable<string | null> {
+		return this.http.get('/api/desafios/backupQuizzes', {responseType: 'text'}) as Observable<string>;
+	}
+
+	public restaurarQuizzes(backupString: string): Observable<number> {
+		return this.http.post<number>(`/api/desafios/restoreQuizzes`, {backupString});
 	}
 }

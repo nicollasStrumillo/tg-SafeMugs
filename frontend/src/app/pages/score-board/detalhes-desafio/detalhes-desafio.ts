@@ -15,6 +15,7 @@ import xml from 'highlight.js/lib/languages/xml';
 import { DetalhesDesafioModel, DicaDesafioDto } from '../score-board.models';
 import { ScoreBoardService } from '../score-board.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
+import { BrowserCookieService } from '../../../services/cookies/browser-cookies.service';
 
 hljs.registerLanguage('csharp', csharp);
 hljs.registerLanguage('typescript', typescript);
@@ -43,7 +44,7 @@ interface FragmentoTexto {
 export class DetalhesDesafio implements OnInit {
 	private readonly scoreBoardService = inject(ScoreBoardService);
 	private readonly notificationService = inject(NotificationService);
-
+	private readonly cookieService = inject(BrowserCookieService);
 	protected readonly desafio = signal<DetalhesDesafioModel>({} as DetalhesDesafioModel);
 	protected readonly linhasSelecionadas = signal<Set<number>>(new Set<number>());
 	protected readonly mensagemResultadoQuiz = signal<string | null>(null);
@@ -118,6 +119,14 @@ export class DetalhesDesafio implements OnInit {
 					this.desafio.update((d) => ({ ...d, quizResolvido: true }));
 					this.mensagemResultadoQuiz.set(null);
 					this.notificationService.sucesso('Resolvido com sucesso!');
+
+					this.scoreBoardService.gerarBackupQuizzes().subscribe((backup) => {
+						if (backup) {
+							this.cookieService.setBackupQuizzesCookie(backup);
+						} else {
+							console.error('Erro ao gerar backup dos quizzes.');
+						}
+					});
 				} else {
 					this.mensagemResultadoQuiz.set(resposta.mensagem);
 					setTimeout(() => this.tentouResolver.set(false), 300);

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 const BACKUP_DESAFIOS_COOKIE_NAME = 'backupCookie';
+const BACKUP_QUIZZES_COOKIE_NAME = 'backupQuizzesCookie';
 const COOKIE_STATUS_NAME = 'cookieStatus';
 
 @Injectable({
@@ -19,6 +20,19 @@ export class BrowserCookieService {
 
     public removeBackupDesafiosCookie(): void {
         this.remove(BACKUP_DESAFIOS_COOKIE_NAME);
+    }
+
+    // Backup quizzes
+    public setBackupQuizzesCookie(value: string): void{
+        this.set(BACKUP_QUIZZES_COOKIE_NAME, value);
+    }
+
+    public getBackupQuizzesCookie(): string | null {
+        return this.get(BACKUP_QUIZZES_COOKIE_NAME);
+    }
+
+    public removeBackupQuizzesCookie(): void {
+        this.remove(BACKUP_QUIZZES_COOKIE_NAME);
     }
 
     // Cookies status

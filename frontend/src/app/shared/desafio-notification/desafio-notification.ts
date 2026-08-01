@@ -55,6 +55,17 @@ export class DesafioNotification implements OnInit {
       });
     }
 
+    const backupQuizzesString = this.cookieService.getBackupQuizzesCookie();
+    if (backupQuizzesString) {
+      this.scoreBoardService.restaurarQuizzes(backupQuizzesString).subscribe(restoredCount => {
+        if (restoredCount > 0) {
+          console.log(`Restaurados ${restoredCount} quizzes a partir do backup.`);
+        } else {
+          console.log("Nenhum quiz foi restaurado a partir do backup.");
+        }
+      });
+    }
+
     this.signalRService.desafioSolved$.subscribe(async desafio => {
       this.showNotification(desafio);
 
