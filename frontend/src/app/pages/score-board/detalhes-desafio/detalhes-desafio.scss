@@ -19,7 +19,7 @@ $azul-escuro-border: rgba(133, 163, 218, 0.28);
 	overflow-y: auto;
 	overflow-x: hidden;
 	border-radius: 0.25rem;
-	border: 1px solid rgba(13, 23, 40, 0.1);
+	border: 1px solid rgba(13, 23, 40, 0.425);
 	box-shadow:
 		0 24px 48px rgba(13, 23, 40, 0.18),
 		0 0 0 1px rgba(61, 212, 126, 0.08);
@@ -31,8 +31,8 @@ $azul-escuro-border: rgba(133, 163, 218, 0.28);
 	z-index: 5;
 	flex-shrink: 0;
 	height: 7px;
-	background: linear-gradient(90deg, #3dd47e, #2bb465 50%, #22a154);
-	box-shadow: 0 2px 12px rgba(61, 212, 126, 0.4);
+	background: $azul-escuro;
+	box-shadow: 0 2px 12px rgba(61, 89, 212, 0.4);
 	border-radius: 0.25rem 0.25rem 0 0;
 }
 
