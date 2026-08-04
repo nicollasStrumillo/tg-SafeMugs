@@ -3,7 +3,7 @@ import * as signalR from '@microsoft/signalr';
 import { DesafioResponse } from '../../pages/score-board/score-board.models';
 import { Subject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthSessionService } from '../../shared/auth/auth-session.service';
+import { AuthSessionService } from '../usuario/auth/auth-session.service';
 
 @Injectable({
 	providedIn: 'root',

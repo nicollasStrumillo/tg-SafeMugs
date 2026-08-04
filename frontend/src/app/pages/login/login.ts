@@ -8,8 +8,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 
-import { AuthApiService } from '../../shared/auth/auth-api.service';
-import { AuthSessionService } from '../../shared/auth/auth-session.service';
+import { UsuarioApiService } from '../../services/usuario/usuario-api.service';
+import { AuthSessionService } from '../../services/usuario/auth/auth-session.service';
 import { ApiError } from '../../shared/notification/erro-api.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -31,7 +31,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
-  private readonly authApiService = inject(AuthApiService);
+  private readonly usuarioApiService = inject(UsuarioApiService);
   private readonly authSessionService = inject(AuthSessionService);
   private readonly router = inject(Router);
 
@@ -61,7 +61,7 @@ export class LoginPage {
 
     const { email, password } = this.loginForm.getRawValue();
 
-    this.authApiService
+    this.usuarioApiService
       .login({ email, senha: password })
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({

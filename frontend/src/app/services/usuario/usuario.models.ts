@@ -29,15 +29,3 @@ export interface UsuarioLogado {
 	perfil: string;
 }
 
-export interface TokenPayload {
-	nameid: string;
-	email: string;
-	unique_name: string;
-	role: string;
-	perfil: string;
-	url_imagem_perfil: string;
-	jti: string;
-	exp: number;
-	iat: number;
-	nbf?: number;
-}

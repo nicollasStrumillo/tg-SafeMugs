@@ -1,9 +1,22 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { LoginResponse, TokenPayload, UsuarioLogado } from './auth.models';
-import { BrowserCookieService } from '../../services/cookies/browser-cookies.service';
+import { LoginResponse, UsuarioLogado } from '../usuario.models';
+import { BrowserCookieService } from '../../cookies/browser-cookies.service';
 
 const TOKEN_COOKIE = 'safemugs.token';
+
+export interface TokenPayload {
+	nameid: string;
+	email: string;
+	unique_name: string;
+	role: string;
+	perfil: string;
+	url_imagem_perfil: string;
+	jti: string;
+	exp: number;
+	iat: number;
+	nbf?: number;
+}
 
 function base64UrlDecode(str: string): string {
 	str = str.replace(/-/g, '+').replace(/_/g, '/');

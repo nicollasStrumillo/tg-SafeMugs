@@ -3,7 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
-import { AuthSessionService } from '../../shared/auth/auth-session.service';
+import { AuthSessionService } from '../../services/usuario/auth/auth-session.service';
 import { ScoreBoardService } from '../../pages/score-board/score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 

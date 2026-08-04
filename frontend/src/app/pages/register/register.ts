@@ -8,9 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 
-import { AuthApiService } from '../../shared/auth/auth-api.service';
-import { AuthSessionService } from '../../shared/auth/auth-session.service';
-import { CadastroRequest } from '../../shared/auth/auth.models';
+import { UsuarioApiService } from '../../services/usuario/usuario-api.service';
+import { AuthSessionService } from '../../services/usuario/auth/auth-session.service';
+import { CadastroRequest } from '../../services/usuario/usuario.models';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NotificationService } from '../../shared/notification/notification.service';
 import { ApiError } from '../../shared/notification/erro-api.model';
@@ -72,7 +72,7 @@ function passwordsMatchValidator(control: AbstractControl): ValidationErrors | n
 })
 export class RegisterPage {
   private readonly formBuilder = inject(NonNullableFormBuilder);
-  private readonly authApiService = inject(AuthApiService);
+  private readonly usuarioApiService = inject(UsuarioApiService);
   private readonly authSessionService = inject(AuthSessionService);
   private readonly router = inject(Router);
   private readonly notificationService = inject(NotificationService);
@@ -117,11 +117,11 @@ export class RegisterPage {
       confirmarSenha: this.registerForm.controls.confirmPassword.value,
     };
 
-    this.authApiService
+    this.usuarioApiService
       .cadastrar(dadosCadastro)
       .pipe(
         switchMap(() =>
-          this.authApiService.login({
+          this.usuarioApiService.login({
             email: dadosCadastro.email,
             senha: dadosCadastro.senha,
             resolverDesafioSqlInjection: false,

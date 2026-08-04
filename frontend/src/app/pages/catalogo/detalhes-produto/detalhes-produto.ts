@@ -9,8 +9,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { finalize } from 'rxjs';
 
-import { AuthSessionService } from '../../../shared/auth/auth-session.service';
-import { UsuarioLogado } from '../../../shared/auth/auth.models';
+import { AuthSessionService } from '../../../services/usuario/auth/auth-session.service';
+import { UsuarioLogado } from '../../../services/usuario/usuario.models';
 import { ComentarioProdutoDto, ComentarioRequest, ProdutoCardViewModel } from '../catalogo.models';
 import { CatalogoService } from '../catalogo.service';
 import { NotificationService } from '../../../shared/notification/notification.service';

@@ -4,7 +4,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { AuthSessionService } from './shared/auth/auth-session.service';
+import { AuthSessionService } from './services/usuario/auth/auth-session.service';
 import { CookieNotification } from './shared/cookie-notification/cookie-notification';
 import { DesafioNotification } from './shared/desafio-notification/desafio-notification';
 import { FooterComponent } from './shared/footer/footer';
