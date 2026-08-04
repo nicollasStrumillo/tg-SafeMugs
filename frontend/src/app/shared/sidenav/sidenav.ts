@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
+import { AuthSessionService } from '../../shared/auth/auth-session.service';
 import { ScoreBoardService } from '../../pages/score-board/score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 
@@ -16,8 +17,10 @@ import { SignalRService } from '../../services/signalR/signalr.service';
 export class SidenavComponent implements OnInit {
 	private readonly scoreBoardService = inject(ScoreBoardService);
 	private readonly signalRService = inject(SignalRService);
+	protected readonly auth = inject(AuthSessionService);
+	private readonly router = inject(Router);
 
-	protected readonly expanded = signal(true);
+	protected readonly expanded = signal(false);
 	protected readonly showScoreBoard = signal(false);
 
 	protected readonly toggleIcon = computed(() => (this.expanded() ? 'chevron_left' : 'chevron_right'));
@@ -52,5 +55,15 @@ export class SidenavComponent implements OnInit {
 
 	protected githubClick(): void {
 		console.log('icone GitHub clicado');
+	}
+
+	protected logout(): void {
+		this.auth.limparSessao();
+		void this.router.navigate(['/catalogo']);
+	}
+
+	protected onFotoError(event: Event): void {
+		const img = event.target as HTMLImageElement;
+		img.src = '/imagens/perfil/generic_profile.jpg';
 	}
 }

@@ -14,6 +14,24 @@
 					</a>
 				</div>
 				<nav class="topnav" aria-label="Navegação da conta">
+				@if (auth.autenticado()) {	
+					<a
+						class="perfil-link"
+						mat-ripple
+						routerLink="/score-board"
+						routerLinkActive="active-link"
+						[routerLinkActiveOptions]="{ exact: true }"
+					>
+						<img
+							class="avatar"
+							[src]="auth.usuarioLogado()?.urlImagemPerfil"
+							(error)="onFotoError($event)"
+							alt="Foto de perfil"
+						/>
+						<span class="perfil-name"> {{ auth.usuarioLogado()?.nomeCompleto }} </span>
+					</a>
+					
+				} @else {
 					<a
 						mat-button
 						routerLink="/login"
@@ -23,7 +41,8 @@
 						Entrar
 					</a>
 					<a mat-button routerLink="/register" routerLinkActive="active-link">Cadastrar</a>
-				</nav>
+				}
+			</nav>
 			</mat-toolbar>
 		</header>
 

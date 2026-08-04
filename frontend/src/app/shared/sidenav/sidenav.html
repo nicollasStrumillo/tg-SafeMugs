@@ -60,14 +60,43 @@
 		}
 	</nav>
 
-	<button
-		type="button"
-		class="sidenav-toggle"
-		(click)="toggle()"
-		[matTooltip]="toggleTooltip()"
-		
-		[attr.aria-label]="toggleTooltip()"
-	>
-		<mat-icon aria-hidden="true">{{ toggleIcon() }}</mat-icon>
-	</button>
+	<div class="sidenav-bottom">
+		@if (auth.autenticado()) {
+			<div class="sidenav-footer">
+				<button
+					type="button"
+					class="nav-item nav-item--perfil"
+					routerLink="/score-board"
+					routerLinkActive="active"
+					matTooltip="Perfil"
+					[matTooltipDisabled]="expanded()"
+				>
+					<mat-icon aria-hidden="true">account_circle</mat-icon>
+					<span class="nav-label">Perfil</span>
+				</button>
+
+				<button
+					type="button"
+					class="nav-item nav-item--logout"
+					(click)="logout()"
+					matTooltip="Fazer Logout"
+					[matTooltipDisabled]="expanded()"
+				>
+					<mat-icon aria-hidden="true">logout</mat-icon>
+					<span class="nav-label">Fazer Logout</span>
+				</button>
+			</div>
+		}
+
+		<button
+			type="button"
+			class="sidenav-toggle"
+			(click)="toggle()"
+			[matTooltip]="toggleTooltip()"
+			
+			[attr.aria-label]="toggleTooltip()"
+		>
+			<mat-icon aria-hidden="true">{{ toggleIcon() }}</mat-icon>
+		</button>
+	</div>
 </aside>

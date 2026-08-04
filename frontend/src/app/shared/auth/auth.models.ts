@@ -17,6 +17,7 @@ export interface LoginResponse {
 	usuarioId: number;
 	nomeCompleto: string;
 	email: string;
+	urlImagemPerfil: string;
 	perfil: string;
 }
 
@@ -24,6 +25,7 @@ export interface UsuarioLogado {
 	usuarioId: number;
 	nomeCompleto: string;
 	email: string;
+	urlImagemPerfil: string;
 	perfil: string;
 }
 
@@ -33,6 +35,7 @@ export interface TokenPayload {
 	unique_name: string;
 	role: string;
 	perfil: string;
+	url_imagem_perfil: string;
 	jti: string;
 	exp: number;
 	iat: number;

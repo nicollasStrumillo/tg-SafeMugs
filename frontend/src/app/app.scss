@@ -77,6 +77,36 @@
 	gap: 0.35rem;
 }
 
+.perfil-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.5rem;
+
+  text-decoration: none;
+  width: fit-content;
+
+  .avatar {
+    flex-shrink: 0;
+  }
+
+  .perfil-name {
+	font-family: var(--sm-body);
+	font-weight: 600;
+	color: var(--sm-ink);
+	font-size: 0.9rem;
+    white-space: nowrap;
+  }
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--sm-border);
+}
+
 a {
 	border: 1px solid transparent;
 	border-radius: 0.5rem;

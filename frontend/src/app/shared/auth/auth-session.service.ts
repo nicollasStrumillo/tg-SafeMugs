@@ -54,6 +54,7 @@ export class AuthSessionService {
 			usuarioId: resposta.usuarioId,
 			nomeCompleto: resposta.nomeCompleto,
 			email: resposta.email,
+			urlImagemPerfil: resposta.urlImagemPerfil,
 			perfil: resposta.perfil,
 		});
 		this.persistirToken(resposta.token);
@@ -83,6 +84,7 @@ export class AuthSessionService {
 			usuarioId: Number(payload.nameid),
 			nomeCompleto: payload.unique_name,
 			email: payload.email,
+			urlImagemPerfil: payload.url_imagem_perfil,
 			perfil: payload.perfil,
 		});
 	}
