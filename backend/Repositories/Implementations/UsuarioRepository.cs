@@ -1,5 +1,5 @@
 using backend.Data;
-using backend.DTOs.Auth;
+using backend.DTOs.Usuario;
 using backend.models;
 using backend.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +13,14 @@ public class UsuarioRepository : IUsuarioRepository
     public UsuarioRepository(ApplicationDBContext context)
     {
         _context = context;
+    }
+
+    public async Task<Usuario?> BuscarPorIdAsync(int usuarioId)
+    {
+        return await _context.Usuarios
+            .Include(u => u.Perfil)
+            .Include(u => u.Endereco)
+            .FirstOrDefaultAsync(u => u.Id == usuarioId);
     }
 
     public async Task<Usuario?> BuscaPorEmailAsync(string email)
@@ -29,7 +37,6 @@ public class UsuarioRepository : IUsuarioRepository
 
     public async Task AtualizarAsync(Usuario usuario)
     {
-        _context.Usuarios.Update(usuario);
         await _context.SaveChangesAsync();
     }
 
@@ -44,7 +51,8 @@ public class UsuarioRepository : IUsuarioRepository
             Ativo = true,
             DtCadastro = DateTime.UtcNow,
             DtAtualizacao = DateTime.UtcNow,
-            PerfilId = 1 // Definindo o PerfilId como 1 (Cliente) 
+            PerfilId = 1, // Definindo o PerfilId como 1 (Cliente)
+            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg" // Definindo a URL da imagem de perfil padrão
         };
 
         _context.Usuarios.Add(novoUsuario);
@@ -62,7 +70,8 @@ public class UsuarioRepository : IUsuarioRepository
             Ativo = true,
             DtCadastro = DateTime.UtcNow,
             DtAtualizacao = DateTime.UtcNow,
-            PerfilId = 2 // Definindo o PerfilId como 2 (Administrador) 
+            PerfilId = 2, // Definindo o PerfilId como 2 (Administrador) 
+            UrlImagemPerfil = "/imagens/perfil/generic_admin_profile.jpg" // Definindo a URL da imagem de perfil admin padrão
         };
 
         _context.Usuarios.Add(novoAdministrador);
@@ -71,7 +80,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
     {
-        var sql = $@"SELECT u.Id AS UsuarioId, u.NomeCompleto, u.Email, p.Nome AS Perfil FROM usuarios u INNER JOIN perfis p ON u.PerfilId = p.Id WHERE u.Email = '{request.Email}' AND u.HashSenha = '{request.HashSenha}' AND u.Ativo = 1 limit 1;";
+        var sql = $@"SELECT u.Id AS UsuarioId, u.NomeCompleto, u.Email, u.UrlImagemPerfil, p.Nome AS Perfil FROM usuarios u INNER JOIN perfis p ON u.PerfilId = p.Id WHERE u.Email = '{request.Email}' AND u.HashSenha = '{request.HashSenha}' AND u.Ativo = 1 limit 1;";
 
         try
         {

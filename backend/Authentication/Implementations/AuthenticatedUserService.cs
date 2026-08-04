@@ -38,6 +38,11 @@ public class AuthenticatedUserService : IAuthenticatedUserService
             .FindFirstValue(ClaimTypes.Role)
         ?? string.Empty;
 
+    public string UrlImagemPerfil =>
+        _httpContextAccessor.HttpContext?.User?
+            .FindFirstValue("url_imagem_perfil")
+        ?? string.Empty;
+
     public bool IsAuthenticated =>
         _httpContextAccessor.HttpContext?.User?
             .Identity?.IsAuthenticated ?? false;

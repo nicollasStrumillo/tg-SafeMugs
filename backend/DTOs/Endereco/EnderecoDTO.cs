@@ -1,5 +1,6 @@
-namespace backend.models;
-public class Endereco
+namespace backend.DTOs.Endereco;
+
+public class EnderecoDTO
 {
     public int Id { get; set; }
     public string Logradouro { get; set; } = string.Empty;
@@ -9,8 +10,4 @@ public class Endereco
     public string Cidade { get; set; } = string.Empty;
     public string Estado { get; set; } = string.Empty;
     public string Cep { get; set; } = string.Empty;
-    public DateTime DtCadastro { get; set; }
-    public DateTime DtAtualizacao { get; set; }
-    public Usuario Usuario { get; set; } = null!;
-    public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
 }

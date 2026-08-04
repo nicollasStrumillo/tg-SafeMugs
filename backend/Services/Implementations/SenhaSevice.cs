@@ -1,4 +1,4 @@
-using backend.DTOs.Auth;
+using backend.DTOs.Usuario;
 using backend.Helpers;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;

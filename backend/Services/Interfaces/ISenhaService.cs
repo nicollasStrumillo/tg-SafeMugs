@@ -1,4 +1,4 @@
-using backend.DTOs.Auth;
+using backend.DTOs.Usuario;
 
 namespace backend.Services.Interfaces
 {

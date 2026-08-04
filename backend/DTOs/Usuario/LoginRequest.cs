@@ -1,4 +1,4 @@
-namespace backend.DTOs.Auth;
+namespace backend.DTOs.Usuario;
 public class LoginRequest
 {
     public string Email { get; set; } = string.Empty;

@@ -1,5 +1,4 @@
-namespace backend.DTOs.Auth;
-
+namespace backend.DTOs.Usuario;
 public class CadastroRequest
 {
     public string NomeCompleto { get; set; } = string.Empty;

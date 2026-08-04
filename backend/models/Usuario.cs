@@ -14,7 +14,11 @@ public class Usuario
     public int PerfilId { get; set; }
     public Perfil Perfil { get; set; } = null!;
 
-    public ICollection<Endereco> Enderecos { get; set; } = new List<Endereco>();
+    public int? EnderecoId { get; set; }
+    public Endereco? Endereco { get; set; }
+
+    public string UrlImagemPerfil { get; set; } = string.Empty;
+
     public ICollection<Avaliacao> Avaliacoes { get; set; } = new List<Avaliacao>();
     public ICollection<ComentarioProduto> ComentariosProduto { get; set; } = new List<ComentarioProduto>();
     public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();

@@ -6,5 +6,6 @@ public interface IAuthenticatedUserService
     string NomeCompleto { get; }
     string Email { get; }
     string Perfil { get; }
+    string UrlImagemPerfil { get; }
     bool IsAuthenticated { get; }
 }

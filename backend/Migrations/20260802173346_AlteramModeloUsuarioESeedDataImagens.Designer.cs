@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260802173346_AlteramModeloUsuarioESeedDataImagens")]
+    partial class AlteramModeloUsuarioESeedDataImagens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1209,8 +1212,7 @@ namespace backend.Migrations
 
                     b.Property<string>("UrlImagemPerfil")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -1236,7 +1238,7 @@ namespace backend.Migrations
                             NomeCompleto = "Ana Lopes",
                             PerfilId = 1,
                             Telefone = "11990000001",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1249,7 +1251,7 @@ namespace backend.Migrations
                             NomeCompleto = "Bruno Costa",
                             PerfilId = 1,
                             Telefone = "11990000002",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1262,7 +1264,7 @@ namespace backend.Migrations
                             NomeCompleto = "Carla Mendes",
                             PerfilId = 1,
                             Telefone = "11990000003",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1275,7 +1277,7 @@ namespace backend.Migrations
                             NomeCompleto = "Diego Souza",
                             PerfilId = 1,
                             Telefone = "11990000004",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1288,7 +1290,7 @@ namespace backend.Migrations
                             NomeCompleto = "Elisa Martins",
                             PerfilId = 1,
                             Telefone = "11990000005",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1301,7 +1303,7 @@ namespace backend.Migrations
                             NomeCompleto = "Felipe Rocha",
                             PerfilId = 1,
                             Telefone = "11990000006",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1314,7 +1316,7 @@ namespace backend.Migrations
                             NomeCompleto = "Marina Alves",
                             PerfilId = 1,
                             Telefone = "11990000007",
-                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
+                            UrlImagemPerfil = ""
                         },
                         new
                         {
@@ -1327,7 +1329,7 @@ namespace backend.Migrations
                             NomeCompleto = "Admin",
                             PerfilId = 2,
                             Telefone = "11990000008",
-                            UrlImagemPerfil = "/imagens/perfil/generic_admin_profile.jpg"
+                            UrlImagemPerfil = ""
                         });
                 });
 

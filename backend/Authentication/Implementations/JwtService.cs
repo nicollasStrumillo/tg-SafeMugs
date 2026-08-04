@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using backend.Authentication.Interfaces;
-using backend.DTOs.Auth;
+using backend.DTOs.Usuario;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -30,6 +30,7 @@ public class JwtService : IJwtService
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(ClaimTypes.Role, userData.Perfil),
             new("perfil", userData.Perfil),
+            new("url_imagem_perfil", userData.UrlImagemPerfil)
         };
 
         var expiration = DateTime.UtcNow.AddMinutes(_settings.ExpirationInMinutes);
@@ -55,6 +56,7 @@ public class JwtService : IJwtService
             UsuarioId = userData.UsuarioId,
             NomeCompleto = userData.NomeCompleto,
             Email = userData.Email,
+            UrlImagemPerfil = userData.UrlImagemPerfil,
             Perfil = userData.Perfil,
         };
     }

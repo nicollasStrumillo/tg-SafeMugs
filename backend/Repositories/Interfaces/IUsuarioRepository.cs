@@ -1,10 +1,11 @@
-using backend.DTOs.Auth;
+using backend.DTOs.Usuario;
 using backend.models;
 
 namespace backend.Repositories.Interfaces;
 
 public interface IUsuarioRepository
 {
+    Task<Usuario?> BuscarPorIdAsync(int usuarioId);
     Task<Usuario?> BuscaPorEmailAsync(string email);
     Task<Usuario?> BuscarPorNomeAsync(string nomeCompleto);
     Task AtualizarAsync(Usuario usuario);

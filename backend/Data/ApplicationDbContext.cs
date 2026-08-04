@@ -48,11 +48,17 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.Telefone).IsRequired(false).HasMaxLength(20);
             entity.Property(e => e.Ativo).HasDefaultValue(true);
             entity.HasIndex(e => e.Email).IsUnique();
+            entity.Property(e => e.UrlImagemPerfil).IsRequired().HasMaxLength(500);
 
             entity.HasOne(e => e.Perfil)
                 .WithMany(e => e.Usuarios)
                 .HasForeignKey(e => e.PerfilId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Endereco)
+                .WithOne(e => e.Usuario)
+                .HasForeignKey<Usuario>(e => e.EnderecoId)
+                .OnDelete(DeleteBehavior.SetNull);  
         });
 
         modelBuilder.Entity<Endereco>(entity =>
@@ -64,11 +70,6 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.Cidade).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Estado).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Cep).IsRequired().HasMaxLength(20);
-
-            entity.HasOne(e => e.Usuario)
-                .WithMany(e => e.Enderecos)
-                .HasForeignKey(e => e.UsuarioId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<CategoriaProduto>(entity =>
@@ -288,7 +289,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -300,7 +302,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -312,7 +315,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -324,7 +328,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -336,7 +341,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -348,7 +354,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -360,7 +367,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 1
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             },
             new Usuario
             {
@@ -372,7 +380,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                PerfilId = 2
+                PerfilId = 2,
+                UrlImagemPerfil = "/imagens/perfil/generic_admin_profile.jpg"
             }
             );
 
@@ -454,42 +463,42 @@ public class ApplicationDBContext : DbContext
             new ImagemProduto
             {
                 Id = 1,
-                UrlImagem = "/imagens/mug_behappy.jpg",
+                UrlImagem = "/imagens/produto/mug_behappy.jpg", 
                 Legenda = "Caneca Be Happy",
                 ProdutoId = 1
             },
             new ImagemProduto
             {
                 Id = 2,
-                UrlImagem = "/imagens/mug_ceramica_rustica.jpg",
+                UrlImagem = "/imagens/produto/mug_ceramica_rustica.jpg",
                 Legenda = "Caneca Ceramica Rustica",
                 ProdutoId = 2
             },
             new ImagemProduto
             {
                 Id = 3,
-                UrlImagem = "/imagens/mug_coala.jpg",
+                UrlImagem = "/imagens/produto/mug_coala.jpg",
                 Legenda = "Caneca Coala",
                 ProdutoId = 3
             },
             new ImagemProduto
             {
                 Id = 4,
-                UrlImagem = "/imagens/mug_coracao.jpg",
+                UrlImagem = "/imagens/produto/mug_coracao.jpg",
                 Legenda = "Caneca Coracao",
                 ProdutoId = 4
             },
             new ImagemProduto
             {
                 Id = 5,
-                UrlImagem = "/imagens/mug_dogpan.jpg",
+                UrlImagem = "/imagens/produto/mug_dogpan.jpg",
                 Legenda = "Caneca cachorro",
                 ProdutoId = 5
             },
             new ImagemProduto
             {
                 Id = 6,
-                UrlImagem = "/imagens/mug_vermelha_cafe.jpg",
+                UrlImagem = "/imagens/produto/mug_vermelha_cafe.jpg",
                 Legenda = "Caneca Vermelha Cafe",
                 ProdutoId = 6
             });

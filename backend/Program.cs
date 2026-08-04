@@ -98,11 +98,12 @@ builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>(
 // Services e Repositories
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IDesafioRepository, DesafioRepository>();
 builder.Services.AddScoped<IDesafioService, DesafioService>();
 builder.Services.AddScoped<ISenhaService, SenhaService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
 
 //NotificationService e SignalR
 builder.Services.AddSingleton<INotificationService, NotificationService>();
@@ -116,6 +117,11 @@ builder.Services.AddScoped<IDesafiosBackupService, DesafiosBackupService>();
 builder.Services.AddSingleton<IQuizDesafioService, QuizDesafioService>();
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddHttpClient("fotoPerfil", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(10);
+});
 
 var app = builder.Build();
 
