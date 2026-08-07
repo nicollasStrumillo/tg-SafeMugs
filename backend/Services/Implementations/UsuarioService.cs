@@ -152,6 +152,9 @@ public class UsuarioService : IUsuarioService
         if (string.IsNullOrWhiteSpace(request.NomeCompleto))
             throw new ValidationException("O nome completo é obrigatório.");
 
+        if (!string.IsNullOrWhiteSpace(request.Telefone) && request.Telefone.Length > 11)
+            throw new ValidationException("O telefone não pode ter mais de 11 caracteres.");
+
         var camposObrigatoriosEndereco = new[]
         {
             request.Logradouro,
@@ -191,6 +194,8 @@ public class UsuarioService : IUsuarioService
                 usuario.Endereco.Estado = request.Estado!;
                 usuario.Endereco.Cep = request.Cep!;
                 usuario.Endereco.DtAtualizacao = DateTime.UtcNow;
+
+                ValidarEnderecoOrThrow(usuario.Endereco);
             }
             else
             {
@@ -208,6 +213,7 @@ public class UsuarioService : IUsuarioService
                     Usuario = usuario
                 };
 
+                ValidarEnderecoOrThrow(novoEndereco);
                 await _enderecoRepository.CadastrarEnderecoAsync(novoEndereco);
                 usuario.EnderecoId = novoEndereco.Id;
                 usuario.Endereco = novoEndereco;
@@ -233,6 +239,33 @@ public class UsuarioService : IUsuarioService
         });
     }
 
+    private static void ValidarEnderecoOrThrow(Endereco endereco)
+    {
+        //Validações de negócio:
+        if (endereco.Logradouro.Length > 150)
+            throw new ValidationException("O logradouro não pode ter mais de 150 caracteres.");
+
+        if (endereco.Numero <= 0)
+            throw new ValidationException("O número do endereço deve ser positivo.");
+
+        if (endereco.Bairro.Length > 100)
+            throw new ValidationException("O bairro não pode ter mais de 100 caracteres.");
+
+        if (endereco.Cidade.Length > 100)
+            throw new ValidationException("A cidade não pode ter mais de 100 caracteres.");
+
+        if (endereco.Estado.Length > 100)
+            throw new ValidationException("O estado não pode ter mais de 100 caracteres.");
+
+        if (endereco.Cep.Length > 20)
+            throw new ValidationException("O CEP não pode ter mais de 20 caracteres.");
+        if (endereco.Cep.Contains(' ') || endereco.Cep.Any(c => !char.IsDigit(c)))
+            throw new ValidationException("O CEP deve conter apenas números.");
+
+        if (endereco.Complemento != null && endereco.Complemento.Length > 200)
+            throw new ValidationException("O complemento não pode ter mais de 200 caracteres.");
+    }
+
     public async Task<AuthTokenResponse?> UploadFotoPerfilAsync(IFormFile foto)
     {
         if (foto == null || foto.Length == 0)
@@ -244,7 +277,8 @@ public class UsuarioService : IUsuarioService
         var usuario = await _usuarioRepository.BuscarPorIdAsync(_user.UsuarioId)
             ?? throw new NotFoundException("Usuário não encontrado.");
 
-        var pastaDestino = Path.Combine(_env.WebRootPath!, "imagens", "perfil");
+        string pastaUsuario = "Usuario_" + usuario.Id.ToString();
+        var pastaDestino = Path.Combine(_env.WebRootPath!, "imagens", "perfil", pastaUsuario);
 
         Directory.CreateDirectory(pastaDestino);
 
@@ -282,10 +316,12 @@ public class UsuarioService : IUsuarioService
         if (request == null || string.IsNullOrWhiteSpace(request.Url))
             throw new ValidationException("URL não informada.");
 
+        if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uriResult) || (uriResult.Scheme != Uri.UriSchemeHttp && uriResult.Scheme != Uri.UriSchemeHttps))
+            throw new ValidationException("URL inválida.");
+        
         var usuario = await _usuarioRepository.BuscarPorIdAsync(_user.UsuarioId)
             ?? throw new NotFoundException("Usuário não encontrado.");
 
-        // VULNERÁVEL A SSRF
         var client = _httpClientFactory.CreateClient("fotoPerfil");
         using var response = await client.GetAsync(request.Url);
 
@@ -298,7 +334,9 @@ public class UsuarioService : IUsuarioService
 
         var bytes = await response.Content.ReadAsByteArrayAsync();
 
-        var pastaDestino = Path.Combine(_env.WebRootPath!, "imagens", "perfil");
+        string pastaUsuario = "Usuario_" + usuario.Id.ToString();
+
+        var pastaDestino = Path.Combine(_env.WebRootPath!, "imagens", "perfil", pastaUsuario);
         Directory.CreateDirectory(pastaDestino);
 
         var nomeArquivo = $"{usuario.Id}.jpg";
@@ -306,7 +344,7 @@ public class UsuarioService : IUsuarioService
 
         await File.WriteAllBytesAsync(caminhoCompleto, bytes);
 
-        usuario.UrlImagemPerfil = $"/imagens/perfil/{nomeArquivo}";
+        usuario.UrlImagemPerfil = $"/imagens/perfil/{pastaUsuario}/{nomeArquivo}";
         usuario.DtAtualizacao = DateTime.UtcNow;
 
         await _usuarioRepository.AtualizarAsync(usuario);

@@ -70,6 +70,7 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.Cidade).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Estado).IsRequired().HasMaxLength(100);
             entity.Property(e => e.Cep).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.Complemento).IsRequired(false).HasMaxLength(200);
         });
 
         modelBuilder.Entity<CategoriaProduto>(entity =>

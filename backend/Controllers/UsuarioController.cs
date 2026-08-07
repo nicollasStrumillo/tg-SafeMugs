@@ -34,7 +34,7 @@ public class UsuarioController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("detalhes/{usuarioId}")]
+    [HttpGet("detalhes/{usuarioId}")]
     public async Task<ActionResult<UsuarioDetalhesDTO>> Detalhes(int usuarioId)
     {
         var response = await _usuarioService.ObterUsuarioDetalhesAsync(usuarioId);
@@ -43,7 +43,7 @@ public class UsuarioController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("editar")]
+    [HttpPatch("editar")]
     public async Task<ActionResult<AuthTokenResponse>> Editar([FromBody] EditarUsuarioRequest request)
     {
         var response = await _usuarioService.EditarUsuarioAsync(request);
@@ -51,7 +51,7 @@ public class UsuarioController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("foto-perfil/upload")]
+    [HttpPatch("foto-perfil/upload")]
     public async Task<ActionResult<AuthTokenResponse>> UploadFotoPerfil(IFormFile foto)
     {
         var response = await _usuarioService.UploadFotoPerfilAsync(foto);
@@ -59,7 +59,7 @@ public class UsuarioController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("foto-perfil/url")]
+    [HttpPatch("foto-perfil/url")]
     public async Task<ActionResult<AuthTokenResponse>> UploadFotoPerfilUrl([FromBody] UploadFotoPerfilUrlRequest request)
     {
         var response = await _usuarioService.UploadFotoPerfilUrlAsync(request);
@@ -67,7 +67,7 @@ public class UsuarioController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("mudar-senha")]
+    [HttpPatch("mudar-senha")]
     public async Task<IActionResult> MudarSenha([FromBody] MudarSenhaRequest request)
     {
         await _usuarioService.MudarSenhaAsync(request);
@@ -75,7 +75,7 @@ public class UsuarioController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("desativar/{usuarioId}")]
+    [HttpPatch("desativar/{usuarioId}")]
     public async Task<IActionResult> Desativar(int usuarioId)
     {
         await _usuarioService.DesativarUsuarioAsync(usuarioId);
