@@ -1,3 +1,4 @@
+import { model } from '@angular/core';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -31,6 +32,11 @@ export const routes: Routes = [
 		loadComponent: () =>
 			import('./pages/score-board/score-board').then((module) => module.ScoreBoard),
 	},
+	{
+		path: 'perfil',
+		loadComponent: () =>
+			import('./pages/perfil/perfil').then((module) => module.Perfil),
+	},	
 	{
 		path: '**',
 		redirectTo: 'catalogo',

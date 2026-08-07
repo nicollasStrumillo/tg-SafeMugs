@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 
-import { LoginResponse, UsuarioLogado } from '../usuario.models';
+import { AuthTokenResponse, UsuarioLogado } from '../usuario.models';
 import { BrowserCookieService } from '../../cookies/browser-cookies.service';
 
 const TOKEN_COOKIE = 'safemugs.token';
@@ -61,7 +61,7 @@ export class AuthSessionService {
 		this.carregarSessaoSalva();
 	}
 
-	salvarLogin(resposta: LoginResponse): void {
+	salvarToken(resposta: AuthTokenResponse): void {
 		this.tokenSignal.set(resposta.token);
 		this.usuarioLogadoSignal.set({
 			usuarioId: resposta.usuarioId,

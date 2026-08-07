@@ -66,7 +66,7 @@ export class LoginPage {
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: (usuario) => {
-          this.authSessionService.salvarLogin(usuario);
+          this.authSessionService.salvarToken(usuario);
           void this.router.navigate(['/catalogo']);
         },
         error: (erro: HttpErrorResponse) => {

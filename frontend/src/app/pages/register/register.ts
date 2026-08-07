@@ -127,7 +127,7 @@ export class RegisterPage {
             resolverDesafioSqlInjection: false,
           }),
         ),
-        tap((usuario) => this.authSessionService.salvarLogin(usuario)),
+        tap((usuario) => this.authSessionService.salvarToken(usuario)),
         finalize(() => this.carregando.set(false)),
       )
       .subscribe({

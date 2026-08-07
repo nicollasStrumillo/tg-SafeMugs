@@ -1,0 +1,309 @@
+<section class="perfil-shell">
+	@if (carregando()) {
+		<p class="loading-note">Carregando perfil...</p>
+	} @else {
+		<div class="perfil-grid">
+			<div class="perfil-col perfil-col--form">
+				<mat-card class="perfil-card">
+					@if (perfilNome()) {
+						<p class="perfil-badge">{{ perfilNome() }}: 
+							<span class="perfil-badge-email">{{ email() }}</span> 
+						</p>
+					}
+					
+					<mat-card-header>
+						<mat-card-title>Editar perfil</mat-card-title>
+						<mat-card-subtitle>
+							Atualize seus dados pessoais e endereço de entrega.
+						</mat-card-subtitle>
+					</mat-card-header>
+
+					<mat-card-content>
+						<form
+							class="editar-form"
+							[formGroup]="editarForm"
+							(ngSubmit)="salvarPerfil()"
+							novalidate
+						>
+							<mat-form-field>
+								<mat-label>Nome completo</mat-label>
+								<input
+									matInput
+									type="text"
+									formControlName="nomeCompleto"
+									autocomplete="name"
+								/>
+								@if (
+									editarForm.controls.nomeCompleto.hasError('required') &&
+									(editarForm.controls.nomeCompleto.touched || formSubmitted())
+								) {
+									<mat-error>Informe o nome completo.</mat-error>
+								}
+								@if (
+									editarForm.controls.nomeCompleto.hasError('minlength') &&
+									(editarForm.controls.nomeCompleto.touched || formSubmitted())
+								) {
+									<mat-error>Use ao menos 3 caracteres.</mat-error>
+								}
+							</mat-form-field>
+
+							<mat-form-field>
+								<mat-label>Telefone</mat-label>
+								<input
+									matInput
+									type="tel"
+									formControlName="telefone"
+									autocomplete="tel"
+									maxlength="11"
+									(keypress)="somenteNumeros($event)"
+								/>
+								<mat-hint>(Opcional)</mat-hint>
+								@if (
+									editarForm.controls.telefone.hasError('minlength') &&
+									(editarForm.controls.telefone.touched || formSubmitted())
+								) {
+									<mat-error>Informe um telefone com 11 dígitos.</mat-error>
+								}
+								@if (
+									editarForm.controls.telefone.hasError('pattern') &&
+									(editarForm.controls.telefone.touched || formSubmitted())
+								) {
+									<mat-error>Digite apenas números.</mat-error>
+								}
+							</mat-form-field>
+
+							<section class="endereco-block" aria-labelledby="endereco-titulo">
+								<div class="endereco-header">
+									<h3 id="endereco-titulo">Endereço</h3>
+									<button
+										type="button"
+										mat-stroked-button
+										class="limpar-endereco"
+										(click)="limparEndereco()"
+									>
+										Limpar Endereço
+									</button>
+								</div>
+
+								<p class="endereco-hint">
+									Deixe todos os campos vazios se não quiser cadastrar um endereço.
+								</p>
+
+								@if (
+									editarForm.hasError('enderecoIncompleto') &&
+									(formSubmitted())
+								) {
+									<p class="error-note" role="alert">
+										Endereço incompleto: preencha todos os campos obrigatórios
+										ou limpe o endereço.
+									</p>
+								}
+
+								<div class="endereco-grid">
+									<mat-form-field class="span-2">
+										<mat-label>Logradouro</mat-label>
+										<input
+											matInput
+											type="text"
+											formControlName="logradouro"
+											autocomplete="street-address"
+											maxlength="150"
+										/>
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>Número</mat-label>
+										<input matInput type="number" formControlName="numero" min="1" step="1" (keypress)="somenteNumeros($event)"/>
+
+										@if (editarForm.controls.numero.hasError('min') && (editarForm.controls.numero.touched)){
+											<mat-error>O número deve ser maior que 0.</mat-error>
+										}
+										@if (editarForm.controls.numero.hasError('pattern') && (editarForm.controls.numero.touched)){
+											<mat-error>Digite apenas números.</mat-error>
+										}
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>Complemento</mat-label>
+										<input matInput type="text" formControlName="complemento" maxlength="200" />
+										<mat-hint>(Opcional)</mat-hint>
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>Bairro</mat-label>
+										<input matInput type="text" formControlName="bairro" maxlength="100" />
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>Cidade</mat-label>
+										<input
+											matInput
+											type="text"
+											formControlName="cidade"
+											autocomplete="address-level2"
+											maxlength="100"
+										/>
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>Estado</mat-label>
+										<input
+											matInput
+											type="text"
+											formControlName="estado"
+											autocomplete="address-level1"
+											maxlength="100"
+										/>
+									</mat-form-field>
+
+									<mat-form-field>
+										<mat-label>CEP</mat-label>
+										<input
+											matInput
+											type="text"
+											formControlName="cep"
+											autocomplete="postal-code"
+											(keypress)="somenteNumeros($event)"
+											maxlength="20"
+										/>
+										@if (editarForm.controls.cep.hasError('pattern') && (editarForm.controls.cep.touched)){
+											<mat-error>Digite apenas números.</mat-error>
+										}
+									</mat-form-field>
+								</div>
+							</section>
+
+							<button
+								mat-flat-button
+								type="submit"
+								class="primary-action"
+								[disabled]="salvando()"
+							>
+								{{ salvando() ? 'Salvando...' : 'Salvar' }}
+							</button>
+						</form>
+					</mat-card-content>
+				</mat-card>
+			</div>
+
+			<div class="perfil-col perfil-col--foto">
+				<mat-card class="perfil-card foto-card">
+					<mat-card-header>
+						<mat-card-title>Foto de perfil</mat-card-title>
+						<mat-card-subtitle>
+							Atualize por URL ou envie um arquivo JPEG.
+						</mat-card-subtitle>
+					</mat-card-header>
+
+					<mat-card-content class="foto-content">
+						<div class="avatar-vitrine">
+							<img
+								class="avatar-img"
+								[src]="urlImagemPerfil()"
+								(error)="onFotoError($event)"
+								alt="Foto de perfil"
+							/>
+						</div>
+
+						<form
+							class="inline-form"
+							[formGroup]="urlFotoForm"
+							(ngSubmit)="enviarFotoUrl()"
+							novalidate
+						>
+							<mat-form-field class="inline-field">
+								<mat-label>URL da imagem</mat-label>
+								<input
+									matInput
+									type="url"
+									formControlName="url"
+									placeholder="Cole a URL da imagem aqui"
+								/>
+							</mat-form-field>
+							<button
+								mat-flat-button
+								type="submit"
+								class="inline-submit"
+								[disabled]="enviandoUrlFoto()"
+							>
+								{{ enviandoUrlFoto() ? 'Enviando...' : 'Enviar' }}
+							</button>
+						</form>
+
+						<input
+							#fileInput
+							type="file"
+							accept="image/jpeg,.jpg,.jpeg"
+							hidden
+							(change)="onArquivoSelecionado($event)"
+						/>
+
+						<button
+							type="button"
+							mat-stroked-button
+							class="upload-btn"
+							(click)="abrirSeletorArquivo()"
+							[disabled]="enviandoUpload()"
+						>
+							<mat-icon aria-hidden="true">upload</mat-icon>
+							{{
+								enviandoUpload()
+									? 'Enviando arquivo...'
+									: 'Fazer Upload de arquivo .jpg'
+							}}
+						</button>
+					</mat-card-content>
+				</mat-card>
+
+				<mat-card class="perfil-card">
+					<mat-card-header>
+						<mat-card-title>Editar senha</mat-card-title>
+						<mat-card-subtitle>Defina uma nova senha com no mínimo 8 caracteres.</mat-card-subtitle>
+					</mat-card-header>
+					<mat-card-content>
+						<form
+							class="inline-form"
+							[formGroup]="senhaForm"
+							(ngSubmit)="enviarNovaSenha()"
+							novalidate
+						>
+							<mat-form-field class="inline-field">
+								<mat-label>Nova senha</mat-label>
+								<input
+									matInput
+									type="password"
+									formControlName="novaSenha"
+									placeholder="Digite a nova senha"
+									autocomplete="new-password"
+								/>
+								@if (
+									senhaForm.controls.novaSenha.hasError('minlength') 
+								) {
+									<mat-error>A senha precisa ter ao menos 8 caracteres.</mat-error>
+								}
+							</mat-form-field>
+							<button
+								mat-flat-button
+								type="submit"
+								class="inline-submit"
+								[disabled]="salvandoSenha()"
+							>
+								{{ salvandoSenha() ? 'Carregando...' : 'Editar' }}
+							</button>
+						</form>
+					</mat-card-content>
+				</mat-card>
+
+				<button
+					type="button"
+					mat-button
+					class="delete-account"
+					(click)="abrirConfirmacaoExclusao()"
+					[disabled]="desativando()"
+				>
+					{{ desativando() ? 'Carregando...' : 'Deletar conta' }}
+				</button>
+			</div>
+		</div>
+	}
+</section>
