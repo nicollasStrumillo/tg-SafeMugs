@@ -20,7 +20,7 @@ export class SidenavComponent implements OnInit {
 	protected readonly auth = inject(AuthSessionService);
 	private readonly router = inject(Router);
 
-	protected readonly expanded = signal(false);
+	protected readonly expanded = signal(true);
 	protected readonly showScoreBoard = signal(false);
 
 	protected readonly toggleIcon = computed(() => (this.expanded() ? 'chevron_left' : 'chevron_right'));
