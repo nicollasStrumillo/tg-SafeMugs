@@ -165,8 +165,7 @@
 					}
 
 					@if (!quizResolvido()) {
-						<button
-							mat-flat-button
+						<button						
 							type="button"
 							class="btn-resolver"
 							[disabled]="carregandoResolucao() || linhasSelecionadas().size === 0"
