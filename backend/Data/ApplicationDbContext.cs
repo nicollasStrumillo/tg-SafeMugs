@@ -113,9 +113,11 @@ public class ApplicationDBContext : DbContext
         {
             entity.ToTable("avaliacoes", t => t.HasCheckConstraint("CK_Avaliacao_Nota", "Nota >= 1 AND Nota <= 5"));
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Comentario).HasMaxLength(1000);
+            entity.Property(e => e.Comentario).IsRequired().HasMaxLength(1000);
             entity.HasIndex(e => new { e.UsuarioId, e.ProdutoId }).IsUnique();
-
+            entity.Property(e => e.Nota).IsRequired();
+            entity.Property(e => e.DtCadastro).IsRequired();
+            entity.Property(e => e.DtAtualizacao).IsRequired();
             entity.HasOne(e => e.Usuario)
                 .WithMany(e => e.Avaliacoes)
                 .HasForeignKey(e => e.UsuarioId)
