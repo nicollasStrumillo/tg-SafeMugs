@@ -1,41 +1,35 @@
 export interface UsuarioResumoDto {
 	id: number;
 	nomeCompleto: string;
-}
-
-export interface PerfilResumoDto {
-	id: number;
-	nome: string;
+	email: string;
+	ativo: boolean;
+	perfil: string;
+	urlImagemPerfil: string;
 }
 
 export interface CategoriaProdutoDto {
 	id: number;
 	nome: string;
-}
-
-export interface ImagemProdutoDto {
-	id: number;
-	urlImagem: string;
-	legenda?: string | null;
+	descricao: string;
 }
 
 export interface AvaliacaoDto {
 	id: number;
 	nota: number;
-	comentario?: string | null;
+	comentario: string;
 	usuario?: UsuarioResumoDto | null;
 }
 
-export interface ProdutoCatalogoDto {
+export interface ProdutoCompletoDto {
 	id: number;
 	nome: string;
 	descricao: string;
 	preco: number;
 	estoque: number;
-	ativo: boolean;
 	categoriaProduto?: CategoriaProdutoDto | null;
-	imagensProduto?: ImagemProdutoDto[];
+	urlImagemProduto: string;
 	avaliacoes?: AvaliacaoDto[];
+	comentariosProduto?: ComentarioProdutoDto[];
 }
 
 export interface ProdutoCardViewModel {
@@ -45,11 +39,11 @@ export interface ProdutoCardViewModel {
 	preco: number;
 	estoque: number;
 	categoria: string;
+	descricaoCategoria: string;
 	imagemUrl: string;
-	imagemLegenda: string;
 	avaliacaoMedia: number | null;
 	quantidadeAvaliacoes: number;
-	ativo: boolean;
+	quantidadeComentarios: number;
 }
 
 // comentarios

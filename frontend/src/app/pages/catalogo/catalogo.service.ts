@@ -4,7 +4,7 @@ import { map, Observable } from 'rxjs';
 
 import {
 	ProdutoCardViewModel,
-	ProdutoCatalogoDto,
+	ProdutoCompletoDto,
 	ComentarioRequest,
 	ComentarioProdutoDto
 } from './catalogo.models';
@@ -17,14 +17,13 @@ export class CatalogoService {
 
 	public listarProdutos(): Observable<ProdutoCardViewModel[]> {
 		return this.http
-			.get<ProdutoCatalogoDto[]>(`/api/produtos/lista`)
+			.get<ProdutoCompletoDto[]>(`/api/produtos/lista`)
 			.pipe(map((produtos) => produtos.map((produto) => this.paraViewModel(produto))));
 	}
 
-	private paraViewModel(produto: ProdutoCatalogoDto): ProdutoCardViewModel {
-		const imagens = produto.imagensProduto ?? [];
+	private paraViewModel(produto: ProdutoCompletoDto): ProdutoCardViewModel {
 		const avaliacoes = produto.avaliacoes ?? [];
-		const imagemPrincipal = imagens[0];
+		const comentarios = produto.comentariosProduto ?? [];
 		const avaliacaoMedia =
 			avaliacoes.length > 0
 				? avaliacoes.reduce((soma, avaliacao) => soma + avaliacao.nota, 0) /
@@ -38,17 +37,18 @@ export class CatalogoService {
 			preco: produto.preco,
 			estoque: produto.estoque,
 			categoria: produto.categoriaProduto?.nome ?? 'Sem categoria',
-			imagemUrl: this.normalizarImagem(imagemPrincipal?.urlImagem),
-			imagemLegenda: imagemPrincipal?.legenda ?? produto.nome,
+			descricaoCategoria: produto.categoriaProduto?.descricao ?? 'Sem descrição',
+			imagemUrl: this.normalizarImagem(produto.urlImagemProduto),
 			avaliacaoMedia,
 			quantidadeAvaliacoes: avaliacoes.length,
-			ativo: produto.ativo
+			quantidadeComentarios: comentarios.length,
+			
 		};
 	}
 
 	private normalizarImagem(urlImagem?: string): string {
 		if (!urlImagem) {
-			return '/imagens/mug_behappy.jpg';
+			return '/imagens/produto/mug_behappy.jpg';
 		}
 
 		if (urlImagem.startsWith('http') || urlImagem.startsWith('/')) {
