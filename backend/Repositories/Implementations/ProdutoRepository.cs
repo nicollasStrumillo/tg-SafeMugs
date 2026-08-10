@@ -14,47 +14,40 @@ public class ProdutoRepository : IProdutoRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IReadOnlyList<Produto>> ObterTodosAsync(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Produto>> ObterTodosAsync()
     {
         return await _dbContext.Produtos.AsNoTracking()
         .Include(p => p.Avaliacoes)
             .ThenInclude(a => a.Usuario)
+                .ThenInclude(u => u.Perfil)
+        .Include(p => p.ComentariosProduto)
+            .ThenInclude(c => c.Usuario)
         .Include(p => p.CategoriaProduto)
-        .Include(p => p.ImagensProduto)
-        .Select(p => new Produto
-        {
-            Id = p.Id,
-            Nome = p.Nome,
-            Descricao = p.Descricao,
-            Preco = p.Preco,
-            Estoque = p.Estoque,
-            Ativo = p.Ativo,
-            CategoriaProdutoId = p.CategoriaProdutoId,
-            CategoriaProduto = new CategoriaProduto
-            {
-                Id = p.CategoriaProduto.Id,
-                Nome = p.CategoriaProduto.Nome
-            },
-            Avaliacoes = p.Avaliacoes.Select(a => new Avaliacao
-            {
-                Id = a.Id,
-                Nota = a.Nota,
-                Comentario = a.Comentario,
-                UsuarioId = a.UsuarioId,
-                Usuario = new Usuario
-                {
-                    Id = a.Usuario.Id,
-                    NomeCompleto = a.Usuario.NomeCompleto
-                }
-            }).ToList(),
-            ImagensProduto = p.ImagensProduto.Select(i => new ImagemProduto
-            {
-                Id = i.Id,
-                UrlImagem = i.UrlImagem,
-                Legenda = i.Legenda
-            }).ToList()
-        })
-        .ToListAsync(cancellationToken);
+        .ToListAsync();
+    }
+
+    public async Task<Produto?> ObterProdutoPorNomeAsync(string nome)
+    {
+        return await _dbContext.Produtos
+            .Include(p => p.Avaliacoes)
+                .ThenInclude(a => a.Usuario)
+                    .ThenInclude(u => u.Perfil)
+            .Include(p => p.ComentariosProduto)
+                .ThenInclude(c => c.Usuario)
+            .Include(p => p.CategoriaProduto)
+            .FirstOrDefaultAsync(p => p.Nome == nome);
+    }
+
+    public async Task<Produto?> ObterProdutoCompletoPorIdAsync(int produtoId)
+    {
+        return await _dbContext.Produtos
+            .Include(p => p.Avaliacoes)
+                .ThenInclude(a => a.Usuario)
+                    .ThenInclude(u => u.Perfil)
+            .Include(p => p.ComentariosProduto)
+                .ThenInclude(c => c.Usuario)
+            .Include(p => p.CategoriaProduto)
+            .FirstOrDefaultAsync(p => p.Id == produtoId);
     }
 
     public async Task<List<ComentarioProduto>> ObterComentariosPorProdutoIdAsync(int produtoId)
@@ -89,7 +82,7 @@ public class ProdutoRepository : IProdutoRepository
 
     public async Task<ComentarioProduto?> ProcurarComentarioPorIdAsync(int comentarioId)
     {
-        var comentario = await _dbContext.ComentariosProduto.FindAsync(new object[] { comentarioId });
+        var comentario = await _dbContext.ComentariosProduto.FindAsync([comentarioId]);
         return comentario;
     }
 }

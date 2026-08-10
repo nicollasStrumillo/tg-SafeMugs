@@ -1,4 +1,3 @@
-using backend.models;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using backend.DTOs.Produto;
@@ -17,14 +16,33 @@ public class ProdutoController : ControllerBase
     }
 
     [HttpGet("lista")]
-    public async Task<ActionResult<IReadOnlyList<Produto>>> GetLista(CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyList<ProdutoCompletoDTO>>> GetLista()
     {
-        var produtos = await _produtoService.ObterTodosAsync(cancellationToken);
+        var produtos = await _produtoService.ObterTodosAsync();
         return Ok(produtos);
     }
 
+    [HttpGet("{produtoId}")]
+    public async Task<ActionResult<ProdutoCompletoDTO?>> GetProduto(int produtoId)
+    {
+        var produto = await _produtoService.ObterProdutoCompletoPorIdAsync(produtoId);
+        if (produto == null)
+            return NotFound();
+        return Ok(produto);
+    }
+
+    // Pega Nome do produto por query string:
+    [HttpGet("por-nome")]
+    public async Task<ActionResult<ProdutoCompletoDTO?>> GetProdutoPorNome([FromQuery] string nome)
+    {
+        var produto = await _produtoService.ObterProdutoCompletoPorNomeAsync(nome);
+        if (produto == null)
+            return NotFound();
+        return Ok(produto);
+    }
+
     [HttpGet("comentarios/{produtoId}")]
-    public async Task<ActionResult<List<ComentarioProduto>>> GetComentarios(int produtoId)
+    public async Task<ActionResult<List<ComentarioProdutoDTO>>> GetComentarios(int produtoId)
     {
         var comentarios = await _produtoService.ObterComentariosPorProdutoIdAsync(produtoId);
         return Ok(comentarios);

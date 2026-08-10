@@ -1,4 +1,6 @@
 using backend.Authentication.Interfaces;
+using backend.DTOs.Produto;
+using backend.DTOs.Usuario;
 using backend.Exceptions;
 using backend.models;
 using backend.models.Enums;
@@ -23,14 +25,104 @@ public class ProdutoService : IProdutoService
         _desafioService = desafioService;
     }
 
-    public async Task<IReadOnlyList<Produto>> ObterTodosAsync(CancellationToken cancellationToken = default)
+    private ProdutoDTO MapProdutoToDTO(Produto produto)
     {
-        return await _produtoRepository.ObterTodosAsync(cancellationToken);
+        return new ProdutoDTO
+        {
+            Id = produto.Id,
+            Nome = produto.Nome,
+            Descricao = produto.Descricao,
+            Preco = produto.Preco,
+            Estoque = produto.Estoque,
+            CategoriaProduto = new CategoriaProdutoDTO
+            {
+                Id = produto.CategoriaProduto.Id,
+                Nome = produto.CategoriaProduto.Nome,
+                Descricao = produto.CategoriaProduto.Descricao
+            },
+            UrlImagemProduto = produto.UrlImagemProduto
+        };
     }
 
-    public async Task<List<ComentarioProduto>> ObterComentariosPorProdutoIdAsync(int produtoId)
+    private ProdutoCompletoDTO MapProdutoCompletoToDTO(Produto produto)
     {
-        return await _produtoRepository.ObterComentariosPorProdutoIdAsync(produtoId);
+        return new ProdutoCompletoDTO
+        {
+            Id = produto.Id,
+            Nome = produto.Nome,
+            Descricao = produto.Descricao,
+            Preco = produto.Preco,
+            Estoque = produto.Estoque,
+            CategoriaProduto = new CategoriaProdutoDTO
+            {
+                Id = produto.CategoriaProduto.Id,
+                Nome = produto.CategoriaProduto.Nome,
+                Descricao = produto.CategoriaProduto.Descricao
+            },
+            UrlImagemProduto = produto.UrlImagemProduto,
+            Avaliacoes = produto.Avaliacoes.Select(a => new AvaliacaoDTO
+            {
+                Id = a.Id,
+                Nota = a.Nota,
+                Comentario = a.Comentario,
+                Usuario = new UsuarioDetalhesDTO{
+                    Id = a.Usuario.Id,
+                    NomeCompleto = a.Usuario.NomeCompleto,
+                    Telefone = a.Usuario.Telefone,
+                    Email = a.Usuario.Email,
+                    Ativo = a.Usuario.Ativo,
+                    UrlImagemPerfil = a.Usuario.UrlImagemPerfil,
+                    Perfil = a.Usuario.Perfil.Nome
+                }
+            }).ToList(),
+            ComentariosProduto = produto.ComentariosProduto.Select(c => new ComentarioProdutoDTO
+            {
+                Id = c.Id,
+                Comentario = c.Comentario,
+                Usuario = c.Usuario == null ? null : new UsuarioDetalhesDTO{
+                    Id = c.Usuario.Id ,
+                    NomeCompleto = c.Usuario.NomeCompleto,
+                    Email = c.Usuario.Email,
+                    Ativo = c.Usuario.Ativo,
+                    UrlImagemPerfil = c.Usuario.UrlImagemPerfil
+                }
+            }).ToList()
+        };
+    }
+
+    public async Task<IReadOnlyList<ProdutoCompletoDTO>> ObterTodosAsync()
+    {
+        var produtos = await _produtoRepository.ObterTodosAsync();
+        return [.. produtos.Select(MapProdutoCompletoToDTO)];
+    }
+
+    public async Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorIdAsync(int produtoId)
+    {
+        var produto = await _produtoRepository.ObterProdutoCompletoPorIdAsync(produtoId);
+        return produto == null ? null : MapProdutoCompletoToDTO(produto);
+    }
+
+    public async Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorNomeAsync(string nome)
+    {
+        var produto = await _produtoRepository.ObterProdutoPorNomeAsync(nome);
+        return produto == null ? null : MapProdutoCompletoToDTO(produto);
+    }
+
+    public async Task<List<ComentarioProdutoDTO>> ObterComentariosPorProdutoIdAsync(int produtoId)
+    {
+        var comentarios = await _produtoRepository.ObterComentariosPorProdutoIdAsync(produtoId);
+        return comentarios.Select(c => new ComentarioProdutoDTO
+        {
+            Id = c.Id,
+            Comentario = c.Comentario,
+            Usuario = c.Usuario == null ? null : new UsuarioDetalhesDTO
+            {
+                Id = c.Usuario.Id,
+                NomeCompleto = c.Usuario.NomeCompleto,
+                Email = c.Usuario.Email,
+                Ativo = c.Usuario.Ativo
+            }
+        }).ToList();
     }
 
     public async Task FazerComentarioAsync(int produtoId, string? nomeCompleto, string comentario)
