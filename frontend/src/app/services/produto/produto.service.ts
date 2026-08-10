@@ -7,12 +7,12 @@ import {
 	ProdutoCompletoDto,
 	ComentarioRequest,
 	ComentarioProdutoDto
-} from './catalogo.models';
+} from './produto.models';
 
 @Injectable({
 	providedIn: 'root',
 })
-export class CatalogoService {
+export class ProdutoService {
 	private readonly http = inject(HttpClient);
 
 	public listarProdutos(): Observable<ProdutoCardViewModel[]> {

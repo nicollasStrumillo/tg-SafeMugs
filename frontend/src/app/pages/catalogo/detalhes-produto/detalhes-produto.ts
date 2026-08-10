@@ -11,8 +11,8 @@ import { finalize } from 'rxjs';
 
 import { AuthSessionService } from '../../../services/usuario/auth/auth-session.service';
 import { UsuarioLogado } from '../../../services/usuario/usuario.models';
-import { ComentarioProdutoDto, ComentarioRequest, ProdutoCardViewModel } from '../catalogo.models';
-import { CatalogoService } from '../catalogo.service';
+import { ComentarioProdutoDto, ComentarioRequest, ProdutoCardViewModel } from '../../../services/produto/produto.models';
+import { ProdutoService } from '../../../services/produto/produto.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
 
 // Parte da vulnerabilidade de Stored XSS
@@ -42,7 +42,7 @@ interface ComentarioProdutoViewModel extends ComentarioProdutoDto {
 })
 export class DetalhesProduto implements OnInit {
     private readonly authSessionService = inject(AuthSessionService);
-    private readonly catalogoService = inject(CatalogoService);
+    private readonly produtoService = inject(ProdutoService);
     private readonly notificationService = inject(NotificationService);
 
     // Parte da vulnerabilidade de Stored XSS
@@ -78,7 +78,7 @@ export class DetalhesProduto implements OnInit {
     private async carregarComentarios(): Promise<void> {
         this.carregandoComentarios.set(true);
 
-        await this.catalogoService.obterComentarios(this.data.produto.id)
+        await this.produtoService.obterComentarios(this.data.produto.id)
             .pipe(finalize(() => this.carregandoComentarios.set(false)))
             .subscribe({
                 next: async (comentarios) => {
@@ -123,7 +123,7 @@ export class DetalhesProduto implements OnInit {
 
         this.enviandoComentario.set(true);
 
-        this.catalogoService.fazerComentario(produtoId, comentarioRequest)
+        this.produtoService.fazerComentario(produtoId, comentarioRequest)
             .pipe(finalize(() => this.enviandoComentario.set(false)))
             .subscribe({
                 next: () => {
@@ -160,7 +160,7 @@ export class DetalhesProduto implements OnInit {
 
         this.enviandoEdicao.set(true);
 
-        this.catalogoService.atualizarComentario(comentarioId, texto)
+        this.produtoService.atualizarComentario(comentarioId, texto)
             .pipe(finalize(() => this.enviandoEdicao.set(false)))
             .subscribe({
                 next: () => {

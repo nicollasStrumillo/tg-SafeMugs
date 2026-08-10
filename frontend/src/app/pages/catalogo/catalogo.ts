@@ -10,10 +10,10 @@ import { MatDialog } from '@angular/material/dialog';
 // Parte da vulnerabilidade de DOM XSS
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
 
-import { CatalogoService } from './catalogo.service';
+import { ProdutoService } from '../../services/produto/produto.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 
-import { ProdutoCardViewModel } from './catalogo.models';
+import { ProdutoCardViewModel } from '../../services/produto/produto.models';
 import { DetalhesProduto } from './detalhes-produto/detalhes-produto';
 
 // Parte da vulnerabilidade de DOM XSS
@@ -34,7 +34,7 @@ const DOMXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
   standalone: true
 })
 export class Catalogo implements OnInit {
-  private readonly catalogoService = inject(CatalogoService);
+  private readonly produtoService = inject(ProdutoService);
   private readonly signalRService = inject(SignalRService);
 
   // Parte da vulnerabilidade de DOM XSS
@@ -58,7 +58,7 @@ export class Catalogo implements OnInit {
   constructor(private readonly dialog: MatDialog) {}
 
   ngOnInit() {
-    this.catalogoService.listarProdutos().subscribe({
+    this.produtoService.listarProdutos().subscribe({
       next: (produtos) => {
         this.todosProdutos.set(produtos);
         this.produtosFiltrados.set(produtos);
