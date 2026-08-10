@@ -13,7 +13,8 @@ public class Produto
     public int CategoriaProdutoId { get; set; }
     public CategoriaProduto CategoriaProduto { get; set; } = null!;
 
-    public ICollection<ImagemProduto> ImagensProduto { get; set; } = new List<ImagemProduto>();
+    public string UrlImagemProduto { get; set; } = string.Empty;
+    
     public ICollection<Avaliacao> Avaliacoes { get; set; } = new List<Avaliacao>();
     public ICollection<ComentarioProduto> ComentariosProduto { get; set; } = new List<ComentarioProduto>();
     public ICollection<ItemCarrinho> ItensCarrinho { get; set; } = new List<ItemCarrinho>();

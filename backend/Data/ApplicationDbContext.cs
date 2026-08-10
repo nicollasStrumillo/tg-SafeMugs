@@ -11,7 +11,6 @@ public class ApplicationDBContext : DbContext
     public DbSet<Endereco> Enderecos => Set<Endereco>();
     public DbSet<CategoriaProduto> CategoriasProduto => Set<CategoriaProduto>();
     public DbSet<Produto> Produtos => Set<Produto>();
-    public DbSet<ImagemProduto> ImagensProduto => Set<ImagemProduto>();
     public DbSet<Avaliacao> Avaliacoes => Set<Avaliacao>();
     public DbSet<ComentarioProduto> ComentariosProduto => Set<ComentarioProduto>();
     public DbSet<Carrinho> Carrinhos => Set<Carrinho>();
@@ -89,24 +88,12 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.Descricao).IsRequired().HasMaxLength(1000);
             entity.Property(e => e.Preco).HasPrecision(18, 2);
             entity.Property(e => e.Ativo).HasDefaultValue(true);
+            entity.Property(e => e.UrlImagemProduto).IsRequired();
 
             entity.HasOne(e => e.CategoriaProduto)
                 .WithMany(e => e.Produtos)
                 .HasForeignKey(e => e.CategoriaProdutoId)
                 .OnDelete(DeleteBehavior.Restrict);
-        });
-
-        modelBuilder.Entity<ImagemProduto>(entity =>
-        {
-            entity.ToTable("imagens_produto");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.UrlImagem).IsRequired().HasMaxLength(500);
-            entity.Property(e => e.Legenda).HasMaxLength(255);
-
-            entity.HasOne(e => e.Produto)
-                .WithMany(e => e.ImagensProduto)
-                .HasForeignKey(e => e.ProdutoId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Avaliacao>(entity =>
@@ -399,7 +386,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                CategoriaProdutoId = 1
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_behappy.jpg"
             },
             new Produto
             {
@@ -411,7 +399,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                CategoriaProdutoId = 3
+                CategoriaProdutoId = 3,
+                UrlImagemProduto = "/imagens/produto/mug_ceramica_rustica.jpg"
             },
             new Produto
             {
@@ -423,7 +412,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                CategoriaProdutoId = 2
+                CategoriaProdutoId = 2,
+                UrlImagemProduto = "/imagens/produto/mug_coala.jpg"
             },
             new Produto
             {
@@ -435,7 +425,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                CategoriaProdutoId = 1
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_coracao.jpg"
             },
             new Produto
             {
@@ -447,7 +438,8 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                CategoriaProdutoId = 2
+                CategoriaProdutoId = 2,
+                UrlImagemProduto = "/imagens/produto/mug_dogpan.jpg"
             },
             new Produto
             {
@@ -459,53 +451,10 @@ public class ApplicationDBContext : DbContext
                 Ativo = true,
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
-                CategoriaProdutoId = 1
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_vermelha_cafe.jpg"
             });
-
-        modelBuilder.Entity<ImagemProduto>().HasData(
-            new ImagemProduto
-            {
-                Id = 1,
-                UrlImagem = "/imagens/produto/mug_behappy.jpg", 
-                Legenda = "Caneca Be Happy",
-                ProdutoId = 1
-            },
-            new ImagemProduto
-            {
-                Id = 2,
-                UrlImagem = "/imagens/produto/mug_ceramica_rustica.jpg",
-                Legenda = "Caneca Ceramica Rustica",
-                ProdutoId = 2
-            },
-            new ImagemProduto
-            {
-                Id = 3,
-                UrlImagem = "/imagens/produto/mug_coala.jpg",
-                Legenda = "Caneca Coala",
-                ProdutoId = 3
-            },
-            new ImagemProduto
-            {
-                Id = 4,
-                UrlImagem = "/imagens/produto/mug_coracao.jpg",
-                Legenda = "Caneca Coracao",
-                ProdutoId = 4
-            },
-            new ImagemProduto
-            {
-                Id = 5,
-                UrlImagem = "/imagens/produto/mug_dogpan.jpg",
-                Legenda = "Caneca cachorro",
-                ProdutoId = 5
-            },
-            new ImagemProduto
-            {
-                Id = 6,
-                UrlImagem = "/imagens/produto/mug_vermelha_cafe.jpg",
-                Legenda = "Caneca Vermelha Cafe",
-                ProdutoId = 6
-            });
-
+    
         modelBuilder.Entity<Avaliacao>().HasData(
             new Avaliacao
             {
