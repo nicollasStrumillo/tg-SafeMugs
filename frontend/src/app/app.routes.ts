@@ -38,6 +38,11 @@ export const routes: Routes = [
 			import('./pages/perfil/perfil').then((module) => module.Perfil),
 	},	
 	{
+		path: 'avaliacoes-produto',
+		loadComponent: () =>
+			import('./pages/avaliacoes-produto/avaliacoes-produto').then((module) => module.AvaliacoesProduto),
+	},
+	{
 		path: '**',
 		redirectTo: 'catalogo',
 	},

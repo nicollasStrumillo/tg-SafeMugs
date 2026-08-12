@@ -1,0 +1,125 @@
+<section class="reviews-shell">
+  @if (carregando()) {
+    <div class="state-panel" role="status">
+      <mat-icon class="state-icon spin">progress_activity</mat-icon>
+      <h1 class="reviews-title">Carregando avaliações</h1>
+      <p class="heading-lead">Estamos buscando as experiências da comunidade com este produto.</p>
+    </div>
+  } @else if (!viewModel()) {
+    <div class="state-panel not-found-panel">
+      <div class="empty-mark" aria-hidden="true">
+        <mat-icon>search_off</mat-icon>
+      </div>
+      <p class="reviews-eyebrow">Nenhuma avaliação encontrada para:</p>
+      <h1 class="reviews-title">{{ nome() || 'produto' }}</h1>
+      <p class="heading-lead">O produto não foi encontrado. Confira se o nome está escrito corretamente e tente novamente.</p>
+    </div>
+  } @else {
+    <header class="reviews-heading">
+      <p class="reviews-eyebrow">Avaliações encontradas para:</p>
+      <h1 class="reviews-title">{{ viewModel()!.nomeProduto }}</h1>
+      <p class="heading-lead">Veja o que outras pessoas acharam desta caneca.</p>
+    </header>
+
+    <mat-card class="product-overview sm-elevated-panel" role="button" tabindex="0"
+              [attr.aria-label]="'Ver detalhes do produto ' + viewModel()!.nomeProduto"
+              (click)="selecionarProduto(viewModel()!.idProduto)"
+              (keydown.enter)="selecionarProduto(viewModel()!.idProduto)"
+              (keydown.space)="$event.preventDefault(); selecionarProduto(viewModel()!.idProduto)">
+      <div class="product-image-frame">
+        @if (viewModel()!.urlImagemProduto) {
+          <img [src]="viewModel()!.urlImagemProduto" [alt]="viewModel()!.nomeProduto" />
+        } @else {
+          <mat-icon>local_cafe</mat-icon>
+        }
+      </div>
+      <div class="product-copy">
+        <span class="category-pill">{{ viewModel()!.categoriaProduto }}</span>
+        <h2>{{ viewModel()!.nomeProduto }}</h2>
+        <p>{{ viewModel()!.descricaoProduto }}</p>
+        <div class="product-rating" aria-label="Avaliação média do produto">
+          <span class="rating-label">Avaliação média: </span>
+          <strong>{{ viewModel()!.avaliacaoMedia | number: '1.1-1' }}</strong>
+          <span class="rating-out-of">/ 5</span>
+          <span class="stars" aria-hidden="true">
+            @for (indice of [1, 2, 3, 4, 5]; track indice) {
+              <mat-icon>{{ estrelaIcone(indice, viewModel()!.avaliacaoMedia) }}</mat-icon>
+            }
+          </span>
+        </div>
+      </div>
+    </mat-card>
+
+    <section class="reviews-content" aria-label="Filtros e avaliações">
+      <div class="filters-panel sm-elevated-panel">
+        <div class="filters-topline">
+          <mat-form-field class="search-field" appearance="outline">
+            <mat-label>Buscar na descrição</mat-label>
+            <mat-icon matIconPrefix>search</mat-icon>
+            <input matInput type="search" [value]="termoBusca()" (input)="atualizarBusca($event)" placeholder="Digite uma palavra ou frase" />
+            @if (termoBusca()) {
+              <button mat-icon-button matSuffix type="button" (click)="termoBusca.set('')" aria-label="Limpar busca">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+          <button mat-icon-button type="button" class="clear-filters-button" (click)="limparFiltros()" matTooltip="Limpar todos os filtros" aria-label="Limpar todos os filtros">
+            <mat-icon>filter_alt_off</mat-icon>
+          </button>
+        </div>
+        <span class="filter-label">Mostrar avaliações com nota até:</span>
+        <div class="rating-filters" aria-label="Filtro de nota">
+          @for (nota of [1, 2, 3, 4, 5]; track nota) {
+            <button type="button" class="filter-chip" [class.is-active]="notaSelecionada() === nota" (click)="selecionarNota(nota)" [attr.aria-label]="'Avaliações de até ' + nota + ' estrelas'">
+              @for (estrela of [1, 2, 3, 4, 5]; track estrela) {
+                @if (estrela <= nota) { <mat-icon>star</mat-icon> }
+              }
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="reviews-list-heading">
+        <div>
+          <h2 class="quant_avaliacoes">{{ avaliacoesFiltradas().length }} {{ avaliacoesFiltradas().length === 1 ? 'avaliação' : 'avaliações' }}</h2>
+        </div>
+      </div>
+
+      @if (avaliacoesFiltradas().length === 0) {
+        <div class="inline-state">Nenhuma avaliação corresponde aos filtros atuais.</div>
+      } @else {
+        <div class="reviews-grid">
+          @for (avaliacao of avaliacoesFiltradas(); track avaliacao.id) {
+            <article class="review-card">
+              <div class="review-card-header">
+                <div class="reviewer">
+                  @if (avaliacao.urlImagemPerfilUsuario) {
+                    <img [src]="avaliacao.urlImagemPerfilUsuario" [alt]="'Foto de ' + avaliacao.nomeUsuario" />
+                  } @else {
+                    <span class="avatar-fallback" aria-hidden="true">{{ avaliacao.nomeUsuario.charAt(0).toUpperCase() }}</span>
+                  }
+                  <div>
+                    <strong>{{ avaliacao.nomeUsuario }}</strong>
+                    <span>{{ avaliacao.emailUsuario }}</span>
+                  </div>
+                </div>
+                <div class="review-score" [attr.aria-label]="avaliacao.nota + ' de 5 estrelas'">
+                  <strong>{{ avaliacao.nota | number: '1.1-1' }}</strong>
+                  <span class="stars" aria-hidden="true">
+                    @for (indice of [1, 2, 3, 4, 5]; track indice) {
+                      <mat-icon>{{ estrelaIcone(indice, avaliacao.nota) }}</mat-icon>
+                    }
+                  </span>
+                </div>
+              </div>
+              <blockquote class="review-comment">
+                <mat-icon class="quote-mark" aria-hidden="true">format_quote</mat-icon>
+                <p>{{ avaliacao.comentario }}</p>
+              </blockquote>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+</section>

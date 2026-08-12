@@ -21,6 +21,30 @@ export class ProdutoService {
 			.pipe(map((produtos) => produtos.map((produto) => this.paraViewModel(produto))));
 	}
 
+	public obterProdutoCompleto(produtoId: number): Observable<ProdutoCompletoDto> {
+		return this.http.get<ProdutoCompletoDto>(`/api/produtos/${produtoId}`);
+	}
+
+	public obterProdutoCompletoPorNome(nomeProduto: string): Observable<ProdutoCompletoDto> {
+		return this.http.get<ProdutoCompletoDto>(`/api/produtos/por-nome?nome=${encodeURIComponent(nomeProduto)}`);
+	}
+	
+	//comentarios
+	public obterComentarios(produtoId: number): Observable<ComentarioProdutoDto[]> {
+		return this.http.get<ComentarioProdutoDto[]>(`/api/produtos/comentarios/${produtoId}`);
+	}
+
+	public fazerComentario(produtoId: number, comentarioRequest: ComentarioRequest): Observable<void>{
+		return this.http.post<void>(`/api/produtos/comentarios/${produtoId}`, comentarioRequest);
+	}
+
+	public atualizarComentario(comentarioId: number, comentario: string): Observable<void> {
+		const requestBody = { comentarioId, comentario };
+		return this.http.patch<void>(`/api/produtos/comentarios`, requestBody);
+	}
+
+
+	// helpers
 	private paraViewModel(produto: ProdutoCompletoDto): ProdutoCardViewModel {
 		const avaliacoes = produto.avaliacoes ?? [];
 		const comentarios = produto.comentariosProduto ?? [];
@@ -56,19 +80,5 @@ export class ProdutoService {
 		}
 
 		return `/${urlImagem}`;
-	}
-
-	//comentarios
-	public obterComentarios(produtoId: number): Observable<ComentarioProdutoDto[]> {
-		return this.http.get<ComentarioProdutoDto[]>(`/api/produtos/comentarios/${produtoId}`);
-	}
-
-	public fazerComentario(produtoId: number, comentarioRequest: ComentarioRequest): Observable<void>{
-		return this.http.post<void>(`/api/produtos/comentarios/${produtoId}`, comentarioRequest);
-	}
-
-	public atualizarComentario(comentarioId: number, comentario: string): Observable<void> {
-		const requestBody = { comentarioId, comentario };
-		return this.http.patch<void>(`/api/produtos/comentarios`, requestBody);
 	}
 }
