@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 // Parte da vulnerabilidade de DOM XSS
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
@@ -36,6 +37,7 @@ const DOMXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
 export class Catalogo implements OnInit {
   private readonly produtoService = inject(ProdutoService);
   private readonly signalRService = inject(SignalRService);
+  private readonly route = inject(ActivatedRoute);
 
   // Parte da vulnerabilidade de DOM XSS
   private readonly sanitizer = inject(DomSanitizer)
@@ -58,12 +60,25 @@ export class Catalogo implements OnInit {
   constructor(private readonly dialog: MatDialog) {}
 
   ngOnInit() {
+    let idProdutoQuery: number | null = null;
+
+    this.route.queryParamMap.subscribe((params) => {
+			const id = params.get('idProduto') ?? '';
+      if (id) idProdutoQuery = Number(id);
+		});
+
     this.produtoService.listarProdutos().subscribe({
       next: (produtos) => {
         this.todosProdutos.set(produtos);
         this.produtosFiltrados.set(produtos);
         this.erroCarregamento.set(null);
         this.carregando.set(false);
+
+        if (idProdutoQuery) {
+          const cardViewModel = produtos.find(p => p.id === Number(idProdutoQuery));
+          if (cardViewModel) 
+            this.abrirDetalhes(cardViewModel);
+        }
       },
       error: (err) => {
         console.error('Erro ao buscar produtos:', err);
@@ -124,7 +139,8 @@ export class Catalogo implements OnInit {
       },
       width: '1100px',
       maxWidth: '95vw',
-      maxHeight: '90vh'
+      maxHeight: '90vh',
+      autoFocus: false
     });
 
     console.debug('Abrir detalhes do produto', produto.id);

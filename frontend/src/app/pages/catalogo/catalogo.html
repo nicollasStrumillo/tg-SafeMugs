@@ -68,13 +68,13 @@
             <p class="product-description">{{ resumirDescricao(p.descricao) }}</p>
 
             <div class="product-meta">
-              <span>
+              <span class="meta-rating">
                 <mat-icon>star</mat-icon>
                 {{ formataAvaliacao(p.avaliacaoMedia) }}
               </span>
-              <span>
-                <mat-icon>rate_review</mat-icon>
-                {{ p.quantidadeAvaliacoes }} reviews
+              <span class="meta-comments">
+                <mat-icon>comment</mat-icon>
+                {{ p.quantidadeComentarios }} {{ p.quantidadeComentarios === 1 ? 'comentário' : 'comentários' }}
               </span>
             </div>
           </mat-card-content>

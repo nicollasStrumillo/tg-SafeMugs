@@ -7,6 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthSessionService } from '../../../services/usuario/auth/auth-session.service';
@@ -62,7 +63,8 @@ export class DetalhesProduto implements OnInit {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { produto: ProdutoCardViewModel },
-        private dialogRef: MatDialogRef<DetalhesProduto>
+        private dialogRef: MatDialogRef<DetalhesProduto>,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -189,6 +191,29 @@ export class DetalhesProduto implements OnInit {
 
     formataAvaliacao(media: number | null): string {
         return media ? media.toFixed(1) : 'Novo';
+    }
+
+    protected verAvaliacoes(): void {
+        this.dialogRef.close();
+        this.router.navigate(['/avaliacoes-produto'], { queryParams: { nome: this.data.produto.nome } });
+    }
+
+    protected contarEstrelas(nota: number): { cheias: number; metade: number; vazias: number } {
+        let metade = 0;
+        let cheias = Math.floor(nota);
+        const decimal = nota - cheias;
+        if (decimal >= 0.85) cheias += 1;
+        else if (decimal >= 0.4) metade += 1;
+        const vazias = 5 - cheias - metade;
+        return { cheias, metade, vazias };
+    }
+
+    protected estrelaIcone(indice: number, nota: number | null): string {
+        if (nota === null) return 'star_border';
+        const estrelas = this.contarEstrelas(nota);
+        if (indice <= estrelas.cheias) return 'star';
+        if (indice === estrelas.cheias + 1 && estrelas.metade > 0) return 'star_half';
+        return 'star_border';
     }
 }
 
