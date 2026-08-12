@@ -26,8 +26,6 @@ public class ProdutoController : ControllerBase
     public async Task<ActionResult<ProdutoCompletoDTO?>> GetProduto(int produtoId)
     {
         var produto = await _produtoService.ObterProdutoCompletoPorIdAsync(produtoId);
-        if (produto == null)
-            return NotFound();
         return Ok(produto);
     }
 
@@ -36,8 +34,6 @@ public class ProdutoController : ControllerBase
     public async Task<ActionResult<ProdutoCompletoDTO?>> GetProdutoPorNome([FromQuery] string nome)
     {
         var produto = await _produtoService.ObterProdutoCompletoPorNomeAsync(nome);
-        if (produto == null)
-            return NotFound();
         return Ok(produto);
     }
 

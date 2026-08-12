@@ -98,14 +98,16 @@ public class ProdutoService : IProdutoService
 
     public async Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorIdAsync(int produtoId)
     {
-        var produto = await _produtoRepository.ObterProdutoCompletoPorIdAsync(produtoId);
-        return produto == null ? null : MapProdutoCompletoToDTO(produto);
+        var produto = await _produtoRepository.ObterProdutoCompletoPorIdAsync(produtoId)
+            ?? throw new NotFoundException($"Produto não encontrado.");
+        return MapProdutoCompletoToDTO(produto);
     }
 
     public async Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorNomeAsync(string nome)
     {
-        var produto = await _produtoRepository.ObterProdutoPorNomeAsync(nome);
-        return produto == null ? null : MapProdutoCompletoToDTO(produto);
+        var produto = await _produtoRepository.ObterProdutoPorNomeAsync(nome) 
+            ?? throw new NotFoundException($"Produto não encontrado.");
+        return MapProdutoCompletoToDTO(produto);
     }
 
     public async Task<List<ComentarioProdutoDTO>> ObterComentariosPorProdutoIdAsync(int produtoId)
