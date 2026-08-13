@@ -13,14 +13,16 @@ public class ProdutoService : IProdutoService
 {
     private readonly IProdutoRepository _produtoRepository;
     private readonly IUsuarioRepository _usuarioReprository;
+    private readonly IAvaliacaoRepository _avaliacaoRepository;
 
     private readonly IAuthenticatedUserService _user;
     private readonly IDesafioService _desafioService;
 
-    public ProdutoService(IProdutoRepository produtoRepository, IAuthenticatedUserService user, IDesafioService desafioService, IUsuarioRepository usuarioRepository)
+    public ProdutoService(IProdutoRepository produtoRepository, IAuthenticatedUserService user, IDesafioService desafioService, IUsuarioRepository usuarioRepository, IAvaliacaoRepository avaliacaoRepository)
     {
         _produtoRepository = produtoRepository;
         _usuarioReprository = usuarioRepository;
+        _avaliacaoRepository = avaliacaoRepository;
         _user = user;
         _desafioService = desafioService;
     }
@@ -110,6 +112,8 @@ public class ProdutoService : IProdutoService
         return MapProdutoCompletoToDTO(produto);
     }
 
+
+    // Comentarios 
     public async Task<List<ComentarioProdutoDTO>> ObterComentariosPorProdutoIdAsync(int produtoId)
     {
         var comentarios = await _produtoRepository.ObterComentariosPorProdutoIdAsync(produtoId);
@@ -153,4 +157,15 @@ public class ProdutoService : IProdutoService
         
         await _produtoRepository.AtualizarComentarioAsync(comentarioEditado, comentario);
     }
+
+
+    // Avaliacoes
+    public async Task AvaliarProdutoAsync(int produtoId, int usuarioId, float nota, string comentario)
+    {
+        _ = await _usuarioReprository.BuscarPorIdAsync(usuarioId) ??
+            throw new NotFoundException("Usuário não encontrado.");
+
+        await _avaliacaoRepository.EscreverAvaliacaoAsync(comentario, nota, usuarioId, produtoId);
+    }
+
 }
