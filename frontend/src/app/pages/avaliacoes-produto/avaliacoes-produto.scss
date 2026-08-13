@@ -10,10 +10,11 @@
 }
 
 .reviews-heading {
+
   display: grid;
   justify-items: center;
   gap: 0.85rem;
-  padding: 1.8rem 0 1rem;
+  padding: 0 1rem 1rem;
   text-align: center;
 }
 
@@ -298,6 +299,44 @@ h1 strong {
   font-size: 1.75rem;
 }
 
+.fazer-avaliacao-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.15rem;
+  border: 1px solid rgba(133, 163, 218, 0.45);
+  border-radius: 0.75rem;
+  background: #adc8f4;
+  color: #000000;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+
+  .mat-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    font-size: 1.15rem;
+    color: #000000;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: rgba(133, 163, 218, 0.65);
+    box-shadow: 0 12px 24px rgba(1, 7, 18, 0.28);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
 .reviews-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -477,64 +516,4 @@ h1 strong {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-@media (max-width: 760px) {
-  .product-overview,
-  .reviews-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .product-image-frame,
-  .product-image-frame img {
-    min-height: 180px;
-  }
-
-  .product-copy {
-    padding: 0.7rem 0.8rem 0.8rem;
-  }
-}
-
-@media (max-width: 520px) {
-  .reviews-heading {
-    padding: 1rem 0 0.5rem;
-  }
-
-  .filters-topline {
-    flex-direction: column;
-  }
-
-  .clear-filters-button {
-    align-self: end;
-  }
-
-  .reviews-list-heading {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .review-card-header {
-    flex-direction: column;
-    align-items: start;
-  }
-
-  .review-score {
-    align-items: start;
-    flex-direction: row;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .filter-chip,
-  .product-overview,
-  .review-card,
-  .spin {
-    transition: none;
-    animation: none;
-  }
-
-  .product-overview:hover,
-  .review-card:hover {
-    transform: none;
-  }
 }

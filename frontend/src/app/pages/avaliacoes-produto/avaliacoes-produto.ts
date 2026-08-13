@@ -1,20 +1,24 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProdutoCompletoDto } from '../../services/produto/produto.models';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { HttpErrorResponse } from '@angular/common/http';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NotificationService } from '../../shared/notification/notification.service';
 import { ProdutoService } from '../../services/produto/produto.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { AuthSessionService } from '../../services/usuario/auth/auth-session.service';
 
-interface AvaliacaoCardViewModel {
+
+import { FazerAvaliacao } from '../fazer-avaliacao/fazer-avaliacao';
+import { MatTooltip } from "@angular/material/tooltip";
+
+export interface AvaliacaoCardViewModel {
 	id: number;
 
 	nomeUsuario: string;
@@ -25,24 +29,18 @@ interface AvaliacaoCardViewModel {
 	comentario: string;
 }
 
-interface AvaliacoesProdutoViewModel {
+export interface AvaliacoesProdutoViewModel {
 	idProduto: number;
 	nomeProduto: string;
 	descricaoProduto: string;
 	categoriaProduto: string;
 	urlImagemProduto: string;
-	avaliacaoMedia: number;
 
 	avaliacoes: AvaliacaoCardViewModel[];
 }
 
 function paraViewModel(produto: ProdutoCompletoDto): AvaliacoesProdutoViewModel {
 	const avaliacoes = produto.avaliacoes ?? [];
-	const avaliacaoMedia =
-		avaliacoes.length > 0
-			? avaliacoes.reduce((soma, avaliacao) => soma + avaliacao.nota, 0) /
-			  avaliacoes.length
-			: 0;
 
 	const avaliacoesViewModel: AvaliacaoCardViewModel[] = avaliacoes.map((avaliacao) => ({
 		id: avaliacao.id,
@@ -59,7 +57,6 @@ function paraViewModel(produto: ProdutoCompletoDto): AvaliacoesProdutoViewModel 
 		descricaoProduto: produto.descricao,
 		categoriaProduto: produto.categoriaProduto?.nome ?? 'Categoria desconhecida',
 		urlImagemProduto: normalizarImagem(produto.urlImagemProduto),
-		avaliacaoMedia: avaliacaoMedia,
 		avaliacoes: avaliacoesViewModel,
 	};
 }
@@ -73,14 +70,13 @@ function normalizarImagem(urlImagem: string): string {
 @Component({
 	selector: 'sm-avaliacoes-produto',
 	imports: [
-		CommonModule,
-		MatButtonModule,
-		MatCardModule,
-		MatFormFieldModule,
-		MatIconModule,
-		MatInputModule,
-		MatTooltipModule,
-	],
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatInputModule,
+    MatTooltip,
+	MatTooltipModule
+],
 	templateUrl: './avaliacoes-produto.html',
 	styleUrl: './avaliacoes-produto.scss',
 	standalone: true,
@@ -88,14 +84,27 @@ function normalizarImagem(urlImagem: string): string {
 })
 export class AvaliacoesProduto implements OnInit {
 	private readonly notificationService = inject(NotificationService);
+	private readonly authSessionService = inject(AuthSessionService);
 	private readonly route = inject(ActivatedRoute);
 	private readonly produtoService = inject(ProdutoService);
 
+	protected readonly usuarioAutenticado = computed(() => this.authSessionService.autenticado());
 	protected readonly viewModel = signal<AvaliacoesProdutoViewModel | null>(null);
 	protected readonly nome = signal<string | null>(null);
 	protected readonly carregando = signal(true);
 	protected readonly termoBusca = signal('');
 	protected readonly notaSelecionada = signal<number>(5);
+
+	protected readonly mediaAvaliacoes = computed(() => {
+		const modelo = this.viewModel();
+		const avaliacoes = modelo?.avaliacoes ?? [];
+
+		const media = avaliacoes.length > 0
+			? avaliacoes.reduce((soma, avaliacao) => soma + avaliacao.nota, 0) /
+			  avaliacoes.length
+			: 0;
+		return media;
+	});
 
 	protected readonly avaliacoesFiltradas = computed(() => {
 		const modelo = this.viewModel();
@@ -109,29 +118,32 @@ export class AvaliacoesProduto implements OnInit {
 		});
 	});
 
-	constructor(private router: Router) {}
+	constructor(private router: Router, private readonly dialog: MatDialog) {}
 
 	ngOnInit(): void {
 		this.route.queryParamMap.subscribe((params) => {
 			const nome = params.get('nome') ?? '';
-
 			this.nome.set(nome);
-			this.viewModel.set(null);
-			this.carregando.set(true);
-
-			this.produtoService.obterProdutoCompletoPorNome(nome)
-				.subscribe({
-					next: (produto) => {
-						this.viewModel.set(paraViewModel(produto));
-						this.carregando.set(false);
-					},
-					error: (error: HttpErrorResponse) => {
-						this.notificationService.notificarErroApi(error);
-						this.viewModel.set(null);
-						this.carregando.set(false);
-					}
-				});
+			this.recarregarProduto(nome);
 		});
+	}
+
+	private recarregarProduto(nome: string): void {
+		this.viewModel.set(null);
+		this.carregando.set(true);
+
+		this.produtoService.obterProdutoCompletoPorNome(nome)
+			.subscribe({
+				next: (produto) => {
+					this.viewModel.set(paraViewModel(produto));
+					this.carregando.set(false);
+				},
+				error: (error: HttpErrorResponse) => {
+					this.notificationService.notificarErroApi(error);
+					this.viewModel.set(null);
+					this.carregando.set(false);
+				}
+			});
 	}
 
 	protected contarEstrelas(nota: number): {cheias: number, metade: number, vazias: number} {
@@ -150,6 +162,30 @@ export class AvaliacoesProduto implements OnInit {
 
 	protected selecionarProduto(id: number): void {
 		this.router.navigate(['/catalogo'], { queryParams: { idProduto: id } });
+	}
+
+	protected fazerAvaliacao(id: number): void {
+		const ref = this.dialog.open(FazerAvaliacao, {
+			data: {
+				produto: {
+					idProduto: id,
+					nomeProduto: this.viewModel()?.nomeProduto ?? '',
+					descricaoProduto: this.viewModel()?.descricaoProduto ?? '',
+					categoriaProduto: this.viewModel()?.categoriaProduto ?? '',
+					urlImagemProduto: this.viewModel()?.urlImagemProduto ?? ''
+				}
+			},
+			width: '1100px',
+			maxWidth: '95vw',
+			maxHeight: '90vh',
+			autoFocus: false
+		});
+
+		ref.afterClosed().subscribe((resultado) => {
+			if (resultado === true) {
+				this.recarregarProduto(this.nome() ?? '');
+			}
+		});
 	}
 
 	protected atualizarBusca(event: Event): void {

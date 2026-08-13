@@ -39,11 +39,11 @@
         <p>{{ viewModel()!.descricaoProduto }}</p>
         <div class="product-rating" aria-label="Avaliação média do produto">
           <span class="rating-label">Avaliação média: </span>
-          <strong>{{ viewModel()!.avaliacaoMedia | number: '1.1-1' }}</strong>
+          <strong>{{ mediaAvaliacoes() | number: '1.1-1' }}</strong>
           <span class="rating-out-of">/ 5</span>
           <span class="stars" aria-hidden="true">
             @for (indice of [1, 2, 3, 4, 5]; track indice) {
-              <mat-icon>{{ estrelaIcone(indice, viewModel()!.avaliacaoMedia) }}</mat-icon>
+              <mat-icon>{{ estrelaIcone(indice, mediaAvaliacoes()) }}</mat-icon>
             }
           </span>
         </div>
@@ -83,6 +83,19 @@
         <div>
           <h2 class="quant_avaliacoes">{{ avaliacoesFiltradas().length }} {{ avaliacoesFiltradas().length === 1 ? 'avaliação' : 'avaliações' }}</h2>
         </div>
+        <span [matTooltip]="!usuarioAutenticado() ? 'Faça login para escrever uma avaliação.' : ''">
+          <button
+            type="button"
+            class="fazer-avaliacao-button"
+            [class.disabled]="!usuarioAutenticado()"
+            (click)="fazerAvaliacao(viewModel()!.idProduto)"
+            [disabled]="!usuarioAutenticado()"
+            aria-label="Fazer uma avaliação para este produto"
+          >
+            <mat-icon>rate_review</mat-icon>
+            <span>Fazer avaliação</span>
+          </button>
+        </span>
       </div>
 
       @if (avaliacoesFiltradas().length === 0) {
