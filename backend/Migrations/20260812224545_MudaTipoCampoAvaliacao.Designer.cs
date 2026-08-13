@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260812224545_MudaTipoCampoAvaliacao")]
+    partial class MudaTipoCampoAvaliacao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,11 +57,12 @@ namespace backend.Migrations
 
                     b.HasIndex("ProdutoId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId", "ProdutoId")
+                        .IsUnique();
 
                     b.ToTable("avaliacoes", null, t =>
                         {
-                            t.HasCheckConstraint("CK_Avaliacao_Nota", "Nota >= 0 AND Nota <= 5.0");
+                            t.HasCheckConstraint("CK_Avaliacao_Nota", "Nota >= 1 AND Nota <= 5");
                         });
 
                     b.HasData(

@@ -98,10 +98,9 @@ public class ApplicationDBContext : DbContext
 
         modelBuilder.Entity<Avaliacao>(entity =>
         {
-            entity.ToTable("avaliacoes", t => t.HasCheckConstraint("CK_Avaliacao_Nota", "Nota >= 1 AND Nota <= 5"));
+            entity.ToTable("avaliacoes", t => t.HasCheckConstraint("CK_Avaliacao_Nota", "Nota >= 0 AND Nota <= 5.0"));
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Comentario).IsRequired().HasMaxLength(1000);
-            entity.HasIndex(e => new { e.UsuarioId, e.ProdutoId }).IsUnique();
             entity.Property(e => e.Nota).IsRequired();
             entity.Property(e => e.DtCadastro).IsRequired();
             entity.Property(e => e.DtAtualizacao).IsRequired();
@@ -459,7 +458,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 1,
-                Nota = 5,
+                Nota = 5f,
                 Comentario = "Acabamento impecavel e o visual ficou exatamente como esperava.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -469,7 +468,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 2,
-                Nota = 4,
+                Nota = 4.5f,
                 Comentario = "Linda e com boa qualidade, chegou muito bem embalada.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -479,7 +478,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 3,
-                Nota = 5,
+                Nota = 5f,
                 Comentario = "Mensagem bem delicada e otima para presentear.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -489,7 +488,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 4,
-                Nota = 4,
+                Nota = 4f,
                 Comentario = "Textura bonita e o estilo rustico da um charme extra.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -499,7 +498,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 5,
-                Nota = 5,
+                Nota = 3.5f,
                 Comentario = "Peca muito bonita e com ar artesanal bem marcante.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -509,7 +508,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 6,
-                Nota = 5,
+                Nota = 4.5f,
                 Comentario = "A estampa de coala ficou excelente e a caneca e bem resistente.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -519,7 +518,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 7,
-                Nota = 4,
+                Nota = 4f,
                 Comentario = "Produto bonito e com acabamento muito caprichado.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -529,7 +528,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 8,
-                Nota = 5,
+                Nota = 5f,
                 Comentario = "Visual apaixonante e otima escolha para presente.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -539,7 +538,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 9,
-                Nota = 5,
+                Nota = 3.5f,
                 Comentario = "A ideia do coracao combinou muito com a cor da caneca.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -549,7 +548,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 10,
-                Nota = 4,
+                Nota = 4.5f,
                 Comentario = "Bonita e delicada, atende bem quem gosta de pecas afetivas.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -559,7 +558,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 11,
-                Nota = 5,
+                Nota = 4f,
                 Comentario = "A caneca do cachorro e divertida e tem uma pintura muito boa.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -569,7 +568,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 12,
-                Nota = 4,
+                Nota = 4f,
                 Comentario = "Gostei bastante do formato e da proposta mais descontraida.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -579,7 +578,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 13,
-                Nota = 5,
+                Nota = 5f,
                 Comentario = "Cor vibrante, pega muito bem e parece otima para o dia a dia.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -589,7 +588,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 14,
-                Nota = 4,
+                Nota = 4.4f,
                 Comentario = "Modelo classico e elegante, combina com qualquer ambiente.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,
@@ -599,7 +598,7 @@ public class ApplicationDBContext : DbContext
             new Avaliacao
             {
                 Id = 15,
-                Nota = 5,
+                Nota = 4.5f,
                 Comentario = "Perfeita para cafe, com cor intensa e acabamento uniforme.",
                 DtCadastro = seedDate,
                 DtAtualizacao = seedDate,

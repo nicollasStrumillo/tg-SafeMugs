@@ -2,7 +2,7 @@ namespace backend.models;
 public class Avaliacao
 {
     public int Id { get; set; }
-    public int Nota { get; set; }
+    public float Nota { get; set; }
     public string Comentario { get; set; } = null!;
     public DateTime DtCadastro { get; set; }
     public DateTime DtAtualizacao { get; set; }
