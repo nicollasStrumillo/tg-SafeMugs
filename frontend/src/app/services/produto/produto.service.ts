@@ -43,6 +43,11 @@ export class ProdutoService {
 		return this.http.patch<void>(`/api/produtos/comentarios`, requestBody);
 	}
 
+	public fazerAvaliacao(produtoId: number, usuarioId: number, nota: number, comentario: string): Observable<void> {
+		const requestBody = { usuarioId, nota, comentario };
+		return this.http.post<void>(`/api/produtos/avaliacoes/${produtoId}`, requestBody);
+	}
+
 
 	// helpers
 	private paraViewModel(produto: ProdutoCompletoDto): ProdutoCardViewModel {

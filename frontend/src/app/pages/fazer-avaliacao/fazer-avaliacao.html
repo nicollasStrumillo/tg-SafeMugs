@@ -1,0 +1,90 @@
+<mat-card class="avaliacao-card">
+	<button
+		mat-icon-button
+		type="button"
+		class="close-button"
+		(click)="fechar()"
+		aria-label="Fechar"
+	>
+		<mat-icon>close</mat-icon>
+	</button>
+
+	<div class="avaliacao-layout">
+		<section class="produto-resumo">
+			<div class="produto-imagem">
+				<img [src]="data.produto.urlImagemProduto" [alt]="data.produto.nomeProduto" />
+			</div>
+			<div class="produto-dados">
+				<span class="category-pill">{{ data.produto.categoriaProduto }}</span>
+				<h2>{{ data.produto.nomeProduto }}</h2>
+				<p>{{ data.produto.descricaoProduto }}</p>
+			</div>
+		</section>
+
+		<section class="formulario-avaliacao">
+			<mat-form-field appearance="outline" class="campo-autor">
+				<mat-label>Autor</mat-label>
+				<mat-icon matPrefix>person</mat-icon>
+				<input matInput type="text" [value]="emailUsuario()" disabled />
+			</mat-form-field>
+
+			<div class="campo-nota">
+				<span class="campo-label">Nota</span>
+				<div
+					class="estrelas-seletor"
+					(mouseleave)="sairHover()"
+					role="radiogroup"
+					aria-label="Nota da avaliação"
+				>
+					@for (indice of [1, 2, 3, 4, 5]; track indice) {
+						<div class="estrela">
+							<button
+								type="button"
+								class="estrela-metade esquerda"
+								(click)="selecionarEstrela(indice, 'esquerda')"
+								(mouseenter)="hoverEstrela(indice, 'esquerda')"
+								[attr.aria-label]="(indice - 0.5) + ' estrelas'"
+							></button>
+							<button
+								type="button"
+								class="estrela-metade direita"
+								(click)="selecionarEstrela(indice, 'direita')"
+								(mouseenter)="hoverEstrela(indice, 'direita')"
+								[attr.aria-label]="indice + ' estrelas'"
+							></button>
+							<mat-icon>{{ estrelaIcone(indice) }}</mat-icon>
+						</div>
+					}
+				</div>
+				<span class="nota-valor">{{ (notaHover() ?? nota()) | number: '1.1-1' }}</span>
+			</div>
+
+			<mat-form-field appearance="outline" class="campo-comentario">
+				<mat-label>Comentário</mat-label>
+				<textarea
+					matInput
+					rows="4"
+					[value]="comentario()"
+					(input)="atualizarComentario($event)"
+					maxlength="1000"
+					placeholder="Conte sua experiência com este produto"
+				></textarea>
+				<mat-hint align="end">{{ comentario().length }} / 1000</mat-hint>
+			</mat-form-field>
+
+			<div class="acoes">
+				<button
+					mat-flat-button
+					type="button"
+					class="botao-enviar"
+                    [class.disabled]="!podeEnviar()"
+					[disabled]="!podeEnviar()"
+					(click)="enviar()"
+				>
+					<mat-icon>send</mat-icon>
+					Enviar avaliação
+				</button>
+			</div>
+		</section>
+	</div>
+</mat-card>
