@@ -1,15 +1,14 @@
 using backend.Data;
 using backend.models;
 using backend.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories.Implementations;
 
-public class AvalicaoRepository : IAvaliacaoRepository
+public class AvaliacaoRepository : IAvaliacaoRepository
 {
     private readonly ApplicationDBContext _dbContext;
 
-    public AvalicaoRepository(ApplicationDBContext dbContext)
+    public AvaliacaoRepository(ApplicationDBContext dbContext)
     {
         _dbContext = dbContext;
     }

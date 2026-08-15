@@ -1,7 +1,4 @@
-using System.ComponentModel;
-using System.Diagnostics;
 using backend.DTOs.Desafio;
-using backend.Exceptions;
 using backend.models;
 using backend.models.Enums;
 using backend.Repositories.Interfaces;
