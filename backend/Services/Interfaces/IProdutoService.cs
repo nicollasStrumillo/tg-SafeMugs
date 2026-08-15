@@ -1,9 +1,11 @@
 using backend.DTOs.Produto;
+using backend.models;
 
 namespace backend.Services.Interfaces;
 
 public interface IProdutoService
 {
+    Task<Produto?> ObterProdutoPorIdAsync(int produtoId);
     Task<IReadOnlyList<ProdutoCompletoDTO>> ObterTodosAsync();
     Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorIdAsync(int produtoId);
     Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorNomeAsync(string nome);

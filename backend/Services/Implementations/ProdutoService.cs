@@ -92,6 +92,11 @@ public class ProdutoService : IProdutoService
         };
     }
 
+    public async Task<Produto?> ObterProdutoPorIdAsync(int produtoId)
+    {
+        return await _produtoRepository.ObterProdutoPorIdAsync(produtoId);
+    }
+
     public async Task<IReadOnlyList<ProdutoCompletoDTO>> ObterTodosAsync()
     {
         var produtos = await _produtoRepository.ObterTodosAsync();

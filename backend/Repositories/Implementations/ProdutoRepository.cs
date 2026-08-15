@@ -14,6 +14,11 @@ public class ProdutoRepository : IProdutoRepository
         _dbContext = dbContext;
     }
 
+    public async Task<Produto?> ObterProdutoPorIdAsync(int produtoId)
+    {
+        return await _dbContext.Produtos.FindAsync(new object[] { produtoId });
+    }
+
     public async Task<IReadOnlyList<Produto>> ObterTodosAsync()
     {
         return await _dbContext.Produtos.AsNoTracking()

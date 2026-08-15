@@ -104,7 +104,9 @@ builder.Services.AddScoped<IDesafioService, DesafioService>();
 builder.Services.AddScoped<ISenhaService, SenhaService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
-builder.Services.AddScoped<IAvaliacaoRepository, AvalicaoRepository>();
+builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
+builder.Services.AddScoped<ICarrinhoRepository, CarrinhoRepository>();
+builder.Services.AddScoped<ICarrinhoService, CarrinhoService>();
 
 //NotificationService e SignalR
 builder.Services.AddSingleton<INotificationService, NotificationService>();

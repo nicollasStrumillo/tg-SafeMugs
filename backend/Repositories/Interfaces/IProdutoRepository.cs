@@ -4,6 +4,7 @@ namespace backend.Repositories.Interfaces;
 
 public interface IProdutoRepository
 {
+    Task<Produto?> ObterProdutoPorIdAsync(int produtoId);
     Task<IReadOnlyList<Produto>> ObterTodosAsync();
     Task<Produto?> ObterProdutoPorNomeAsync(string nome);
     Task<Produto?> ObterProdutoCompletoPorIdAsync(int produtoId);
