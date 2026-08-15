@@ -133,6 +133,11 @@
 	--icon-color: #9a8cf76d;
 }
 
+.disabled{
+	opacity: 0.5;
+    pointer-events: none;
+}
+
 .nav-item mat-icon {
 	color: transparent;
 	-webkit-text-stroke: 1.5px var(--icon-color);

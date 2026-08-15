@@ -47,15 +47,19 @@
                 {{ data.produto.descricao }}
             </p>
 
-            <button
-                type="button"
-                class="add-to-cart-button"
-                (click)="adicionarAoCarrinho()"
-                aria-label="Adicionar {{ data.produto.nome }} ao carrinho"
-            >
-                <mat-icon>add_shopping_cart</mat-icon>
-                <span>Adicionar ao carrinho</span>
-            </button>
+            <span [matTooltip]="!autenticado() ? 'Faça login para adicionar ao carrinho.' : ''">
+                <button
+                    type="button"
+                    class="add-to-cart-button"
+                    (click)="adicionarAoCarrinho()"
+                    [class.disabled]="!autenticado()"
+                    [disabled]="this.enviandoAdicaoCarrinho()"
+                    aria-label="Adicionar {{ data.produto.nome }} ao carrinho"
+                >
+                    <mat-icon>add_shopping_cart</mat-icon>
+                    <span>Adicionar ao carrinho</span>
+                </button>
+            </span>
 
             <div class="comments-panel">
                 <details closed>

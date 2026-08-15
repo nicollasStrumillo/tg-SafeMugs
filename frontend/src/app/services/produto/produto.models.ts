@@ -20,6 +20,16 @@ export interface AvaliacaoDto {
 	usuario?: UsuarioResumoDto | null;
 }
 
+export interface ProdutoResumoDto {
+    id: number;
+    nome: string;
+    descricao: string;
+    preco: number;
+    estoque: number;
+    categoriaProduto?: CategoriaProdutoDto | null;
+    urlImagemProduto: string;
+}
+
 export interface ProdutoCompletoDto {
 	id: number;
 	nome: string;

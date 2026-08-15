@@ -15,10 +15,13 @@ import { UsuarioLogado } from '../../../services/usuario/usuario.models';
 import { ComentarioProdutoDto, ComentarioRequest, ProdutoCardViewModel } from '../../../services/produto/produto.models';
 import { ProdutoService } from '../../../services/produto/produto.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
+import { CarrinhoService } from '../../../services/carrinho/carrinho.service';
 
 // Parte da vulnerabilidade de Stored XSS
 import {SignalRService} from '../../../services/signalR/signalr.service';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
+import { MatTooltip } from '@angular/material/tooltip';
+import { HttpErrorResponse } from '@angular/common/http';
 
 const STOREDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
 
@@ -36,6 +39,7 @@ interface ComentarioProdutoViewModel extends ComentarioProdutoDto {
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatTooltip
   ],
   templateUrl: './detalhes-produto.html',
   styleUrl: './detalhes-produto.scss',
@@ -45,6 +49,7 @@ export class DetalhesProduto implements OnInit {
     private readonly authSessionService = inject(AuthSessionService);
     private readonly produtoService = inject(ProdutoService);
     private readonly notificationService = inject(NotificationService);
+    private readonly carrinhoService = inject(CarrinhoService);
 
     // Parte da vulnerabilidade de Stored XSS
     private readonly signalRService = inject(SignalRService);
@@ -55,11 +60,13 @@ export class DetalhesProduto implements OnInit {
     protected readonly carregandoComentarios = signal(true);
     protected readonly enviandoComentario = signal(false);
     protected readonly enviandoEdicao = signal(false);
+    protected readonly enviandoAdicaoCarrinho = signal(false);
 
     protected readonly comentarioEditandoId = signal<number | null>(null);
     protected readonly comentarioEditandoTexto = signal('');
 
     protected usuarioLogado: UsuarioLogado | null = null;
+    protected autenticado = signal(false);
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: { produto: ProdutoCardViewModel },
@@ -69,8 +76,8 @@ export class DetalhesProduto implements OnInit {
 
     ngOnInit(): void {
         this.carregarComentarios();
+        this.autenticado.set(this.authSessionService.autenticado())
         this.usuarioLogado = this.authSessionService.usuarioLogado();
-        console.log('Usuairo logado:', this.usuarioLogado);
     }
 
     fechar(): void {
@@ -80,13 +87,13 @@ export class DetalhesProduto implements OnInit {
     private async carregarComentarios(): Promise<void> {
         this.carregandoComentarios.set(true);
 
-        await this.produtoService.obterComentarios(this.data.produto.id)
+        this.produtoService.obterComentarios(this.data.produto.id)
             .pipe(finalize(() => this.carregandoComentarios.set(false)))
             .subscribe({
                 next: async (comentarios) => {
                     // Parte da vulnerabilidade de Stored XSS
-                    const comenatariosVuln : ComentarioProdutoViewModel[] = comentarios.map(c => ({...c, comentarioInseguro: this.sanitizer.bypassSecurityTrustHtml(c.comentario.trim())}));
-                    
+                    const comenatariosVuln: ComentarioProdutoViewModel[] = comentarios.map(c => ({ ...c, comentarioInseguro: this.sanitizer.bypassSecurityTrustHtml(c.comentario.trim()) }));
+
                     await this.VerificarPayloadXSS(comenatariosVuln);
                     this.comentarios.set(comenatariosVuln);
                 },
@@ -168,21 +175,27 @@ export class DetalhesProduto implements OnInit {
                 next: () => {
                     this.cancelarEdicao();
                     this.carregarComentarios();
-                    this.notificationService.sucesso('Comentario atualizado.', {
-                        icon: 'check_circle',
-                    });
+                    this.notificationService.sucesso('Comentario atualizado.');
                 },
-                error: (erro: unknown) => {
-                    console.error('Erro ao atualizar comentário:', erro);
-                    this.notificationService.erro('Erro ao atualizar comentario.', {
-                        icon: 'error',
-                    });
+                error: () => {
+                    this.notificationService.erro('Erro ao atualizar comentario.');
                 }
             });
     }
 
     adicionarAoCarrinho(): void {
-        console.log('Adicionado ao carrinho');
+        if (this.enviandoAdicaoCarrinho() || this.usuarioLogado == null || !this.autenticado()) return;
+  
+        this.enviandoAdicaoCarrinho.set(true);
+
+        this.carrinhoService.adicionarUnidadeProdutoAoCarrinho(this.usuarioLogado.usuarioId, this.data.produto.id, 1)
+            .pipe(finalize(() => this.enviandoAdicaoCarrinho.set(false)))
+            .subscribe({
+                next: () => {
+                    this.notificationService.sucesso('Produto adicionado ao carrinho!');
+                },
+                error: (erro: HttpErrorResponse) => this.notificationService.notificarErroApi(erro),
+            });
     }
 
     atualizarComentario(valor: string): void {

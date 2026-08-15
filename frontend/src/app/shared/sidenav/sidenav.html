@@ -9,17 +9,18 @@
 	</a>
 
 	<nav class="sidenav-nav" aria-label="Atalhos da aplicação">
-		<button
-			type="button"
+		<a
 			class="nav-item nav-item--carrinho"
-			(click)="carrinhoClick()"
+			[class.disabled]="!auth.autenticado()"
+			routerLink="/carrinho"
+			routerLinkActive="active"
 			matTooltip="Carrinho"
 			[matTooltipDisabled]="expanded()"
-		>
+			>
 			<mat-icon aria-hidden="true">shopping_basket</mat-icon>
 			<span class="nav-label">Carrinho</span>
-		</button>
-
+		</a>
+	
 		<button
 			type="button"
 			class="nav-item nav-item--avaliacoes"

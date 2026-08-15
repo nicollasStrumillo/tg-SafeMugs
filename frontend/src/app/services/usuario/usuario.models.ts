@@ -1,3 +1,12 @@
+export interface UsuarioResumoDto {
+	id: number;
+	nomeCompleto: string;
+	email: string;
+	ativo: boolean;
+	perfil: string;
+	urlImagemPerfil: string;
+}
+
 export interface LoginRequest {
 	email: string;
 	senha: string;

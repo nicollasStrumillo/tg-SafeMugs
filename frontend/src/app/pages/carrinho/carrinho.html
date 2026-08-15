@@ -1,0 +1,154 @@
+<section class="carrinho-shell">
+	<header class="carrinho-hero">
+		<div class="carrinho-copy">
+			<p class="eyebrow">Carrinho</p>
+			<h1>Revise seus itens antes de pedir.</h1>
+		</div>
+	</header>
+
+	@if (carregando() && !carrinho()) {
+		<div class="carrinho-state">Carregando carrinho...</div>
+	} @else {
+		<div class="carrinho-grid">
+			<div class="carrinho-col carrinho-col--itens">
+				@if (carrinhoVazio()) {
+					<mat-card class="carrinho-card carrinho-card--vazio">
+						<div class="empty-state">
+							<mat-icon aria-hidden="true">shopping_cart</mat-icon>
+							<p class="empty-title">Seu carrinho está vazio</p>
+							<p class="empty-hint">Adicione produtos pelo catálogo para continuar.</p>
+							<button
+								type="button"
+								mat-flat-button
+								class="empty-action"
+								(click)="router.navigate(['/catalogo'])"
+							>
+								Ir para o catálogo
+							</button>
+						</div>
+					</mat-card>
+				} @else {
+					<ul class="itens-lista">
+						@for (item of itensCarrinho(); track trackByItemId($index, item)) {
+							<li>
+								<mat-card class="carrinho-card item-card">
+									<div class="item-media">
+										<img
+											[src]="item.produto.urlImagemProduto"
+											[alt]="item.produto.nome"
+											loading="lazy"
+										/>
+									</div>
+
+									<div class="item-info">
+										<div class="item-cabecalho">
+											<h3 class="item-titulo">{{ item.produto.nome }}</h3>
+											<p class="item-preco-unit">
+												{{ item.precoUnitario | currency:'BRL' }} <span>por unidade</span>
+											</p>
+										</div>
+
+										<div class="item-rodape">
+											<div class="quantidade-controle" role="group" aria-label="Quantidade do produto">
+												<button
+													type="button"
+													mat-icon-button
+													class="quantidade-btn"
+													[disabled]="linhaOperando(item)"
+													(click)="diminuirQuantidade(item)"
+													aria-label="Diminuir quantidade"
+												>
+													<mat-icon>remove</mat-icon>
+												</button>
+
+												<span class="quantidade-valor" aria-live="polite">{{ item.quantidade }}</span>
+
+												<button
+													type="button"
+													mat-icon-button
+													class="quantidade-btn"
+													[disabled]="linhaOperando(item)"
+													(click)="aumentarQuantidade(item)"
+													aria-label="Aumentar quantidade"
+												>
+													<mat-icon>add</mat-icon>
+												</button>
+											</div>
+
+											<div class="item-total">
+												<span class="item-total-label">Subtotal</span>
+												<strong class="item-total-valor">
+													{{ item.precoTotal | currency:'BRL' }}
+												</strong>
+											</div>
+										</div>
+									</div>
+								</mat-card>
+							</li>
+						}
+					</ul>
+				}
+			</div>
+
+			<aside class="carrinho-col carrinho-col--resumo">
+				<mat-card class="carrinho-card resumo-card">
+					<mat-card-header>
+						<mat-card-title>Resumo do pedido</mat-card-title>
+					</mat-card-header>
+
+					<mat-card-content>
+						<div class="resumo-total">
+							<span class="resumo-total-label">Total</span>
+							<strong class="resumo-total-valor">
+								{{ totalCarrinho() | currency:'BRL' }}
+							</strong>
+						</div>
+
+						<section class="endereco-block" aria-labelledby="endereco-titulo">
+							<div class="endereco-header">
+								<h3 id="endereco-titulo" class="endereco-titulo">
+									<mat-icon aria-hidden="true">location_on</mat-icon>
+									Endereço de entrega
+								</h3>
+							</div>
+
+                        @if (enderecoUsuario(); as endereco) {
+							<address class="endereco-conteudo">
+								<span class="endereco-localidade">{{ endereco.cidade }} - {{ endereco.estado }}</span>
+								<span class="endereco-logradouro">{{ endereco.logradouro }}, {{ endereco.numero }}</span>
+							</address>
+						} @else {
+								<div class="endereco-vazio" role="alert">
+									<mat-icon aria-hidden="true">location_off</mat-icon>
+									<p class="endereco-vazio-titulo">Nenhum endereço cadastrado</p>
+									<p class="endereco-vazio-hint">
+										Cadastre um endereço no seu perfil para liberar o pedido.
+									</p>
+									<button
+										type="button"
+										mat-stroked-button
+										class="endereco-vazio-acao"
+										(click)="router.navigate(['/perfil'])"
+									>
+										Ir para o perfil
+									</button>
+								</div>
+							}
+						</section>
+
+						<button
+							type="button"
+							mat-flat-button
+							class="fazer-pedido-btn"
+							[disabled]="!podeFinalizar()"
+							(click)="fazerPedido()"
+						>
+							<mat-icon [class.disabled]="!podeFinalizar()" aria-hidden="true">shopping_bag</mat-icon>
+							Fazer pedido
+						</button>
+					</mat-card-content>
+				</mat-card>
+			</aside>
+		</div>
+	}
+</section>
