@@ -16,7 +16,6 @@ public class ApplicationDBContext : DbContext
     public DbSet<Carrinho> Carrinhos => Set<Carrinho>();
     public DbSet<ItemCarrinho> ItensCarrinho => Set<ItemCarrinho>();
     public DbSet<Pedido> Pedidos => Set<Pedido>();
-    public DbSet<ItemPedido> ItensPedido => Set<ItemPedido>();
     public DbSet<Desafio> Desafios => Set<Desafio>();
     public DbSet<DicaDesafio> DicasDesafio => Set<DicaDesafio>();
 
@@ -168,9 +167,9 @@ public class ApplicationDBContext : DbContext
         {
             entity.ToTable("pedidos");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(30);
-            entity.Property(e => e.MetodoPagamento).HasConversion<string>().HasMaxLength(30);
+            entity.Property(e => e.NumeroPedido).IsRequired().HasMaxLength(30);
             entity.Property(e => e.ValorTotal).HasPrecision(18, 2);
+            entity.Property(e => e.QuantidadeItens).IsRequired();
             entity.HasIndex(e => e.NumeroPedido).IsUnique();
 
             entity.HasOne(e => e.Usuario)
@@ -182,24 +181,10 @@ public class ApplicationDBContext : DbContext
                 .WithMany(e => e.Pedidos)
                 .HasForeignKey(e => e.EnderecoId)
                 .OnDelete(DeleteBehavior.Restrict);
-        });
 
-        modelBuilder.Entity<ItemPedido>(entity =>
-        {
-            entity.ToTable("itens_pedido");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.PrecoUnitario).HasPrecision(18, 2);
-            entity.Property(e => e.SubTotal).HasPrecision(18, 2);
-            entity.HasIndex(e => new { e.PedidoId, e.ProdutoId }).IsUnique();
-
-            entity.HasOne(e => e.Pedido)
-                .WithMany(e => e.ItensPedido)
-                .HasForeignKey(e => e.PedidoId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(e => e.Produto)
-                .WithMany(e => e.ItensPedido)
-                .HasForeignKey(e => e.ProdutoId)
+            entity.HasOne(e => e.Carrinho)
+                .WithOne(e => e.Pedido)
+                .HasForeignKey<Pedido>(e => e.CarrinhoId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

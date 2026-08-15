@@ -12,4 +12,6 @@ public class Carrinho
     public Usuario Usuario { get; set; } = null!;
 
     public ICollection<ItemCarrinho> Itens { get; set; } = [];
+
+    public Pedido? Pedido { get; set; }
 }
