@@ -141,8 +141,8 @@ public class ApplicationDBContext : DbContext
             entity.HasIndex(e => e.UsuarioId).IsUnique();
 
             entity.HasOne(e => e.Usuario)
-                .WithOne(e => e.Carrinho)
-                .HasForeignKey<Carrinho>(e => e.UsuarioId)
+                .WithMany(e => e.Carrinhos)
+                .HasForeignKey(e => e.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 
@@ -151,7 +151,6 @@ public class ApplicationDBContext : DbContext
             entity.ToTable("itens_carrinho");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.PrecoUnitario).HasPrecision(18, 2);
-            entity.Property(e => e.SubTotal).HasPrecision(18, 2);
             entity.HasIndex(e => new { e.CarrinhoId, e.ProdutoId }).IsUnique();
 
             entity.HasOne(e => e.Carrinho)

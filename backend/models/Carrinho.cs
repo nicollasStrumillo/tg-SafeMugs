@@ -11,5 +11,5 @@ public class Carrinho
     public int UsuarioId { get; set; }
     public Usuario Usuario { get; set; } = null!;
 
-    public ICollection<ItemCarrinho> Itens { get; set; } = new List<ItemCarrinho>();
+    public ICollection<ItemCarrinho> Itens { get; set; } = [];
 }

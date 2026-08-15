@@ -22,5 +22,5 @@ public class Usuario
     public ICollection<Avaliacao> Avaliacoes { get; set; } = new List<Avaliacao>();
     public ICollection<ComentarioProduto> ComentariosProduto { get; set; } = new List<ComentarioProduto>();
     public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
-    public Carrinho? Carrinho { get; set; }
+    public ICollection<Carrinho> Carrinhos { get; set; } = new List<Carrinho>();
 }
