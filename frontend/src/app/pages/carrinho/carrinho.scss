@@ -69,6 +69,7 @@ h1 {
 }
 
 .item-card {
+	position: relative;
 	display: grid;
 	grid-template-columns: 96px minmax(0, 1fr);
 	gap: 1rem;
@@ -77,6 +78,36 @@ h1 {
 
 	&:hover {
 		border-color: rgba(133, 163, 218, 0.34);
+	}
+
+	&:hover .remover-item-btn {
+		opacity: 1;
+	}
+}
+
+.remover-item-btn {
+	position: absolute;
+	top: 0.4rem;
+	right: 0.4rem;
+	width: 32px;
+	height: 32px;
+	z-index: 2;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0.65;
+	transition: opacity 160ms ease, background 160ms ease;
+
+	.mat-icon {
+		font-size: 20px;
+		width: 20px;
+		height: 20px;
+		color: #ef5350;
+	}
+
+	&:hover {
+		background: rgba(239, 83, 80, 0.16);
+		opacity: 1;
 	}
 }
 

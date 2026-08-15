@@ -86,6 +86,21 @@ export class Carrinho implements OnInit {
 			});
 	}
 
+	protected removerItem(item: ItemCarrinhoDto): void {
+		if (this.operandoItemId() !== null || this.usuarioId === null || item.quantidade <= 0) {
+			return;
+		}
+
+		this.operandoItemId.set(item.id);
+		this.carrinhoService
+			.removerUnidadeProdutoDoCarrinho(this.usuarioId, item.produto.id, item.quantidade)
+			.pipe(finalize(() => this.operandoItemId.set(null)))
+			.subscribe({
+				next: () => this.atualizarCarrinho(),
+				error: (erro: HttpErrorResponse) => this.notificationService.notificarErroApi(erro),
+			});
+	}
+
 	protected linhaOperando(item: ItemCarrinhoDto): boolean {
 		return this.operandoItemId() === item.id;
 	}

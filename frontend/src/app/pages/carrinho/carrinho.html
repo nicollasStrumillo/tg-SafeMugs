@@ -31,8 +31,19 @@
 					<ul class="itens-lista">
 						@for (item of itensCarrinho(); track trackByItemId($index, item)) {
 							<li>
-								<mat-card class="carrinho-card item-card">
-									<div class="item-media">
+<mat-card class="carrinho-card item-card">
+								<button
+									type="button"
+									mat-icon-button
+									class="remover-item-btn"
+									[disabled]="linhaOperando(item)"
+									(click)="removerItem(item)"
+									aria-label="Remover {{ item.produto.nome }} do carrinho"
+								>
+									<mat-icon>delete</mat-icon>
+								</button>
+
+								<div class="item-media">
 										<img
 											[src]="item.produto.urlImagemProduto"
 											[alt]="item.produto.nome"
