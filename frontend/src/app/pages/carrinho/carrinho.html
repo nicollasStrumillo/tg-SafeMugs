@@ -155,7 +155,7 @@
 							(click)="fazerPedido()"
 						>
 							<mat-icon [class.disabled]="!podeFinalizar()" aria-hidden="true">shopping_bag</mat-icon>
-							Fazer pedido
+							{{ enviandoPedido() ? 'Enviando pedido...' : 'Fazer pedido' }}
 						</button>
 					</mat-card-content>
 				</mat-card>
