@@ -6,4 +6,5 @@ public interface IEnderecoRepository
 {
     Task<Endereco> CadastrarEnderecoAsync(Endereco endereco);
     Task DeletarEnderecoAsync(int enderecoId);
+    Task<Endereco> CriarDuplicataAsync(Endereco endereco);
 }

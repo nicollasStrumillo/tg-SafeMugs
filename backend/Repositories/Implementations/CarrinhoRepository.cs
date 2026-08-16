@@ -14,25 +14,25 @@ public class CarrinhoRepository : ICarrinhoRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Carrinho?> ObterCarrinhoAsNoTrackingPorUsuarioIdAsync(int usuarioId)
+    public async Task<Carrinho?> ObterCarrinhoAsNoTrackingAsync(int carrinhoId)
     {
         return await _dbContext.Carrinhos.AsNoTracking()
             .Include(c => c.Itens)
                 .ThenInclude(i => i.Produto)
-            .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId);
+            .FirstOrDefaultAsync(c => c.Id == carrinhoId);
+    }
+
+    public async Task<Carrinho?> ObterCarrinhoAtivoPorUsuarioIdAsync(int usuarioId)
+    {
+        return await _dbContext.Carrinhos
+            .Include(c => c.Itens)
+                .ThenInclude(i => i.Produto)
+            .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId && c.Status == StatusCarrinho.Ativo);
     }
   
     public async Task<Carrinho> ObterOuCriarCarrinhoAtivoAsync(int usuarioId)
     {
-        var carrinhoAtivo = await _dbContext.Carrinhos
-            .Include(c => c.Itens)
-                .ThenInclude(i => i.Produto)
-                    .ThenInclude(p => p.CategoriaProduto)
-            .Include(c => c.Usuario)
-                .ThenInclude(u => u.Endereco)
-            .Include(c => c.Usuario)
-                .ThenInclude(u => u.Perfil)
-            .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId && c.Status == StatusCarrinho.Ativo);
+        var carrinhoAtivo = await ObterCarrinhoAtivoComIncludesAsync(usuarioId);
         
         if (carrinhoAtivo == null)
         {
@@ -45,9 +45,24 @@ public class CarrinhoRepository : ICarrinhoRepository
             };
             _dbContext.Carrinhos.Add(carrinhoAtivo);
             await _dbContext.SaveChangesAsync();
+
+            carrinhoAtivo = await ObterCarrinhoAtivoComIncludesAsync(usuarioId);
         }
 
-        return carrinhoAtivo;
+        return carrinhoAtivo!;
+    }
+
+    private async Task<Carrinho?> ObterCarrinhoAtivoComIncludesAsync(int usuarioId)
+    {
+        return await _dbContext.Carrinhos
+            .Include(c => c.Itens)
+                .ThenInclude(i => i.Produto)
+                    .ThenInclude(p => p.CategoriaProduto)
+            .Include(c => c.Usuario)
+                .ThenInclude(u => u.Endereco)
+            .Include(c => c.Usuario)
+                .ThenInclude(u => u.Perfil)
+            .FirstOrDefaultAsync(c => c.UsuarioId == usuarioId && c.Status == StatusCarrinho.Ativo);
     }
 
     // Adiciona o produto ao carrinho ou simplesmente incrementa a quantidadea

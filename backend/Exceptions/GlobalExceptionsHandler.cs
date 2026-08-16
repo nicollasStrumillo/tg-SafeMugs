@@ -18,6 +18,7 @@ internal sealed class GlobalExceptionsHandler(RequestDelegate next)
             {
                 NotFoundException => StatusCodes.Status404NotFound,
                 BusinessException or ValidationException => StatusCodes.Status400BadRequest,
+                UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError
             };
 

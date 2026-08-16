@@ -29,4 +29,24 @@ public class EnderecoRepository : IEnderecoRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<Endereco> CriarDuplicataAsync(Endereco endereco)
+    {
+        var duplicata = new Endereco
+        {
+            Logradouro = endereco.Logradouro,
+            Numero = endereco.Numero,
+            Complemento = endereco.Complemento,
+            Bairro = endereco.Bairro,
+            Cidade = endereco.Cidade,
+            Estado = endereco.Estado,
+            Cep = endereco.Cep,
+            DtCadastro = DateTime.UtcNow,
+            DtAtualizacao = DateTime.UtcNow,
+        };
+
+        _context.Enderecos.Add(duplicata);
+        await _context.SaveChangesAsync();
+        return duplicata;
+    }
 }

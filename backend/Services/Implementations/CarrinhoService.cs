@@ -98,15 +98,12 @@ public class CarrinhoService : ICarrinhoService
         await _carrinhoRepository.RemoverUnidadeProdutoDoCarrinhoAsync(carrinho, produtoId, quantidade);
     }
 
-    public async Task FinalizarCarrinhoAsync(int usuarioId)
+    public async Task<Carrinho> FinalizarEObterCarrinhoAsync(int usuarioId)
     {
-        var carrinho = await _carrinhoRepository.ObterCarrinhoAsNoTrackingPorUsuarioIdAsync(usuarioId)
-            ?? throw new NotFoundException($"Carrinho para o usuário com ID {usuarioId} não encontrado.");
-        if (carrinho.Status != StatusCarrinho.Ativo)
-            throw new InvalidOperationException($"O carrinho com ID {carrinho.Id} não está ativo e não pode ser finalizado.");
-
-        var carrinhoAsTracked = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+        var carrinho = await _carrinhoRepository.ObterCarrinhoAtivoPorUsuarioIdAsync(usuarioId)
+            ?? throw new NotFoundException($"Carrinho Ativo para o usuário com ID {usuarioId} não encontrado.");
         
-        await _carrinhoRepository.FinalizarCarrinhoAsync(carrinhoAsTracked);
+        await _carrinhoRepository.FinalizarCarrinhoAsync(carrinho);
+        return carrinho;
     }
 }
