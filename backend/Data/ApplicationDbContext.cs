@@ -137,8 +137,7 @@ public class ApplicationDBContext : DbContext
             entity.ToTable("carrinhos");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(30);
-            entity.HasIndex(e => e.UsuarioId).IsUnique();
-
+            
             entity.HasOne(e => e.Usuario)
                 .WithMany(e => e.Carrinhos)
                 .HasForeignKey(e => e.UsuarioId)
