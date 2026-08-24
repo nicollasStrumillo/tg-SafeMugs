@@ -42,6 +42,7 @@ public class PedidoService : IPedidoService
             NumeroPedido = pedido.NumeroPedido,
             ValorTotal = pedido.ValorTotal,
             QuantidadeItens = pedido.QuantidadeItens,
+            DataPedido = pedido.DataPedido,
             Usuario = new UsuarioDetalhesDTO
             {
                 Id = pedido.Usuario.Id,
@@ -124,6 +125,7 @@ public class PedidoService : IPedidoService
                 NumeroPedido = "placeholder",
                 ValorTotal = valorTotal,
                 QuantidadeItens = quantidadeItens,
+                DataPedido = DateTime.UtcNow,
                 UsuarioId = usuario.Id,
                 Usuario = usuario,
                 EnderecoId = snapshotEndereco.Id,
@@ -145,5 +147,53 @@ public class PedidoService : IPedidoService
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    public async Task<List<PedidoResumoDTO>> ListarPedidosPorUsuarioAsync(int usuarioId)
+    {
+        if (usuarioId != _user.UsuarioId)
+            throw new UnauthorizedAccessException("Você não tem permissão para listar pedidos de outro usuário.");
+
+        var pedidos = await _pedidoRepository.ObterPedidosPorUsuarioIdAsync(usuarioId);
+
+        return pedidos.Select(p => new PedidoResumoDTO
+        {
+            Id = p.Id,
+            NumeroPedido = p.NumeroPedido,
+            ValorTotal = p.ValorTotal,
+            QuantidadeItens = p.QuantidadeItens,
+            DataPedido = p.DataPedido,
+            UsuarioId = p.UsuarioId
+        }).ToList();
+    }
+
+    public async Task<PedidoDTO> ObterDetalhesPedidoAsync(int pedidoId)
+    {
+        var pedido = await _pedidoRepository.ObterPedidoPorIdAsync(pedidoId)
+            ?? throw new NotFoundException($"Pedido com id {pedidoId} não encontrado");
+
+        if (pedido.UsuarioId != _user.UsuarioId)
+            throw new UnauthorizedAccessException("Você não tem permissão para acessar os detalhes deste pedido.");
+
+        return MapToDTO(pedido);
+    }
+
+    public async Task<List<PedidoResumoDTO>> PesquisarPedidoPorNumeroAsync(string numeroPedido)
+    {
+        if (string.IsNullOrWhiteSpace(numeroPedido))
+            throw new ValidationException("Informe o número do pedido.");
+
+        return await _pedidoRepository.ObterPedidoPorNumeroAsync(numeroPedido, _user.UsuarioId);
+    }
+
+    public async Task CancelarPedidoAsync(int pedidoId)
+    {
+        var pedido = await _pedidoRepository.ObterPedidoPorIdAsync(pedidoId)
+            ?? throw new NotFoundException($"Pedido com id {pedidoId} não encontrado");
+
+        if (pedido.UsuarioId != _user.UsuarioId)
+            throw new UnauthorizedAccessException("Você não tem permissão para cancelar este pedido.");
+
+        await _pedidoRepository.CancelarPedidoAsync(pedido);
     }
 }

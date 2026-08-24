@@ -10,6 +10,7 @@ public class PedidoDTO
     public string NumeroPedido { get; set; } = null!;
     public decimal ValorTotal { get; set; }
     public int QuantidadeItens { get; set; }
+    public DateTime DataPedido { get; set; }
 
     public UsuarioDetalhesDTO Usuario { get; set; } = null!;
 
