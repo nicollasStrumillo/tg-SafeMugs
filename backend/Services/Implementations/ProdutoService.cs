@@ -69,11 +69,11 @@ public class ProdutoService : IProdutoService
                 Comentario = a.Comentario,
                 Usuario = new UsuarioDetalhesDTO{
                     Id = a.Usuario.Id,
-                    NomeCompleto = a.Usuario.NomeCompleto,
+                    NomeCompleto = a.Usuario.Ativo ? a.Usuario.NomeCompleto : "Usuário Inativo",
                     Telefone = a.Usuario.Telefone,
-                    Email = a.Usuario.Email,
+                    Email = a.Usuario.Ativo ? a.Usuario.Email : "[Usuário inativo]",
                     Ativo = a.Usuario.Ativo,
-                    UrlImagemPerfil = a.Usuario.UrlImagemPerfil,
+                    UrlImagemPerfil = a.Usuario.Ativo ? a.Usuario.UrlImagemPerfil : "/imagens/perfil/generic_profile.jpg",
                     Perfil = a.Usuario.Perfil.Nome
                 }
             }).ToList(),
@@ -83,10 +83,10 @@ public class ProdutoService : IProdutoService
                 Comentario = c.Comentario,
                 Usuario = c.Usuario == null ? null : new UsuarioDetalhesDTO{
                     Id = c.Usuario.Id ,
-                    NomeCompleto = c.Usuario.NomeCompleto,
-                    Email = c.Usuario.Email,
+                    NomeCompleto = c.Usuario.Ativo ? c.Usuario.NomeCompleto : "Usuário Inativo",
+                    Email = c.Usuario.Ativo ? c.Usuario.Email : "[Usuário inativo]",
                     Ativo = c.Usuario.Ativo,
-                    UrlImagemPerfil = c.Usuario.UrlImagemPerfil
+                    UrlImagemPerfil = c.Usuario.Ativo ? c.Usuario.UrlImagemPerfil : "/imagens/perfil/generic_profile.jpg"
                 }
             }).ToList()
         };
@@ -129,8 +129,8 @@ public class ProdutoService : IProdutoService
             Usuario = c.Usuario == null ? null : new UsuarioDetalhesDTO
             {
                 Id = c.Usuario.Id,
-                NomeCompleto = c.Usuario.NomeCompleto,
-                Email = c.Usuario.Email,
+                NomeCompleto = c.Usuario.Ativo ?  c.Usuario.NomeCompleto : "Usuário Inativo",
+                Email = c.Usuario.Ativo ? c.Usuario.Email : "[Usuário inativo]",
                 Ativo = c.Usuario.Ativo
             }
         }).ToList();
