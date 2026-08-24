@@ -852,6 +852,9 @@ namespace backend.Migrations
                     b.Property<int>("CarrinhoId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DataPedido")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int>("EnderecoId")
                         .HasColumnType("int");
 

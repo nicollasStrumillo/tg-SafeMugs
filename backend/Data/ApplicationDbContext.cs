@@ -169,6 +169,7 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.NumeroPedido).IsRequired().HasMaxLength(30);
             entity.Property(e => e.ValorTotal).HasPrecision(18, 2);
             entity.Property(e => e.QuantidadeItens).IsRequired();
+            entity.Property(e => e.DataPedido).IsRequired();
             entity.HasIndex(e => e.NumeroPedido).IsUnique();
 
             entity.HasOne(e => e.Usuario)
