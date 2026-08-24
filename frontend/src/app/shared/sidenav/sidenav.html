@@ -3,12 +3,23 @@
 	[class.expanded]="expanded()"
 	aria-label="Menu lateral de navegação"
 >
-	<a class="sidenav-brand" routerLink="/catalogo" aria-label="Ir para a página inicial da SafeMugs">
+	<a class="sidenav-brand">
 		<mat-icon class="brand-mark-icon" aria-hidden="true">emoji_food_beverage</mat-icon>
 		<span class="brand-text">SafeMugs</span>
 	</a>
 
 	<nav class="sidenav-nav" aria-label="Atalhos da aplicação">
+		<a
+			class="nav-item nav-item--catalogo"
+			routerLink="/catalogo"
+			routerLinkActive="active"
+			matTooltip="Catalogo"
+			[matTooltipDisabled]="expanded()"
+			>
+			<mat-icon aria-hidden="true">storefront</mat-icon>
+			<span class="nav-label">Catálogo</span>
+		</a>
+
 		<a
 			class="nav-item nav-item--carrinho"
 			[class.disabled]="!auth.autenticado()"
@@ -17,7 +28,7 @@
 			matTooltip="Carrinho"
 			[matTooltipDisabled]="expanded()"
 			>
-			<mat-icon aria-hidden="true">shopping_basket</mat-icon>
+			<mat-icon aria-hidden="true">shopping_cart</mat-icon>
 			<span class="nav-label">Carrinho</span>
 		</a>
 	
@@ -33,10 +44,11 @@
 			<span class="nav-label">Pedidos</span>
 		</a>
 
-		<button
-			type="button"
+		<a
 			class="nav-item nav-item--github"
-			(click)="githubClick()"
+			[href]="githubUrl"
+			target="_blank"
+			rel="noopener noreferrer"
 			matTooltip="GitHub"
 			[matTooltipDisabled]="expanded()"
 		>
@@ -46,7 +58,7 @@
 				/>
 			</svg>
 			<span class="nav-label">GitHub</span>
-		</button>
+		</a>
 
 		@if (showScoreBoard()) {
 			<a

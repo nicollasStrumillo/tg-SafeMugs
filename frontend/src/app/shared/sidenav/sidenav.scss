@@ -117,6 +117,10 @@
 	background: var(--sm-accent-strong);
 }
 
+.nav-item--catalogo{
+	--icon-color: #0a5dda8c;
+}
+
 .nav-item--carrinho {
 	--icon-color: #f0a76894;
 }
@@ -228,15 +232,6 @@
 
 .sidenav-panel.expanded .toggle-label {
 	opacity: 1;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.sidenav-panel,
-	.nav-item,
-	.sidenav-toggle {
-		transition: none !important;
-		animation: none !important;
-	}
 }
 
 .sidenav-bottom {

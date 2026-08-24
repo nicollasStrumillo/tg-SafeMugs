@@ -27,6 +27,8 @@ export class SidenavComponent implements OnInit {
 	protected readonly toggleLabel = computed(() => (this.expanded() ? '' : ''));
 	protected readonly toggleTooltip = computed(() => (this.expanded() ? 'Recolher menu' : 'Expandir menu'));
 
+	protected readonly githubUrl = 'https://github.com/nicollasStrumillo/tg-SafeMugs';
+
 	ngOnInit(): void {
 		this.scoreBoardService.buscarDesafioPorNome('Encontrar a Score-Board').subscribe((desafio) => {
 			if (desafio && desafio.resolvido) {
@@ -43,10 +45,6 @@ export class SidenavComponent implements OnInit {
 
 	protected toggle(): void {
 		this.expanded.update((v) => !v);
-	}
-
-	protected githubClick(): void {
-		console.log('icone GitHub clicado');
 	}
 
 	protected logout(): void {
