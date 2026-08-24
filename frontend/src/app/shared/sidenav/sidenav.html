@@ -21,16 +21,17 @@
 			<span class="nav-label">Carrinho</span>
 		</a>
 	
-		<button
-			type="button"
-			class="nav-item nav-item--avaliacoes"
-			(click)="avaliacoesClick()"
-			matTooltip="Avaliações"
+		<a
+			class="nav-item nav-item--pedidos"
+			[class.disabled]="!auth.autenticado()"
+			routerLink="/pedidos"
+			routerLinkActive="active"
+			matTooltip="Pedidos"
 			[matTooltipDisabled]="expanded()"
-		>
-			<mat-icon aria-hidden="true">reviews</mat-icon>
-			<span class="nav-label">Avaliações</span>
-		</button>
+			>
+			<mat-icon aria-hidden="true">sell</mat-icon>
+			<span class="nav-label">Pedidos</span>
+		</a>
 
 		<button
 			type="button"

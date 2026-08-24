@@ -1,0 +1,115 @@
+<mat-card class="detalhes-pedido-card">
+	<button
+		mat-icon-button
+		type="button"
+		class="close-button"
+		(click)="fechar()"
+		aria-label="Fechar detalhes do pedido"
+	>
+		<mat-icon>close</mat-icon>
+	</button>
+
+	@if (carregando()) {
+		<div class="detalhes-state">Carregando detalhes do pedido...</div>
+	} @else if (erroCarregamento()) {
+		<div class="detalhes-state detalhes-state-error">{{ erroCarregamento() }}</div>
+	} @else if (pedido(); as pedido) {
+		<div class="detalhes-layout">
+			<div class="detalhes-col detalhes-col--itens">
+				<header class="detalhes-cabecalho">
+					<p class="eyebrow">Pedido</p>
+					<h2 class="detalhes-numero">{{ pedido.numeroPedido }}</h2>
+					<div class="detalhes-meta">
+						<span class="meta-item">
+							<mat-icon aria-hidden="true">calendar_month</mat-icon>
+							{{ pedido.dataPedido | date:'dd/MM/yyyy' }}
+						</span>
+						<span class="meta-item">
+							<mat-icon aria-hidden="true">inventory_2</mat-icon>
+							{{ pedido.quantidadeItens }} {{ pedido.quantidadeItens === 1 ? 'item' : 'itens' }}
+						</span>
+					</div>
+				</header>
+
+				<ul class="itens-lista">
+					@for (item of pedido.carrinho.itens; track trackByItemId($index, item.id)) {
+						<li>
+							<mat-card class="item-card">
+								<div class="item-media">
+									<img
+										[src]="item.produto.urlImagemProduto"
+										[alt]="item.produto.nome"
+										loading="lazy"
+									/>
+								</div>
+
+								<div class="item-info">
+									<div class="item-cabecalho">
+										<h3 class="item-titulo">{{ item.produto.nome }}</h3>
+										<p class="item-preco-unit">
+											{{ item.precoUnitario | currency:'BRL' }} <span>por unidade</span>
+										</p>
+									</div>
+
+									<div class="item-rodape">
+										<div class="quantidade-pill" role="group" aria-label="Quantidade do produto">
+											<mat-icon aria-hidden="true">inventory_2</mat-icon>
+											<span class="quantidade-valor">{{ item.quantidade }}</span>
+										</div>
+
+										<div class="item-total">
+											<span class="item-total-label">Subtotal</span>
+											<strong class="item-total-valor">
+												{{ item.precoTotal | currency:'BRL' }}
+											</strong>
+										</div>
+									</div>
+								</div>
+							</mat-card>
+						</li>
+					}
+				</ul>
+			</div>
+
+			<aside class="detalhes-col detalhes-col--resumo">
+				<div class="resumo-total">
+					<span class="resumo-total-label">Total</span>
+					<strong class="resumo-total-valor">
+						{{ pedido.valorTotal | currency:'BRL' }}
+					</strong>
+				</div>
+
+				<section class="endereco-block" aria-labelledby="endereco-titulo">
+					<div class="endereco-header">
+						<h3 id="endereco-titulo" class="endereco-titulo">
+							<mat-icon aria-hidden="true">location_on</mat-icon>
+							Endereço de entrega
+						</h3>
+					</div>
+
+					<address class="endereco-conteudo">
+						<span class="endereco-localidade">{{ pedido.endereco.cidade }} - {{ pedido.endereco.estado }}</span>
+						<span class="endereco-logradouro">{{ pedido.endereco.logradouro }}, {{ pedido.endereco.numero }}</span>
+						@if (pedido.endereco.complemento) {
+							<span class="endereco-logradouro">{{ pedido.endereco.complemento }}</span>
+						}
+						<span class="endereco-logradouro">
+							{{ pedido.endereco.bairro }} - CEP {{ pedido.endereco.cep }}
+						</span>
+					</address>
+				</section>
+
+				<button
+					type="button"
+					class="cancelar-btn"
+					[disabled]="cancelando()"
+					(click)="cancelarPedido()"
+					aria-label="Cancelar pedido {{ pedido.numeroPedido }}"
+				>
+					<mat-icon>cancel_presentation</mat-icon>
+					{{ cancelando() ? 'Cancelando...' : 'Cancelar pedido' }}
+				</button>
+			</aside>
+		</div>
+	}
+</mat-card>

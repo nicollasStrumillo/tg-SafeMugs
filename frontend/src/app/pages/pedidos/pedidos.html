@@ -1,0 +1,108 @@
+<section class="pedidos-shell">
+	<header class="pedidos-hero">
+		<div class="pedidos-copy">
+			<p class="eyebrow">Pedidos</p>
+			<h1>Acompanhe seus últimos pedidos.</h1>
+		</div>
+	</header>
+
+	<div class="filtros-bar">
+		<mat-form-field class="campo-data" appearance="outline">
+			<mat-label>Data do pedido</mat-label>
+			<input matInput [matDatepicker]="picker" (dateChange)="atualizarFiltroData($event)" />
+			<mat-datepicker-toggle matIconSuffix [for]="picker" />
+			<mat-datepicker #picker />
+		</mat-form-field>
+
+		<div class="filtro-busca">
+			<mat-form-field class="campo-busca" appearance="outline">
+				<mat-label>Número do pedido</mat-label>
+				<input
+					matInput
+					type="text"
+					[value]="termoNumeroPedido()"
+					(input)="atualizarBuscaNumero($event)"
+					(keyup.enter)="buscarPorNumero()"
+				/>
+				@if (termoNumeroPedido()) {
+					<button
+						mat-icon-button
+						matSuffix
+						type="button"
+						(click)="limparTermoBusca()"
+						aria-label="Limpar busca"
+						class="clear-button"
+					>
+						<mat-icon>close</mat-icon>
+					</button>
+				}
+			</mat-form-field>
+
+			<button mat-icon-button class="search-button" aria-label="Buscar pedido" (click)="buscarPorNumero()">
+				<mat-icon>search</mat-icon>
+			</button>
+		</div>
+	</div>
+
+	@if (carregando()) {
+		<div class="pedidos-state">Carregando pedidos...</div>
+	} @else if (erroCarregamento()) {
+		<div class="pedidos-state pedidos-state-error">{{ erroCarregamento() }}</div>
+	} @else if (pedidosFiltrados().length === 0) {
+		<div class="pedidos-state">	
+			Nenhum pedido encontrado.
+		</div>
+	} @else {
+		<section class="pedidos-grid">
+			@for (pedido of pedidosFiltrados(); track trackById($index, pedido)) {
+				<mat-card
+					class="pedido-card"
+					(click)="abrirPedido(pedido)"
+					(keyup.enter)="abrirPedido(pedido)"
+					tabindex="0"
+					role="button"
+					aria-label="Ver detalhes do pedido {{ pedido.numeroPedido }}"
+				>
+					<mat-card-content class="pedido-conteudo">
+						<div class="pedido-cabecalho">
+							<div class="pedido-identificacao">
+								<h3 class="pedido-numero"><span class="text-num-pedido">N.º</span> {{ pedido.numeroPedido }}</h3>
+							</div>
+
+							<span class="entrega-badge">
+								<span class="material-symbols-outlined" aria-hidden="true">moped_package</span>
+								Entrega a caminho!
+							</span>
+						</div>
+
+						<div class="pedido-meta">
+							<span class="meta-item">
+								<mat-icon aria-hidden="true">calendar_month</mat-icon>
+								{{ pedido.dataPedido | date:'dd/MM/yyyy' }}
+							</span>
+							<span class="meta-item">
+								<mat-icon aria-hidden="true">inventory_2</mat-icon>
+								{{ pedido.quantidadeItens }} {{ pedido.quantidadeItens === 1 ? 'item' : 'itens' }}
+							</span>
+						</div>
+
+						<div class="pedido-rodape">
+							<p class="pedido-total">{{ pedido.valorTotal | currency:'BRL' }}</p>
+
+							<button
+								type="button"
+								class="cancelar-btn"
+								[disabled]="cancelandoPedidoId() === pedido.id"
+								(click)="cancelarPedido(pedido, $event)"
+								aria-label="Cancelar pedido {{ pedido.numeroPedido }}"
+							>
+								<mat-icon>cancel_presentation</mat-icon>
+								Cancelar pedido
+							</button>
+						</div>
+					</mat-card-content>
+				</mat-card>
+			}
+		</section>
+	}
+</section>

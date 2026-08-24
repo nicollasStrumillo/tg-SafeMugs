@@ -48,6 +48,11 @@ export const routes: Routes = [
 			import('./pages/carrinho/carrinho').then((module) => module.Carrinho),
 	},
 	{
+		path: 'pedidos',
+		loadComponent: () =>
+			import('./pages/pedidos/pedidos').then((module) => module.Pedidos),
+	},
+	{
 		path: '**',
 		redirectTo: 'catalogo',
 	},

@@ -45,14 +45,6 @@ export class SidenavComponent implements OnInit {
 		this.expanded.update((v) => !v);
 	}
 
-	protected carrinhoClick(): void {
-		console.log('icone Carrinho clicado');
-	}
-
-	protected avaliacoesClick(): void {
-		console.log('icone Avaliações clicado');
-	}
-
 	protected githubClick(): void {
 		console.log('icone GitHub clicado');
 	}
