@@ -22,6 +22,7 @@ public class ProdutoRepository : IProdutoRepository
     public async Task<IReadOnlyList<Produto>> ObterTodosAsync()
     {
         return await _dbContext.Produtos.AsNoTracking()
+        .Where(p => p.Ativo)
         .Include(p => p.Avaliacoes)
             .ThenInclude(a => a.Usuario)
                 .ThenInclude(u => u.Perfil)
@@ -40,7 +41,7 @@ public class ProdutoRepository : IProdutoRepository
             .Include(p => p.ComentariosProduto)
                 .ThenInclude(c => c.Usuario)
             .Include(p => p.CategoriaProduto)
-            .FirstOrDefaultAsync(p => p.Nome == nome);
+            .FirstOrDefaultAsync(p => p.Nome == nome && p.Ativo);
     }
 
     public async Task<Produto?> ObterProdutoCompletoPorIdAsync(int produtoId)
@@ -52,7 +53,7 @@ public class ProdutoRepository : IProdutoRepository
             .Include(p => p.ComentariosProduto)
                 .ThenInclude(c => c.Usuario)
             .Include(p => p.CategoriaProduto)
-            .FirstOrDefaultAsync(p => p.Id == produtoId);
+            .FirstOrDefaultAsync(p => p.Id == produtoId && p.Ativo);
     }
 
     public async Task<List<ComentarioProduto>> ObterComentariosPorProdutoIdAsync(int produtoId)

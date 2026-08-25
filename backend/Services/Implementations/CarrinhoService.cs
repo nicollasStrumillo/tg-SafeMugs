@@ -15,10 +15,13 @@ public class CarrinhoService : ICarrinhoService
 
     private readonly IProdutoService _produtoService;
 
-    public CarrinhoService(ICarrinhoRepository carrinhoRepository, IProdutoService produtoService)
+    private readonly IDesafioService _desafioService;
+
+    public CarrinhoService(ICarrinhoRepository carrinhoRepository, IProdutoService produtoService, IDesafioService desafioService)
     {
         _carrinhoRepository = carrinhoRepository;
         _produtoService = produtoService;
+        _desafioService = desafioService;
     }
 
     private CarrinhoDTO MapCarrinhoToDTO(Carrinho carrinho)
@@ -90,6 +93,8 @@ public class CarrinhoService : ICarrinhoService
 
         var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
         await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade);
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.AdicionarProdutoIndisponivel, () => !produto.Ativo || produto.Estoque <= 0);
     }
 
     public async Task RemoverUnidadeProdutoDoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)

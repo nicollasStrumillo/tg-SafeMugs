@@ -1,0 +1,12 @@
+public async Task AdicionarUnidadeProdutoAoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    var produto = await _produtoService.ObterProdutoPorIdAsync(produtoId)
+        ?? throw new NotFoundException($"Produto com ID {produtoId} não encontrado.");
+
+    // Verificando disponibilidade do produto.
+    if (!produto.Ativo || produto.Estoque < quantidade)
+        throw new ValidationException($"O produto '{produto.Nome}' não está disponível ou não há estoque suficiente.");
+
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+    await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade);
+}
