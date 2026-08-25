@@ -241,6 +241,72 @@ namespace backend.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("carrinhos", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Status = "Ativo",
+                            UsuarioId = 8
+                        });
                 });
 
             modelBuilder.Entity("backend.models.CategoriaProduto", b =>
@@ -590,6 +656,16 @@ namespace backend.Migrations
                             Dificuldade = 4,
                             Nome = "Enumere as tabelas do banco",
                             Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Categoria = "ImproperInputValidation",
+                            Descricao = "Adicione a um carrinho um produto que não devia estar disponível.",
+                            DescricaoDetalhes = "Nem todos os produtos registrados no banco do SafeMugs aparecem no catálogo: existe um item com estoque zerado e marcado como inativo, invisível para qualquer cliente da loja. O fluxo que adiciona um produto ao carrinho recebe o identificador do produto no corpo da requisição e apenas verifica se ele existe no banco — não confere se o produto está ativo nem se há estoque disponível. Para explorá-lo, primeiro é preciso descobrir o produto oculto: consultando o carrinho de outro usuário pela rota |/api/carrinho/{usuarioId}|, que expõe todos os itens e seus produtos, ou extraindo os registros da tabela de produtos com a injeção de SQL da pesquisa de pedidos. Com o identificador em mãos, basta interceptar a requisição |PATCH /api/carrinho/adicionar| e substituir o |produtoId| pelo do produto indisponível: o servidor aceita o item e o adiciona ao carrinho sem qualquer questionamento. O backend confia cegamente que o cliente só referencia produtos que podem ser vendidos, quando deveria validar o estado do recurso — ativo e com estoque — antes de aceitá-lo em qualquer operação, caracterizando uma validação de entrada imprópria no servidor.",
+                            Dificuldade = 3,
+                            Nome = "Produto inválido",
+                            Resolvido = false
                         });
                 });
 
@@ -787,6 +863,34 @@ namespace backend.Migrations
                             DesafioId = 11,
                             NrDica = 3,
                             Texto = "Os nomes das tabelas ficam na coluna TABLE_NAME da view information_schema.tables. Finalize o payload com # (ou -- seguido de espaço) para comentar o restante da consulta."
+                        },
+                        new
+                        {
+                            Id = 25,
+                            DesafioId = 12,
+                            NrDica = 1,
+                            Texto = "Nem todos os produtos registrados no banco aparecem no catálogo da loja."
+                        },
+                        new
+                        {
+                            Id = 26,
+                            DesafioId = 12,
+                            NrDica = 2,
+                            Texto = "Existe um endpoint que revela indevidamente os produtos que participaram de outras operações do sistema"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            DesafioId = 12,
+                            NrDica = 3,
+                            Texto = "Os carrinhos de outros usuários podem revelar produtos que não estão à venda."
+                        },
+                        new
+                        {
+                            Id = 28,
+                            DesafioId = 12,
+                            NrDica = 4,
+                            Texto = "Intercepte a requisição que adiciona um produto ao carrinho e troque o produtoId pelo do produto indisponível."
                         });
                 });
 
@@ -870,6 +974,72 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("itens_carrinho", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CarrinhoId = 1,
+                            PrecoUnitario = 64.90m,
+                            ProdutoId = 3,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CarrinhoId = 1,
+                            PrecoUnitario = 49.90m,
+                            ProdutoId = 6,
+                            Quantidade = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CarrinhoId = 2,
+                            PrecoUnitario = 54.90m,
+                            ProdutoId = 2,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CarrinhoId = 2,
+                            PrecoUnitario = 58.90m,
+                            ProdutoId = 5,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CarrinhoId = 4,
+                            PrecoUnitario = 59.90m,
+                            ProdutoId = 1,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CarrinhoId = 4,
+                            PrecoUnitario = 62.90m,
+                            ProdutoId = 4,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CarrinhoId = 4,
+                            PrecoUnitario = 56.90m,
+                            ProdutoId = 7,
+                            Quantidade = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CarrinhoId = 5,
+                            PrecoUnitario = 64.90m,
+                            ProdutoId = 3,
+                            Quantidade = 1
+                        });
                 });
 
             modelBuilder.Entity("backend.models.Pedido", b =>
@@ -967,7 +1137,7 @@ namespace backend.Migrations
                     b.Property<bool>("Ativo")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(true);
+                        .HasDefaultValue(false);
 
                     b.Property<int>("CategoriaProdutoId")
                         .HasColumnType("int");
@@ -1083,6 +1253,19 @@ namespace backend.Migrations
                             Nome = "Caneca Vermelha Cafe",
                             Preco = 49.90m,
                             UrlImagemProduto = "/imagens/produto/mug_vermelha_cafe.jpg"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Ativo = false,
+                            CategoriaProdutoId = 2,
+                            Descricao = "Caneca branca com ilustracao de um gato cinza segurando um morango.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 0,
+                            Nome = "Caneca Gato Cinza",
+                            Preco = 56.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_gato_morango.jpg"
                         });
                 });
 

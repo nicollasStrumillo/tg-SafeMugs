@@ -35,5 +35,8 @@ public enum DesafiosEnum
     TratamentoErro,
 
     [Display(Name = "Enumere as tabelas do banco")]
-    EnumerarTabelasBanco
+    EnumerarTabelasBanco,
+
+    [Display(Name = "Produto inválido")]
+    AdicionarProdutoIndisponivel
 }

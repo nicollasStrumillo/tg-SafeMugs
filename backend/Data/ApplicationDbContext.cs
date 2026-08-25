@@ -86,7 +86,7 @@ public class ApplicationDBContext : DbContext
             entity.Property(e => e.Nome).IsRequired().HasMaxLength(150);
             entity.Property(e => e.Descricao).IsRequired().HasMaxLength(1000);
             entity.Property(e => e.Preco).HasPrecision(18, 2);
-            entity.Property(e => e.Ativo).HasDefaultValue(true);
+            entity.Property(e => e.Ativo).HasDefaultValue(false);
             entity.Property(e => e.UrlImagemProduto).IsRequired();
 
             entity.HasOne(e => e.CategoriaProduto)
@@ -436,8 +436,21 @@ public class ApplicationDBContext : DbContext
                 DtAtualizacao = seedDate,
                 CategoriaProdutoId = 1,
                 UrlImagemProduto = "/imagens/produto/mug_vermelha_cafe.jpg"
+            },
+            new Produto
+            {
+                Id = 7,
+                Nome = "Caneca Gato Cinza",
+                Descricao = "Caneca branca com ilustracao de um gato cinza segurando um morango.",
+                Preco = 56.90m,
+                Estoque = 0,
+                Ativo = false,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 2,
+                UrlImagemProduto = "/imagens/produto/mug_gato_morango.jpg"
             });
-    
+
         modelBuilder.Entity<Avaliacao>().HasData(
             new Avaliacao
             {
@@ -725,6 +738,140 @@ public class ApplicationDBContext : DbContext
 
         );
 
+        modelBuilder.Entity<Carrinho>().HasData(
+            new Carrinho
+            {
+                Id = 1,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1
+            },
+            new Carrinho
+            {
+                Id = 2,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2
+            },
+            new Carrinho
+            {
+                Id = 3,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3
+            },
+            new Carrinho
+            {
+                Id = 4,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4
+            },
+            new Carrinho
+            {
+                Id = 5,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 5
+            },
+            new Carrinho
+            {
+                Id = 6,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 6
+            },
+            new Carrinho
+            {
+                Id = 7,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 7
+            },
+            new Carrinho
+            {
+                Id = 8,
+                Status = StatusCarrinho.Ativo,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 8
+            }
+        );
+
+        modelBuilder.Entity<ItemCarrinho>().HasData(
+            new ItemCarrinho
+            {
+                Id = 1,
+                Quantidade = 1,
+                PrecoUnitario = 64.90m,
+                CarrinhoId = 1,
+                ProdutoId = 3
+            },
+            new ItemCarrinho
+            {
+                Id = 2,
+                Quantidade = 2,
+                PrecoUnitario = 49.90m,
+                CarrinhoId = 1,
+                ProdutoId = 6
+            },
+            new ItemCarrinho
+            {
+                Id = 3,
+                Quantidade = 1,
+                PrecoUnitario = 54.90m,
+                CarrinhoId = 2,
+                ProdutoId = 2
+            },
+            new ItemCarrinho
+            {
+                Id = 4,
+                Quantidade = 1,
+                PrecoUnitario = 58.90m,
+                CarrinhoId = 2,
+                ProdutoId = 5
+            },
+            new ItemCarrinho
+            {
+                Id = 5,
+                Quantidade = 1,
+                PrecoUnitario = 59.90m,
+                CarrinhoId = 4,
+                ProdutoId = 1
+            },
+            new ItemCarrinho
+            {
+                Id = 6,
+                Quantidade = 1,
+                PrecoUnitario = 62.90m,
+                CarrinhoId = 4,
+                ProdutoId = 4
+            },
+            new ItemCarrinho
+            {
+                Id = 7,
+                Quantidade = 2,
+                PrecoUnitario = 56.90m,
+                CarrinhoId = 4,
+                ProdutoId = 7
+            },
+            new ItemCarrinho
+            {
+                Id = 8,
+                Quantidade = 1,
+                PrecoUnitario = 64.90m,
+                CarrinhoId = 5,
+                ProdutoId = 3
+            }
+        );
+
         // Desafios e dicas 
         modelBuilder.Entity<Desafio>().HasData(
             new Desafio
@@ -835,6 +982,16 @@ public class ApplicationDBContext : DbContext
                 DescricaoDetalhes = "A consulta SQL que pesquisa pedidos por número concatena o termo digitado diretamente na string da consulta, permitindo injeção de SQL. Como a consulta original retorna seis colunas, um |UNION SELECT| anexado ao payload só é aceito se trouxer exatamente o mesmo número de colunas, e as mensagens de erro da API expõem quando essa contagem está errada, funcionando como um oráculo para descobri-la. O MySQL mantém os metadados do banco na view |information_schema.tables|: selecionar a coluna |TABLE_NAME| com o filtro |WHERE TABLE_SCHEMA = DATABASE()| retorna o nome de todas as tabelas do esquema atual. O payload |' UNION SELECT 1,TABLE_NAME,3,4,CURDATE(),6 FROM information_schema.tables WHERE TABLE_SCHEMA = DATABASE()%23|, por exemplo, lista todas as tabelas na coluna do número do pedido, enquanto o |%23| ('#' encodado para URL) transforma o restante da linha em comentário, neutralizando o filtro que restringiria os resultados ao usuário autenticado.",
                 Categoria = CategoriaDesafio.SqlInjection,
                 Dificuldade = 4,
+                Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 12,
+                Nome = DesafiosEnum.AdicionarProdutoIndisponivel.GetNomeDisplay(),
+                Descricao = "Adicione a um carrinho um produto que não devia estar disponível.",
+                DescricaoDetalhes = "Nem todos os produtos registrados no banco do SafeMugs aparecem no catálogo: existe um item com estoque zerado e marcado como inativo, invisível para qualquer cliente da loja. O fluxo que adiciona um produto ao carrinho recebe o identificador do produto no corpo da requisição e apenas verifica se ele existe no banco — não confere se o produto está ativo nem se há estoque disponível. Para explorá-lo, primeiro é preciso descobrir o produto oculto: consultando o carrinho de outro usuário pela rota |/api/carrinho/{usuarioId}|, que expõe todos os itens e seus produtos, ou extraindo os registros da tabela de produtos com a injeção de SQL da pesquisa de pedidos. Com o identificador em mãos, basta interceptar a requisição |PATCH /api/carrinho/adicionar| e substituir o |produtoId| pelo do produto indisponível: o servidor aceita o item e o adiciona ao carrinho sem qualquer questionamento. O backend confia cegamente que o cliente só referencia produtos que podem ser vendidos, quando deveria validar o estado do recurso — ativo e com estoque — antes de aceitá-lo em qualquer operação, caracterizando uma validação de entrada imprópria no servidor.",
+                Categoria = CategoriaDesafio.ImproperInputValidation,
+                Dificuldade = 3,
                 Resolvido = false
             }
         );
@@ -1016,6 +1173,35 @@ public class ApplicationDBContext : DbContext
                 NrDica = 3,
                 Texto = "Os nomes das tabelas ficam na coluna TABLE_NAME da view information_schema.tables. Finalize o payload com # (ou -- seguido de espaço) para comentar o restante da consulta.",
                 DesafioId = 11
+            },
+
+            new DicaDesafio
+            {
+                Id = 25,
+                NrDica = 1,
+                Texto = "Nem todos os produtos registrados no banco aparecem no catálogo da loja.",
+                DesafioId = 12
+            },
+            new DicaDesafio
+            {
+                Id = 26,
+                NrDica = 2,
+                Texto = "Existe um endpoint que revela indevidamente os produtos que participaram de outras operações do sistema",
+                DesafioId = 12
+            },
+            new DicaDesafio
+            {
+                Id = 27,
+                NrDica = 3,
+                Texto = "Os carrinhos de outros usuários podem revelar produtos que não estão à venda.",
+                DesafioId = 12
+            },
+            new DicaDesafio
+            {
+                Id = 28,
+                NrDica = 4,
+                Texto = "Intercepte a requisição que adiciona um produto ao carrinho e troque o produtoId pelo do produto indisponível.",
+                DesafioId = 12
             }
         );
 
