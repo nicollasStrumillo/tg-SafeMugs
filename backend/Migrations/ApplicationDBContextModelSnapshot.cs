@@ -456,8 +456,8 @@ namespace backend.Migrations
 
                     b.Property<string>("DescricaoDetalhes")
                         .IsRequired()
-                        .HasMaxLength(800)
-                        .HasColumnType("varchar(800)");
+                        .HasMaxLength(1500)
+                        .HasColumnType("varchar(1500)");
 
                     b.Property<int>("Dificuldade")
                         .HasColumnType("int");
@@ -579,6 +579,16 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Quando ocorre um erro inesperado no SafeMugs, a API retorna ao cliente uma resposta contendo o nome da classe da exceção e a mensagem original, frequentemente acompanhada de detalhes internos como nomes de tabelas, consultas SQL e trechos de código. Ao provocar uma falha no backend, é possível extrair dessa resposta informações sensíveis sobre a implementação. Um exemplo é inserir uma aspa simples no e-mail do login (|'|) para quebrar a consulta SQL e forçar uma exceção não tratada, expondo os detalhes técnicos no corpo retornado.",
                             Dificuldade = 1,
                             Nome = "Tratamento de Erro",
+                            Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Categoria = "SqlInjection",
+                            Descricao = "Obtenha o nome de todas as tabelas do banco de dados do SafeMugs.",
+                            DescricaoDetalhes = "A consulta SQL que pesquisa pedidos por número concatena o termo digitado diretamente na string da consulta, permitindo injeção de SQL. Como a consulta original retorna seis colunas, um |UNION SELECT| anexado ao payload só é aceito se trouxer exatamente o mesmo número de colunas, e as mensagens de erro da API expõem quando essa contagem está errada, funcionando como um oráculo para descobri-la. O MySQL mantém os metadados do banco na view |information_schema.tables|: selecionar a coluna |TABLE_NAME| com o filtro |WHERE TABLE_SCHEMA = DATABASE()| retorna o nome de todas as tabelas do esquema atual. O payload |' UNION SELECT 1,TABLE_NAME,3,4,CURDATE(),6 FROM information_schema.tables WHERE TABLE_SCHEMA = DATABASE()%23|, por exemplo, lista todas as tabelas na coluna do número do pedido, enquanto o |%23| ('#' encodado para URL) transforma o restante da linha em comentário, neutralizando o filtro que restringiria os resultados ao usuário autenticado.",
+                            Dificuldade = 4,
+                            Nome = "Enumere as tabelas do banco",
                             Resolvido = false
                         });
                 });
@@ -756,6 +766,27 @@ namespace backend.Migrations
                             DesafioId = 10,
                             NrDica = 3,
                             Texto = "Tente quebrar a consulta SQL realizada a partir da tela de Login."
+                        },
+                        new
+                        {
+                            Id = 22,
+                            DesafioId = 11,
+                            NrDica = 1,
+                            Texto = "A consulta que pesquisa pedidos por número concatena o termo pesquisado diretamente na string SQL."
+                        },
+                        new
+                        {
+                            Id = 23,
+                            DesafioId = 11,
+                            NrDica = 2,
+                            Texto = "Um UNION SELECT só é aceito com o mesmo número de colunas da consulta original. As mensagens de erro da API indicam quando essa contagem está errada."
+                        },
+                        new
+                        {
+                            Id = 24,
+                            DesafioId = 11,
+                            NrDica = 3,
+                            Texto = "Os nomes das tabelas ficam na coluna TABLE_NAME da view information_schema.tables. Finalize o payload com # (ou -- seguido de espaço) para comentar o restante da consulta."
                         });
                 });
 

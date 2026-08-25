@@ -194,7 +194,7 @@ public class ApplicationDBContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Nome).IsRequired().HasMaxLength(150);
             entity.Property(e => e.Descricao).IsRequired().HasMaxLength(500);
-            entity.Property(e => e.DescricaoDetalhes).IsRequired().HasMaxLength(800);
+            entity.Property(e => e.DescricaoDetalhes).IsRequired().HasMaxLength(1500);
             entity.Property(e => e.Categoria).IsRequired().HasConversion<string>().HasMaxLength(100);
             entity.Property(e => e.Dificuldade).IsRequired();
             entity.HasIndex(e => e.Nome).IsUnique();
@@ -826,6 +826,16 @@ public class ApplicationDBContext : DbContext
                 Categoria = CategoriaDesafio.SecurityMisconfiguration,
                 Dificuldade = 1,
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 11,
+                Nome = DesafiosEnum.EnumerarTabelasBanco.GetNomeDisplay(),
+                Descricao = "Obtenha o nome de todas as tabelas do banco de dados do SafeMugs.",
+                DescricaoDetalhes = "A consulta SQL que pesquisa pedidos por número concatena o termo digitado diretamente na string da consulta, permitindo injeção de SQL. Como a consulta original retorna seis colunas, um |UNION SELECT| anexado ao payload só é aceito se trouxer exatamente o mesmo número de colunas, e as mensagens de erro da API expõem quando essa contagem está errada, funcionando como um oráculo para descobri-la. O MySQL mantém os metadados do banco na view |information_schema.tables|: selecionar a coluna |TABLE_NAME| com o filtro |WHERE TABLE_SCHEMA = DATABASE()| retorna o nome de todas as tabelas do esquema atual. O payload |' UNION SELECT 1,TABLE_NAME,3,4,CURDATE(),6 FROM information_schema.tables WHERE TABLE_SCHEMA = DATABASE()%23|, por exemplo, lista todas as tabelas na coluna do número do pedido, enquanto o |%23| ('#' encodado para URL) transforma o restante da linha em comentário, neutralizando o filtro que restringiria os resultados ao usuário autenticado.",
+                Categoria = CategoriaDesafio.SqlInjection,
+                Dificuldade = 4,
+                Resolvido = false
             }
         );
 
@@ -984,6 +994,28 @@ public class ApplicationDBContext : DbContext
                 NrDica = 3,
                 Texto = "Tente quebrar a consulta SQL realizada a partir da tela de Login.",
                 DesafioId = 10
+            },
+
+            new DicaDesafio
+            {
+                Id = 22,
+                NrDica = 1,
+                Texto = "A consulta que pesquisa pedidos por número concatena o termo pesquisado diretamente na string SQL.",
+                DesafioId = 11
+            },
+            new DicaDesafio
+            {
+                Id = 23,
+                NrDica = 2,
+                Texto = "Um UNION SELECT só é aceito com o mesmo número de colunas da consulta original. As mensagens de erro da API indicam quando essa contagem está errada.",
+                DesafioId = 11
+            },
+            new DicaDesafio
+            {
+                Id = 24,
+                NrDica = 3,
+                Texto = "Os nomes das tabelas ficam na coluna TABLE_NAME da view information_schema.tables. Finalize o payload com # (ou -- seguido de espaço) para comentar o restante da consulta.",
+                DesafioId = 11
             }
         );
 
