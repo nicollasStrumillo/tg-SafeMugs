@@ -32,5 +32,8 @@ public enum DesafiosEnum
     EncontrarScoreBoard,
 
     [Display(Name = "Tratamento de Erro")]
-    TratamentoErro
+    TratamentoErro,
+
+    [Display(Name = "Enumere as tabelas do banco")]
+    EnumerarTabelasBanco
 }

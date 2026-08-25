@@ -1,0 +1,21 @@
+public async Task<List<PedidoResumoDTO>> ObterPedidoPorNumeroAsync(string numeroPedido, int usuarioId)
+{
+    const string sql = @"
+        SELECT Id, NumeroPedido, ValorTotal, QuantidadeItens, DataPedido, UsuarioId
+        FROM pedidos
+        WHERE NumeroPedido LIKE CONCAT('%', @numeroPedido, '%')
+          AND UsuarioId = @usuarioId";
+    try
+    {
+        return await _context.Database
+            .SqlQueryRaw<PedidoResumoDTO>(sql,
+                // passa os parâmetros da forma correta:
+                new MySqlConnector.MySqlParameter("@numeroPedido", numeroPedido),
+                new MySqlConnector.MySqlParameter("@usuarioId", usuarioId))
+            .ToListAsync();
+    }
+    catch
+    {
+        throw new DBException("Ocorreu um erro ao buscar os pedidos.");
+    }
+}

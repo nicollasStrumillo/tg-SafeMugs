@@ -19,10 +19,11 @@ internal sealed class GlobalExceptionsHandler(RequestDelegate next)
                 NotFoundException => StatusCodes.Status404NotFound,
                 BusinessException or ValidationException => StatusCodes.Status400BadRequest,
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                DBException => StatusCodes.Status500InternalServerError,
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            if (context.Response.StatusCode == StatusCodes.Status500InternalServerError)
+            if (context.Response.StatusCode == StatusCodes.Status500InternalServerError && ex is not DBException)
             {
                 var desafioService = context.RequestServices.GetRequiredService<IDesafioService>();
                 await desafioService.SolveIfAsync(DesafiosEnum.TratamentoErro, () => true);

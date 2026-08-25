@@ -8,6 +8,7 @@ using backend.DTOs.Usuario;
 using backend.Exceptions;
 using backend.Helpers;
 using backend.models;
+using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 
@@ -15,16 +16,24 @@ namespace backend.Services.Implementations;
 
 public class PedidoService : IPedidoService
 {
+    private static readonly HashSet<string> TabelasDoBanco = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "usuarios", "pedidos", "produtos", "carrinhos", "itens_carrinho",
+        "categorias_produto", "comentarios_produto", "avaliacoes", "enderecos",
+        "perfis", "desafios", "dicas_desafio"
+    };
+
     private readonly IPedidoRepository _pedidoRepository;
 
     private readonly ApplicationDBContext _context;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IEnderecoRepository _enderecoRepository;
     private readonly ICarrinhoService _carrinhoService;
+    private readonly IDesafioService _desafioService;
 
     private readonly IAuthenticatedUserService _user;
 
-    public PedidoService(IPedidoRepository pedidoRepository, ICarrinhoService carrinhoService, IUsuarioRepository usuarioRepository, IEnderecoRepository enderecoRepository, ApplicationDBContext context, IAuthenticatedUserService user)
+    public PedidoService(IPedidoRepository pedidoRepository, ICarrinhoService carrinhoService, IUsuarioRepository usuarioRepository, IEnderecoRepository enderecoRepository, ApplicationDBContext context, IAuthenticatedUserService user, IDesafioService desafioService)
     {
         _pedidoRepository = pedidoRepository;
         _usuarioRepository = usuarioRepository;
@@ -32,6 +41,7 @@ public class PedidoService : IPedidoService
         _carrinhoService = carrinhoService;
         _user = user;
         _context = context;
+        _desafioService = desafioService;
     }
 
     private PedidoDTO MapToDTO(Pedido pedido)
@@ -183,7 +193,13 @@ public class PedidoService : IPedidoService
         if (string.IsNullOrWhiteSpace(numeroPedido))
             throw new ValidationException("Informe o número do pedido.");
 
-        return await _pedidoRepository.ObterPedidoPorNumeroAsync(numeroPedido, _user.UsuarioId);
+        var pedidos = await _pedidoRepository.ObterPedidoPorNumeroAsync(numeroPedido, _user.UsuarioId);
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.EnumerarTabelasBanco, () =>
+            TabelasDoBanco.All(tabela => pedidos.Any(pedido =>
+                string.Equals(pedido.NumeroPedido, tabela, StringComparison.OrdinalIgnoreCase))));
+
+        return pedidos;
     }
 
     public async Task CancelarPedidoAsync(int pedidoId)

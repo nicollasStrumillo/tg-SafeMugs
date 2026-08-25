@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.DTOs.Pedido;
+using backend.Exceptions;
 using backend.models;
 using backend.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -55,18 +56,16 @@ public class PedidoRepository : IPedidoRepository
                     FROM pedidos
                     WHERE NumeroPedido LIKE '%{numeroPedido}%' AND UsuarioId = {usuarioId}";
 
-        try
-        {
-            return await _context.Database
-                .SqlQueryRaw<PedidoResumoDTO>(sql)
-                .ToListAsync();
-        }
-        catch (MySqlConnector.MySqlException ex)
-        {
-            throw new InvalidOperationException(
-                $"MYSQL_ERROR: {ex.Message}, on query: {sql}", ex);
-        }
+    try{
+        return await _context.Database
+            .SqlQueryRaw<PedidoResumoDTO>(sql)
+            .ToListAsync();
     }
+    catch
+    {
+        throw new DBException("Ocorreu um erro ao buscar os pedidos.");
+    }
+}
 
     public async Task CancelarPedidoAsync(Pedido pedido)
     {
