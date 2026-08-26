@@ -666,6 +666,16 @@ namespace backend.Migrations
                             Dificuldade = 3,
                             Nome = "Produto inválido",
                             Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Categoria = "IDOR",
+                            Descricao = "Visualize o carrinho de compras de outro usuário.",
+                            DescricaoDetalhes = "A rota que busca o carrinho de compras recebe o identificador do usuário diretamente pela URL e o utiliza para localizar o carrinho, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, o servidor devolve o carrinho completo do alvo: itens, quantidades e preços — acompanhados dos dados pessoais do dono, como nome, e-mail, telefone e endereço.\nO servidor confia que o parâmetro recebido na URL identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de retornar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
+                            Dificuldade = 2,
+                            Nome = "Visualizar carrinho de outro usuário",
+                            Resolvido = false
                         });
                 });
 
@@ -891,6 +901,20 @@ namespace backend.Migrations
                             DesafioId = 12,
                             NrDica = 4,
                             Texto = "Intercepte a requisição que adiciona um produto ao carrinho e troque o produtoId pelo do produto indisponível."
+                        },
+                        new
+                        {
+                            Id = 29,
+                            DesafioId = 13,
+                            NrDica = 1,
+                            Texto = "A rota que busca o carrinho recebe o identificador do usuário diretamente pela URL."
+                        },
+                        new
+                        {
+                            Id = 30,
+                            DesafioId = 13,
+                            NrDica = 2,
+                            Texto = "Troque o identificador da requisição pelo de outro usuário e observe a resposta."
                         });
                 });
 

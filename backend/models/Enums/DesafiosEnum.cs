@@ -38,5 +38,8 @@ public enum DesafiosEnum
     EnumerarTabelasBanco,
 
     [Display(Name = "Produto inválido")]
-    AdicionarProdutoIndisponivel
+    AdicionarProdutoIndisponivel,
+
+    [Display(Name = "Visualizar carrinho de outro usuário")]
+    VisualizarCarrinhoAlheio
 }

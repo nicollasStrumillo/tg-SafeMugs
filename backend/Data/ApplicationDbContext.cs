@@ -993,6 +993,16 @@ public class ApplicationDBContext : DbContext
                 Categoria = CategoriaDesafio.ImproperInputValidation,
                 Dificuldade = 3,
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 13,
+                Nome = DesafiosEnum.VisualizarCarrinhoAlheio.GetNomeDisplay(),
+                Descricao = "Visualize o carrinho de compras de outro usuário.",
+                DescricaoDetalhes = "A rota que busca o carrinho de compras recebe o identificador do usuário diretamente pela URL e o utiliza para localizar o carrinho, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, o servidor devolve o carrinho completo do alvo: itens, quantidades e preços — acompanhados dos dados pessoais do dono, como nome, e-mail, telefone e endereço.\nO servidor confia que o parâmetro recebido na URL identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de retornar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
+                Categoria = CategoriaDesafio.IDOR,
+                Dificuldade = 2,
+                Resolvido = false
             }
         );
 
@@ -1202,6 +1212,21 @@ public class ApplicationDBContext : DbContext
                 NrDica = 4,
                 Texto = "Intercepte a requisição que adiciona um produto ao carrinho e troque o produtoId pelo do produto indisponível.",
                 DesafioId = 12
+            },
+
+            new DicaDesafio
+            {
+                Id = 29,
+                NrDica = 1,
+                Texto = "A rota que busca o carrinho recebe o identificador do usuário diretamente pela URL.",
+                DesafioId = 13
+            },
+            new DicaDesafio
+            {
+                Id = 30,
+                NrDica = 2,
+                Texto = "Troque o identificador da requisição pelo de outro usuário e observe a resposta.",
+                DesafioId = 13
             }
         );
 
