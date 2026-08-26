@@ -95,6 +95,12 @@ public enum CategoriaDesafio
     ServerSideRequestForgery,
 
     [Display(
+        Name = "Path Traversal",
+        Description = "Ocorre quando a aplicação utiliza uma entrada do usuário para montar um caminho de arquivo sem sanitizar separadores de diretório e segmentos como .., permitindo que o atacante acesse ou sobrescreva arquivos fora do diretório pretendido."
+    )]
+    PathTraversal,
+
+    [Display(
         Name = "Outros",
         Description = "Desafios não relacionados a uma vulnerabilidade específica."
     )]

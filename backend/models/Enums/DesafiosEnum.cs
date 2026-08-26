@@ -50,5 +50,8 @@ public enum DesafiosEnum
     BurlarAllowlistRedirect,
     
     [Display(Name = "Endpoint interno")]
-    SsrfUploadFotoPerfil
+    SsrfUploadFotoPerfil,
+    
+    [Display(Name = "Alterar a imagem de um produto")]
+    PathTraversalFotoPerfil
 }

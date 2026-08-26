@@ -706,6 +706,16 @@ namespace backend.Migrations
                             Dificuldade = 3,
                             Nome = "Endpoint interno",
                             Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Categoria = "PathTraversal",
+                            Descricao = "Sobrescreva a imagem de um dos produtos exibidos no catálogo da loja.",
+                            DescricaoDetalhes = "O catálogo exibe imagens guardadas na pasta |/imagens/produto|, cada uma referenciada por um produto do banco. Um endpoint que recebe o upload de um arquivo monta o caminho de destino concatenando o nome do arquivo informado pelo cliente diretamente em Path.Combine, sem sanitizar separadores nem segmentos |..|. Como |..| permite navegar para cima na árvore de diretórios, basta interceptar o upload e trocar o metadado filename por |../../produto/mug_behappy.jpg| (ou outra imagem real da pasta) para que o arquivo enviado sobrescreva a imagem daquele produto.",
+                            Dificuldade = 4,
+                            Nome = "Alterar a imagem de um produto",
+                            Resolvido = false
                         });
                 });
 
@@ -994,6 +1004,20 @@ namespace backend.Migrations
                             DesafioId = 16,
                             NrDica = 2,
                             Texto = "Na tela de perfil, o campo de upload de foto por URL faz o próprio servidor baixar a imagem informada, sem validar o destino."
+                        },
+                        new
+                        {
+                            Id = 38,
+                            DesafioId = 17,
+                            NrDica = 1,
+                            Texto = "Procure uma funcionalidade do sistema que te permite fazer uploads de imagens."
+                        },
+                        new
+                        {
+                            Id = 39,
+                            DesafioId = 17,
+                            NrDica = 2,
+                            Texto = "Na tela de perfil, o upload de foto de perfil monta o caminho de destino a partir do nome do arquivo enviado pelo cliente, sem sanitizar."
                         });
                 });
 
