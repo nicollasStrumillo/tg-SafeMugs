@@ -53,5 +53,8 @@ public enum DesafiosEnum
     SsrfUploadFotoPerfil,
     
     [Display(Name = "Alterar a imagem de um produto")]
-    PathTraversalFotoPerfil
+    PathTraversalFotoPerfil,
+    
+    [Display(Name = "Reflected XSS")]
+    ReflectedXss    
 }

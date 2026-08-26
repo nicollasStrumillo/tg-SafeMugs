@@ -1043,6 +1043,16 @@ public class ApplicationDBContext : DbContext
                 Categoria = CategoriaDesafio.PathTraversal,
                 Dificuldade = 4,
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 18,
+                Nome = DesafiosEnum.ReflectedXss.GetNomeDisplay(),
+                Descricao = "Faça a API refletir, no corpo de uma resposta, o payload |<iframe src=\"javascript:alert(`XSS`)\">| de uma forma que ele seja executado no navegador do cliente.",
+                DescricaoDetalhes = "Ao buscar um produto pelo nome, a API recebe o termo pesquisado como parâmetro da requisição. Quando o produto não é encontrado, a resposta de erro devolve esse mesmo termo de volta, sem tratamento, dentro da mensagem. No cliente, esse conteúdo refletido é inserido diretamente na página sem sanitização, de modo que qualquer HTML presente no termo é interpretado pelo navegador. O payload |?nome=<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, faz o servidor devolver o |<iframe>| na resposta, que então é renderizado e executado. Por se tratar de um conteúdo que parte do servidor e volta no corpo da resposta, trata-se de um Reflected XSS — diferente do DOM XSS, em que o payload nunca sai do navegador.",
+                Categoria = CategoriaDesafio.ReflectedXSS,
+                Dificuldade = 3,
+                Resolvido = false
             }
         );
 
@@ -1332,6 +1342,13 @@ public class ApplicationDBContext : DbContext
                 NrDica = 2,
                 Texto = "Na tela de perfil, o upload de foto de perfil monta o caminho de destino a partir do nome do arquivo enviado pelo cliente, sem sanitizar.",
                 DesafioId = 17
+            },
+            new DicaDesafio
+            {
+                Id = 40,
+                NrDica = 1,
+                Texto = "Procure uma funcionalidade de busca que devolva, na resposta, algo que você enviou na requisição.",
+                DesafioId = 18
             }
         );
 

@@ -716,6 +716,16 @@ namespace backend.Migrations
                             Dificuldade = 4,
                             Nome = "Alterar a imagem de um produto",
                             Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Categoria = "ReflectedXSS",
+                            Descricao = "Faça a API refletir, no corpo de uma resposta, o payload |<iframe src=\"javascript:alert(`XSS`)\">| de uma forma que ele seja executado no navegador do cliente.",
+                            DescricaoDetalhes = "Ao buscar um produto pelo nome, a API recebe o termo pesquisado como parâmetro da requisição. Quando o produto não é encontrado, a resposta de erro devolve esse mesmo termo de volta, sem tratamento, dentro da mensagem. No cliente, esse conteúdo refletido é inserido diretamente na página sem sanitização, de modo que qualquer HTML presente no termo é interpretado pelo navegador. O payload |?nome=<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, faz o servidor devolver o |<iframe>| na resposta, que então é renderizado e executado. Por se tratar de um conteúdo que parte do servidor e volta no corpo da resposta, trata-se de um Reflected XSS — diferente do DOM XSS, em que o payload nunca sai do navegador.",
+                            Dificuldade = 3,
+                            Nome = "Reflected XSS",
+                            Resolvido = false
                         });
                 });
 
@@ -1018,6 +1028,13 @@ namespace backend.Migrations
                             DesafioId = 17,
                             NrDica = 2,
                             Texto = "Na tela de perfil, o upload de foto de perfil monta o caminho de destino a partir do nome do arquivo enviado pelo cliente, sem sanitizar."
+                        },
+                        new
+                        {
+                            Id = 40,
+                            DesafioId = 18,
+                            NrDica = 1,
+                            Texto = "Procure uma funcionalidade de busca que devolva, na resposta, algo que você enviou na requisição."
                         });
                 });
 
