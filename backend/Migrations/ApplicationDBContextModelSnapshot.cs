@@ -686,6 +686,16 @@ namespace backend.Migrations
                             Dificuldade = 2,
                             Nome = "Modificar o carrinho de outro usuário",
                             Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Categoria = "OpenRedirect",
+                            Descricao = "Faça a API redirecionar para um domínio que não seja o GitHub, burlando a allowlist de redirect.",
+                            DescricaoDetalhes = "O botão do GitHub na navegação lateral não abre o link diretamente: ele chama o endpoint |/api/redirect?url=...|, que deve garantir que o destino seja um host confiável antes de redirecionar. Para isso, o backend mantém uma allowlist com o host permitido e valida a URL recebida checando se ela contém o host como substring — ou seja, basta que a string |https://github.com| apareça em qualquer posição da URL para que ela seja considerada segura. Como essa checagem ignora a estrutura real da URL, é possível embutir o host permitido em posições que não correspondem ao destino efetivo. Em uma URL, o trecho antes do |@| é tratado como informação de usuário e o host vem depois dele: o payload |https://github.com@evil.com| passa pela allowlist (contém |https://github.com|), mas o navegador direciona ao host |evil.com|. Outro bypass análogo usa a query string — |https://evil.com?https://github.com| — em que o host permitido aparece após o |?|, como parte dos parâmetros, sem identificar o host real. Um redirect confiável deve analisar a URL como uma estrutura (parseando host, esquema e caminho) e comparar o host efetivo contra a allowlist, nunca realizar um simples casamento de substring.",
+                            Dificuldade = 2,
+                            Nome = "Burlar a allowlist de redirect",
+                            Resolvido = false
                         });
                 });
 
@@ -939,6 +949,27 @@ namespace backend.Migrations
                             DesafioId = 14,
                             NrDica = 2,
                             Texto = "Troque o identificador pelo de outro usuário e observe o carrinho dele mudar."
+                        },
+                        new
+                        {
+                            Id = 33,
+                            DesafioId = 15,
+                            NrDica = 1,
+                            Texto = "A allowlist confere apenas se a URL contém o host permitido como substring, sem examinar o destino real."
+                        },
+                        new
+                        {
+                            Id = 34,
+                            DesafioId = 15,
+                            NrDica = 2,
+                            Texto = "Pense em como embutir o host permitido dentro de uma URL que aponta para outro domínio."
+                        },
+                        new
+                        {
+                            Id = 35,
+                            DesafioId = 15,
+                            NrDica = 3,
+                            Texto = "Em uma URL, o segmento antes do @ é tratado como informação de usuário e o host vem depois."
                         });
                 });
 

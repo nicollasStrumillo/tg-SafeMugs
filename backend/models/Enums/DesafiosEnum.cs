@@ -45,4 +45,7 @@ public enum DesafiosEnum
 
     [Display(Name = "Modificar o carrinho de outro usuário")]
     ModificarCarrinhoAlheio,
+
+    [Display(Name = "Burlar a allowlist de redirect")]
+    BurlarAllowlistRedirect,
 }

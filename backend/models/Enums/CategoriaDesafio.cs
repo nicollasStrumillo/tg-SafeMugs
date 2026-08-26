@@ -83,6 +83,12 @@ public enum CategoriaDesafio
     ParameterTampering,
     
     [Display(
+        Name = "Open Redirect",
+        Description = "Ocorre quando a aplicação redireciona o usuário para uma URL controlada pelo cliente sem validar adequadamente o destino. Um atacante pode explorar essa falha para construir links aparentemente legítimos que levam vítimas a sites maliciosos, facilitando ataques de phishing, roubo de credenciais ou evasão de filtros baseados em allowlist."
+    )]
+    OpenRedirect,
+
+    [Display(
         Name = "Outros",
         Description = "Desafios não relacionados a uma vulnerabilidade específica."
     )]
