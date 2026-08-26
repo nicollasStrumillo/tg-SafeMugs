@@ -8,6 +8,8 @@ using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using System.Net.Mail;
+using backend.SsrfConfiguration;
+using Microsoft.Extensions.Options;
 
 namespace backend.Services.Implementations;
 
@@ -20,11 +22,12 @@ public class UsuarioService : IUsuarioService
 
     private readonly IAuthenticatedUserService _user;
     private readonly IJwtService _jwtService;
+    private readonly SsrfSettings _ssrf;
 
     private readonly ApplicationDBContext _context;
     private readonly IWebHostEnvironment _env;
     private readonly IHttpClientFactory _httpClientFactory;
-
+    
     public UsuarioService(
         IUsuarioRepository usuarioRepository,
         IEnderecoRepository enderecoRepository,
@@ -33,7 +36,8 @@ public class UsuarioService : IUsuarioService
         IJwtService jwtService,
         ApplicationDBContext context,
         IWebHostEnvironment env,
-        IHttpClientFactory httpClientFactory)
+        IHttpClientFactory httpClientFactory,
+        IOptions<SsrfSettings> ssrfSettings)
     {
         _usuarioRepository = usuarioRepository;
         _enderecoRepository = enderecoRepository;
@@ -43,6 +47,7 @@ public class UsuarioService : IUsuarioService
         _context = context;
         _env = env;
         _httpClientFactory = httpClientFactory;
+        _ssrf = ssrfSettings.Value;
     }
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
@@ -316,14 +321,20 @@ public class UsuarioService : IUsuarioService
         if (request == null || string.IsNullOrWhiteSpace(request.Url))
             throw new ValidationException("URL não informada.");
 
-        if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uriResult) || (uriResult.Scheme != Uri.UriSchemeHttp && uriResult.Scheme != Uri.UriSchemeHttps))
+        if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uri) || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
             throw new ValidationException("URL inválida.");
         
         var usuario = await _usuarioRepository.BuscarPorIdAsync(_user.UsuarioId)
             ?? throw new NotFoundException("Usuário não encontrado.");
 
         var client = _httpClientFactory.CreateClient("fotoPerfil");
-        using var response = await client.GetAsync(request.Url);
+
+        // Verirfica se o desafio de SSRF foi solucionado
+        using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
+        if (EhTargetSsrf(uri))
+            req.Headers.Add(_ssrf.SecretHeaderName, _ssrf.SecretHeaderValue);
+
+        using var response = await client.SendAsync(req);
 
         if (!response.IsSuccessStatusCode)
             throw new BusinessException($"Falha ao baixar a imagem: {(int)response.StatusCode} {response.StatusCode}");
@@ -349,8 +360,6 @@ public class UsuarioService : IUsuarioService
 
         await _usuarioRepository.AtualizarAsync(usuario);
 
-        // TODO (desafio SSRF): chamar _desafioService.SolveIfAsync(...) aqui 
-
         return _jwtService.GenerateToken(new LoginResponse
         {
             UsuarioId = usuario.Id,
@@ -359,6 +368,14 @@ public class UsuarioService : IUsuarioService
             UrlImagemPerfil = usuario.UrlImagemPerfil,
             Perfil = usuario.Perfil.Nome
         });
+    }
+
+    private bool EhTargetSsrf(Uri uri)
+    {
+        return string.Equals(uri.Scheme, _ssrf.TargetScheme, StringComparison.OrdinalIgnoreCase)
+            && _ssrf.TargetHost.Contains(uri.Host.ToLower())
+            && uri.Port == _ssrf.TargetPort
+            && string.Equals(uri.AbsolutePath.TrimEnd('/'), _ssrf.TargetPath.TrimEnd('/'), StringComparison.OrdinalIgnoreCase);
     }
 
     public async Task MudarSenhaAsync(MudarSenhaRequest request)

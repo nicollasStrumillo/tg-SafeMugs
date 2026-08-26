@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using backend.Authentication;
 using backend.Authentication.Implementations;
 using backend.Authentication.Interfaces;
+using backend.SsrfConfiguration;
 using backend.Data;
 using backend.Exceptions;
 using backend.Hubs;
@@ -53,6 +54,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 // JWT
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName);
 builder.Services.Configure<JwtSettings>(jwtSettings);
+//Configuracoes pro desafio de SSRF
+builder.Services.Configure<SsrfSettings>(builder.Configuration.GetSection(SsrfSettings.SectionName));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -140,7 +143,6 @@ if (app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 app.UseMiddleware<GlobalExceptionsHandler>();
-app.UseHttpsRedirection();
 app.UseCors("Frontend");
 
 app.UseAuthentication();

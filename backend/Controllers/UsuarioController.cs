@@ -2,6 +2,9 @@ using backend.DTOs.Usuario;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using backend.SsrfConfiguration;
+using backend.models.Enums;
+using Microsoft.Extensions.Options;
 
 namespace backend.Controllers;
 
@@ -11,9 +14,15 @@ public class UsuarioController : ControllerBase
 {
     private readonly IUsuarioService _usuarioService;
 
-    public UsuarioController(IUsuarioService authService)
+    private readonly IDesafioService _desafioService;
+    private readonly SsrfSettings _ssrf;
+
+
+    public UsuarioController(IUsuarioService authService, IDesafioService desafioService, IOptions<SsrfSettings> ssrf)
     {
         _usuarioService = authService;
+        _desafioService = desafioService;
+        _ssrf = ssrf.Value;
     }
 
     [HttpPost("cadastro")]
@@ -80,5 +89,19 @@ public class UsuarioController : ControllerBase
     {
         await _usuarioService.DesativarUsuarioAsync(usuarioId);
         return Ok();
+    }
+
+    // Endpoint para resolver o desafio de SSRF
+    [HttpGet("requisicao-interna")]
+    public async Task<IActionResult> RequisicaoDesafioSsrf()
+    {
+        if (Request.Headers.TryGetValue(_ssrf.SecretHeaderName, out var valor) 
+        && string.Equals(valor.ToString(), _ssrf.SecretHeaderValue,StringComparison.OrdinalIgnoreCase ))
+        {
+            await _desafioService.SolveIfAsync(DesafiosEnum.SsrfUploadFotoPerfil, () => true);
+            return Ok(new {mensagem = "Desafio interna atingida!"});
+        }
+
+        return Unauthorized(new {detail = "Acesso não autorizado."});
     }
 }
