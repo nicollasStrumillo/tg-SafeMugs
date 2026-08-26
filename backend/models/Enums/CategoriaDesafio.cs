@@ -89,6 +89,12 @@ public enum CategoriaDesafio
     OpenRedirect,
 
     [Display(
+        Name = "Server-Side Request Forgery (SSRF)",
+        Description = "Ocorre quando a aplicação faz uma requisição HTTP para uma URL fornecida pelo usuário sem validar adequadamente o destino. Um atacante pode induzir o servidor a alcançar serviços internos ou recursos de rede inacessíveis externamente, executando requisições em nome da própria aplicação."
+    )]
+    ServerSideRequestForgery,
+
+    [Display(
         Name = "Outros",
         Description = "Desafios não relacionados a uma vulnerabilidade específica."
     )]

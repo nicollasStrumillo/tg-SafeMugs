@@ -696,6 +696,16 @@ namespace backend.Migrations
                             Dificuldade = 2,
                             Nome = "Burlar a allowlist de redirect",
                             Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Categoria = "ServerSideRequestForgery",
+                            Descricao = "Alcance o endpoint interno |/api/usuario/requisicao-interna|, que só responde a requisições originadas pelo próprio servidor.",
+                            DescricaoDetalhes = "Existe um endpoint interno em |/api/usuario/requisicao-interna| que valida um header secreto adicionado apenas quando a requisição é disparada pelo próprio backend — por isso não pode ser alcançado diretamente pelo navegador ou pelo Burp. O caminho é induzir o servidor a emitir uma requisição HTTP para uma URL controlada por você, apontando-a para o loopback. O payload esperado é |http://127.0.0.1:8080/api/usuario/requisicao-interna|: o servidor faz a requisição em seu nome, alcança o endpoint interno e o desafio é marcado.",
+                            Dificuldade = 3,
+                            Nome = "Endpoint interno",
+                            Resolvido = false
                         });
                 });
 
@@ -970,6 +980,20 @@ namespace backend.Migrations
                             DesafioId = 15,
                             NrDica = 3,
                             Texto = "Em uma URL, o segmento antes do @ é tratado como informação de usuário e o host vem depois."
+                        },
+                        new
+                        {
+                            Id = 36,
+                            DesafioId = 16,
+                            NrDica = 1,
+                            Texto = "Procure um local da aplicação onde é possível induzir o servidor a fazer uma requisição a uma url escolhida por você."
+                        },
+                        new
+                        {
+                            Id = 37,
+                            DesafioId = 16,
+                            NrDica = 2,
+                            Texto = "Na tela de perfil, o campo de upload de foto por URL faz o próprio servidor baixar a imagem informada, sem validar o destino."
                         });
                 });
 

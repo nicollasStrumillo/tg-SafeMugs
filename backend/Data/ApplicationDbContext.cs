@@ -1023,6 +1023,16 @@ public class ApplicationDBContext : DbContext
                 Categoria = CategoriaDesafio.OpenRedirect,
                 Dificuldade = 2,
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 16,
+                Nome = DesafiosEnum.SsrfUploadFotoPerfil.GetNomeDisplay(),
+                Descricao = "Alcance o endpoint interno |/api/usuario/requisicao-interna|, que só responde a requisições originadas pelo próprio servidor.",
+                DescricaoDetalhes = "Existe um endpoint interno em |/api/usuario/requisicao-interna| que valida um header secreto adicionado apenas quando a requisição é disparada pelo próprio backend — por isso não pode ser alcançado diretamente pelo navegador ou pelo Burp. O caminho é induzir o servidor a emitir uma requisição HTTP para uma URL controlada por você, apontando-a para o loopback. O payload esperado é |http://127.0.0.1:8080/api/usuario/requisicao-interna|: o servidor faz a requisição em seu nome, alcança o endpoint interno e o desafio é marcado.",
+                Categoria = CategoriaDesafio.ServerSideRequestForgery,
+                Dificuldade = 3,
+                Resolvido = false
             }
         );
 
@@ -1284,6 +1294,20 @@ public class ApplicationDBContext : DbContext
                 NrDica = 3,
                 Texto = "Em uma URL, o segmento antes do @ é tratado como informação de usuário e o host vem depois.",
                 DesafioId = 15
+            },
+            new DicaDesafio
+            {
+                Id = 36,
+                NrDica = 1,
+                Texto = "Procure um local da aplicação onde é possível induzir o servidor a fazer uma requisição a uma url escolhida por você.",
+                DesafioId = 16
+            },
+            new DicaDesafio
+            {
+                Id = 37,
+                NrDica = 2,
+                Texto = "Na tela de perfil, o campo de upload de foto por URL faz o próprio servidor baixar a imagem informada, sem validar o destino.",
+                DesafioId = 16
             }
         );
 

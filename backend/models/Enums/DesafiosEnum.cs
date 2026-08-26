@@ -48,4 +48,7 @@ public enum DesafiosEnum
 
     [Display(Name = "Burlar a allowlist de redirect")]
     BurlarAllowlistRedirect,
+    
+    [Display(Name = "Endpoint interno")]
+    SsrfUploadFotoPerfil
 }
