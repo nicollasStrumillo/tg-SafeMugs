@@ -1,0 +1,13 @@
+[HttpGet]
+public IActionResult Redirecionar([FromQuery] string url)
+{
+    if (string.IsNullOrWhiteSpace(url))
+        return BadRequest("URL não informada.");
+
+    bool isAllowed = AllowedHosts.Any(host => url.Contains(host));  // correta
+
+    if (!isAllowed)  // neutra
+        return BadRequest("URL não permitida.");
+
+    return Redirect(url);  // neutra
+}

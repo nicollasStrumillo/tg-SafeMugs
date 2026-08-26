@@ -46,9 +46,7 @@
 
 		<a
 			class="nav-item nav-item--github"
-			[href]="githubUrl"
-			target="_blank"
-			rel="noopener noreferrer"
+			(click)="openGitHub()"
 			matTooltip="GitHub"
 			[matTooltipDisabled]="expanded()"
 		>

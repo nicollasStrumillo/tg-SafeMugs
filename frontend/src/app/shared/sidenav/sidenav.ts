@@ -56,4 +56,8 @@ export class SidenavComponent implements OnInit {
 		const img = event.target as HTMLImageElement;
 		img.src = '/imagens/perfil/generic_profile.jpg';
 	}
+
+	protected openGitHub(): void {
+		window.open(`/api/redirect?url=${this.githubUrl}`, '_blank', 'noopener,noreferrer');
+	}
 }

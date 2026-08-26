@@ -1,0 +1,17 @@
+private static readonly HashSet<string> AllowedHosts =
+    new(StringComparer.OrdinalIgnoreCase) { "github.com" };
+
+[HttpGet]
+public IActionResult Redirecionar([FromQuery] string url)
+{
+    if (string.IsNullOrWhiteSpace(url))
+        return BadRequest("URL não informada.");
+
+    if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+        return BadRequest("URL inválida.");
+
+    if (!AllowedHosts.Contains(uri.Host))
+        return BadRequest("Host não permitido.");
+
+    return Redirect(uri.ToString());
+}
