@@ -1,0 +1,39 @@
+public async Task<AuthTokenResponse?> UploadFotoPerfilAsync(IFormFile foto)
+{
+    if (foto == null || foto.Length == 0)
+        throw new ValidationException("Nenhum arquivo enviado.");
+
+    if (foto.ContentType != "image/jpeg")
+        throw new ValidationException("Apenas imagens JPEG são permitidas.");
+
+    var usuario = await _usuarioRepository.BuscarPorIdAsync(_user.UsuarioId)
+        ?? throw new NotFoundException("Usuário não encontrado.");
+
+    string pastaUsuario = "Usuario_" + usuario.Id.ToString();
+    var pastaDestino = Path.Combine(_env.WebRootPath!, "imagens", "perfil", pastaUsuario);
+
+    Directory.CreateDirectory(pastaDestino);
+
+    // Obtem apenas o nome final do arquivo. 
+    var nomeArquivoSeguro = Path.GetFileName(foto.FileName);
+    var caminhoCompleto = Path.Combine(pastaDestino, nomeArquivoSeguro);
+
+    await using var stream = new FileStream(caminhoCompleto, FileMode.Create);
+    await foto.CopyToAsync(stream);
+
+    var urlImagem = $"/imagens/perfil/{pastaUsuario}/{nomeArquivoSeguro}";
+
+    usuario.UrlImagemPerfil = urlImagem;
+    usuario.DtAtualizacao = DateTime.UtcNow;
+
+    await _usuarioRepository.AtualizarAsync(usuario);
+
+    return _jwtService.GenerateToken(new LoginResponse
+    {
+        UsuarioId = usuario.Id,
+        NomeCompleto = usuario.NomeCompleto,
+        Email = usuario.Email,
+        UrlImagemPerfil = usuario.UrlImagemPerfil,
+        Perfil = usuario.Perfil.Nome
+    });
+}

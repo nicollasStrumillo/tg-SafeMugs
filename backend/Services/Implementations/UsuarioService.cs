@@ -290,6 +290,9 @@ public class UsuarioService : IUsuarioService
         // VULNERAVEL A PATH TRAVERSAL
         var caminhoCompleto = Path.Combine(pastaDestino, foto.FileName);
 
+        // RASTREAR PATH TRAVERSAL: Identifica se o upload vai sobreescrever um arquivo 
+        bool houveSobrescrita = File.Exists(caminhoCompleto); 
+
         await using var stream = new FileStream(caminhoCompleto, FileMode.Create);
         await foto.CopyToAsync(stream);
 
@@ -299,12 +302,16 @@ public class UsuarioService : IUsuarioService
             .Replace('\\', '/');
         var urlImagem = "/" + caminhoRelativo;
 
+        // RASTREAR PATH TRAVERSAL: Identifica se o upload final foi na pasta /produto
+        var produtoDir = Path.GetFullPath(Path.Combine(_env.WebRootPath!, "imagens", "produto"));
+        bool naPastaProduto = caminhoNormalizado.StartsWith(produtoDir + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
+
         usuario.UrlImagemPerfil = urlImagem;
         usuario.DtAtualizacao = DateTime.UtcNow;
 
         await _usuarioRepository.AtualizarAsync(usuario);
 
-        // TODO (desafio Path Traversal): chamar _desafioService.SolveIfAsync(...) aqui
+        await _desafioService.SolveIfAsync(DesafiosEnum.PathTraversalFotoPerfil, () => houveSobrescrita && naPastaProduto);
 
         return _jwtService.GenerateToken(new LoginResponse
         {
