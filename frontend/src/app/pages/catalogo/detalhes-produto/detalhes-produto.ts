@@ -16,12 +16,12 @@ import { ComentarioProdutoDto, ComentarioRequest, ProdutoCardViewModel } from '.
 import { ProdutoService } from '../../../services/produto/produto.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
 import { CarrinhoService } from '../../../services/carrinho/carrinho.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { HttpErrorResponse } from '@angular/common/http';
 
 // Parte da vulnerabilidade de Stored XSS
 import {SignalRService} from '../../../services/signalR/signalr.service';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
-import { MatTooltip } from '@angular/material/tooltip';
-import { HttpErrorResponse } from '@angular/common/http';
 
 const STOREDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
 
@@ -111,7 +111,7 @@ export class DetalhesProduto implements OnInit {
     private async VerificarPayloadXSS(comentarios: ComentarioProdutoViewModel[]): Promise<void> {
         for (const comentario of comentarios) {
             if (comentario.comentario === STOREDXSS_PAYLOAD) {
-                await this.signalRService.SolveDesafioStoredXss(STOREDXSS_PAYLOAD);
+                await this.signalRService.SolveDesafioXss("Stored XSS", STOREDXSS_PAYLOAD);
                 break;
             }
         }

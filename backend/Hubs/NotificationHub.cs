@@ -28,13 +28,14 @@ public sealed class NotificationHub : Hub
         await _notificationService.AcknowledgeNotification(desafioId);
     }
 
-    public async Task SolveDesafioDomXss(string payload)
-    {
-        await _desafioService.SolveIfAsync(DesafiosEnum.DomXss, () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
-    }
+    private static readonly HashSet<DesafiosEnum> DesafiosXss =
+    [DesafiosEnum.DomXss, DesafiosEnum.StoredXss, DesafiosEnum.ReflectedXss];
+    private const string PayloadXssEsperado = "<iframe src=\"javascript:alert(`XSS`)\">";
 
-    public async Task SolveDesafioStoredXss(string payload)
+    public async Task SolveDesafioXss(string nomeDesafio, string payloadXss)
     {
-        await _desafioService.SolveIfAsync(DesafiosEnum.StoredXss, () => payload == "<iframe src=\"javascript:alert(`XSS`)\">");
+        if (!EnumExtensions.TryGetEnumByNomeDisplay<DesafiosEnum>(nomeDesafio, out var enumDesafio)) return;
+        if (!DesafiosXss.Contains(enumDesafio)) return;   
+        await _desafioService.SolveIfAsync(enumDesafio, () => payloadXss == PayloadXssEsperado);
     }
 }

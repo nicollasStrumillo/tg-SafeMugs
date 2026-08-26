@@ -96,7 +96,7 @@ export class Catalogo implements OnInit {
   async buscar() {
     // Parte da vulnerabilidade de DOM XSS
     if (this.termoBusca().trim() === DOMXSS_PAYLOAD) {
-      await this.signalRService.SolveDesafioDomXss(DOMXSS_PAYLOAD);
+      await this.signalRService.SolveDesafioXss("DOM XSS", DOMXSS_PAYLOAD);
     }
 
     const termo = this.normalizarTexto(this.termoBusca());
