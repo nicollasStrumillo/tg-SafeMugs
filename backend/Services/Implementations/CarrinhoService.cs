@@ -100,6 +100,7 @@ public class CarrinhoService : ICarrinhoService
         var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
         await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade);
 
+        await _desafioService.SolveIfAsync(DesafiosEnum.ModificarCarrinhoAlheio, () => _user.UsuarioId != usuarioId);
         await _desafioService.SolveIfAsync(DesafiosEnum.AdicionarProdutoIndisponivel, () => !produto.Ativo || produto.Estoque <= 0);
     }
 
@@ -107,6 +108,8 @@ public class CarrinhoService : ICarrinhoService
     {
         var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
         await _carrinhoRepository.RemoverUnidadeProdutoDoCarrinhoAsync(carrinho, produtoId, quantidade);
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.ModificarCarrinhoAlheio, () => _user.UsuarioId != usuarioId);
     }
 
     public async Task<Carrinho> FinalizarEObterCarrinhoAsync(int usuarioId)

@@ -1,0 +1,24 @@
+public async Task AdicionarUnidadeProdutoAoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    var produto = await _produtoService.ObterProdutoPorIdAsync(produtoId)
+        ?? throw new NotFoundException($"Produto com ID {produtoId} não encontrado.");
+
+    if (usuarioId != _user.UsuarioId)
+    {
+        throw new UnauthorizedAccessException("Você não tem permissão para adicionar produtos ao carrinho de outro usuário.");
+    }
+
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+    await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade);
+}
+
+public async Task RemoverUnidadeProdutoDoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    if (usuarioId != _user.UsuarioId)
+    {
+        throw new UnauthorizedAccessException("Você não tem permissão para remover produtos do carrinho de outro usuário.");
+    }
+
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+    await _carrinhoRepository.RemoverUnidadeProdutoDoCarrinhoAsync(carrinho, produtoId, quantidade);
+}

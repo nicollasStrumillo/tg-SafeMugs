@@ -1,0 +1,14 @@
+public async Task AdicionarUnidadeProdutoAoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    var produto = await _produtoService.ObterProdutoPorIdAsync(produtoId)
+        ?? throw new NotFoundException($"Produto com ID {produtoId} não encontrado.");
+    // neutra
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);  // correta
+    await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade);  // neutra
+}
+
+public async Task RemoverUnidadeProdutoDoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);  // correta
+    await _carrinhoRepository.RemoverUnidadeProdutoDoCarrinhoAsync(carrinho, produtoId, quantidade);  // neutra
+}
