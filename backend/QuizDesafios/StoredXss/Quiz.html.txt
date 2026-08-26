@@ -3,7 +3,7 @@
     <li class="comment-item">
       <span class="comment-author">{{ comentario.usuario?.nomeCompleto ?? 'Anônimo' }}</span>  // neutra
 
-      <p class="comment-text" [innerHTML]="comentario.comentarioInseguro"></p>  // correta
+      <p class="comment-text" [innerHTML]="comentario.texto"></p>  // correta
     </li>
   }
 </ul>

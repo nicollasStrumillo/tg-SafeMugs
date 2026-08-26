@@ -6,7 +6,7 @@
   @if (produtos().length === 0) {
     <p>
       Nenhum produto encontrado para // neutra
-      <span [innerHtml]="termoBuscaFormatado()"></span> // correta
+      <span [innerHtml]="termoBusca()"></span> // correta
     </p>
   }
 </section>

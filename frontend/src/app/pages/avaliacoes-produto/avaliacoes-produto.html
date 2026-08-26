@@ -10,9 +10,9 @@
       <div class="empty-mark" aria-hidden="true">
         <mat-icon>search_off</mat-icon>
       </div>
-      <p class="reviews-eyebrow">Nenhuma avaliação encontrada para:</p>
-      <h1 class="reviews-title">{{ nome() || 'produto' }}</h1>
-      <p class="heading-lead">O produto não foi encontrado. Confira se o nome está escrito corretamente e tente novamente.</p>
+      <p class="reviews-eyebrow">Ocorreu um erro:</p>
+      <h1 class="reviews-title" [innerHTML]="mensagemErroPesquisa()"></h1>
+      <p class="heading-lead">Ocorreu um erro durante a pesquisa. Confira se o nome está escrito corretamente e tente novamente.</p>
     </div>
   } @else {
     <header class="reviews-heading">

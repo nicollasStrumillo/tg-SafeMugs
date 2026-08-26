@@ -8,15 +8,19 @@ import { ProdutoCompletoDto } from '../../services/produto/produto.models';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltipModule, MatTooltip } from '@angular/material/tooltip';
 
-import { NotificationService } from '../../shared/notification/notification.service';
 import { ProdutoService } from '../../services/produto/produto.service';
 import { AuthSessionService } from '../../services/usuario/auth/auth-session.service';
-
-
+import { ApiError } from '../../shared/notification/erro-api.model';
 import { FazerAvaliacao } from '../fazer-avaliacao/fazer-avaliacao';
-import { MatTooltip } from "@angular/material/tooltip";
+
+
+// Parte da vulnerabilidade de Reflected XSS
+import {SignalRService} from '../../services/signalR/signalr.service';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
+
+const REFLECTEDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
 
 export interface AvaliacaoCardViewModel {
 	id: number;
@@ -83,16 +87,20 @@ function normalizarImagem(urlImagem: string): string {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvaliacoesProduto implements OnInit {
-	private readonly notificationService = inject(NotificationService);
 	private readonly authSessionService = inject(AuthSessionService);
 	private readonly route = inject(ActivatedRoute);
 	private readonly produtoService = inject(ProdutoService);
 
+	// Parte da vulnerabilidade de Reflected XSS
+	private readonly signalRService = inject(SignalRService);
+	private readonly sanitizer = inject(DomSanitizer)
+	protected readonly mensagemErroPesquisa = signal<SafeHtml | null>(null);
+
 	protected readonly usuarioAutenticado = computed(() => this.authSessionService.autenticado());
 	protected readonly viewModel = signal<AvaliacoesProdutoViewModel | null>(null);
-	protected readonly nome = signal<string | null>(null);
 	protected readonly carregando = signal(true);
 	protected readonly termoBusca = signal('');
+	protected readonly nome = signal<string | null>(null);
 	protected readonly notaSelecionada = signal<number>(5);
 
 	protected readonly mediaAvaliacoes = computed(() => {
@@ -117,7 +125,7 @@ export class AvaliacoesProduto implements OnInit {
 			return correspondeAoTexto && correspondeANota;
 		});
 	});
-
+	
 	constructor(private router: Router, private readonly dialog: MatDialog) {}
 
 	ngOnInit(): void {
@@ -131,6 +139,7 @@ export class AvaliacoesProduto implements OnInit {
 	private recarregarProduto(nome: string): void {
 		this.viewModel.set(null);
 		this.carregando.set(true);
+		this.mensagemErroPesquisa.set(null);
 
 		this.produtoService.obterProdutoCompletoPorNome(nome)
 			.subscribe({
@@ -138,8 +147,14 @@ export class AvaliacoesProduto implements OnInit {
 					this.viewModel.set(paraViewModel(produto));
 					this.carregando.set(false);
 				},
-				error: (error: HttpErrorResponse) => {
-					this.notificationService.notificarErroApi(error);
+				error: async (error: HttpErrorResponse) => {
+					const mensagemErro = (error.error as ApiError | null)?.detail ?? '';
+					this.mensagemErroPesquisa.set(this.sanitizer.bypassSecurityTrustHtml(mensagemErro));
+					
+					if (mensagemErro.includes(REFLECTEDXSS_PAYLOAD)){
+						await this.signalRService.SolveDesafioXss("Reflected XSS", REFLECTEDXSS_PAYLOAD);
+					}
+
 					this.viewModel.set(null);
 					this.carregando.set(false);
 				}

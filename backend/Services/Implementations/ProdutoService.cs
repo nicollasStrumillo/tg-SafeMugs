@@ -113,7 +113,7 @@ public class ProdutoService : IProdutoService
     public async Task<ProdutoCompletoDTO?> ObterProdutoCompletoPorNomeAsync(string nome)
     {
         var produto = await _produtoRepository.ObterProdutoPorNomeAsync(nome) 
-            ?? throw new NotFoundException($"Produto não encontrado.");
+            ?? throw new NotFoundException($"O produto {nome} não foi encontrado.");
         return MapProdutoCompletoToDTO(produto);
     }
 

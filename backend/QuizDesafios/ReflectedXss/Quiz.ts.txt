@@ -1,0 +1,10 @@
+@else if (!viewModel()) {
+    <div class="state-panel not-found-panel">
+      <div class="empty-mark" aria-hidden="true">
+        <mat-icon>search_off</mat-icon>
+      </div>
+      <p class="reviews-eyebrow">Ocorreu um erro:</p>
+      <h1 class="reviews-title" [innerHTML]="mensagemErroPesquisa()"></h1> // correta
+      <p class="heading-lead">Ocorreu um erro durante a pesquisa. Confira se o nome está escrito corretamente e tente novamente.</p>
+    </div>
+} 

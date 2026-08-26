@@ -1,0 +1,1 @@
+Conteúdo que volta do servidor — especialmente em mensagens de erro que ecoam entrada do usuário — não é confiável e pode conter HTML injetado. Neste caso, a mensagem de erro pode ser exibida via interpolação `{{ }}`, que escapa automaticamente caracteres especiais. Reserve `[innerHTML]` para HTML estático ou já sanitizado.
