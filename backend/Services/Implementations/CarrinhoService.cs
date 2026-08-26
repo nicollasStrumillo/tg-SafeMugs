@@ -1,3 +1,4 @@
+using backend.Authentication.Interfaces;
 using backend.DTOs.Carrinho;
 using backend.DTOs.Produto;
 using backend.DTOs.Usuario;
@@ -16,12 +17,14 @@ public class CarrinhoService : ICarrinhoService
     private readonly IProdutoService _produtoService;
 
     private readonly IDesafioService _desafioService;
+    private readonly IAuthenticatedUserService _user;
 
-    public CarrinhoService(ICarrinhoRepository carrinhoRepository, IProdutoService produtoService, IDesafioService desafioService)
+    public CarrinhoService(ICarrinhoRepository carrinhoRepository, IProdutoService produtoService, IDesafioService desafioService, IAuthenticatedUserService authenticatedUserService)
     {
         _carrinhoRepository = carrinhoRepository;
         _produtoService = produtoService;
         _desafioService = desafioService;
+        _user = authenticatedUserService;
     }
 
     private CarrinhoDTO MapCarrinhoToDTO(Carrinho carrinho)
@@ -83,6 +86,9 @@ public class CarrinhoService : ICarrinhoService
     public async Task<CarrinhoDTO> ObterOuCriarCarrinhoAtivoAsync(int usuarioId)
     {
         var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.VisualizarCarrinhoAlheio, () => _user.UsuarioId != usuarioId);
+
         return MapCarrinhoToDTO(carrinho);
     }
 

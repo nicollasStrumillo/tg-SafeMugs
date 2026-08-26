@@ -1,0 +1,6 @@
+public async Task<CarrinhoDTO> ObterOuCriarCarrinhoAtivoAsync(int usuarioId)  
+{
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);  // correta
+
+    return MapCarrinhoToDTO(carrinho);  // neutra
+}

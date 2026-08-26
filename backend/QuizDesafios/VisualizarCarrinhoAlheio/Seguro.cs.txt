@@ -1,0 +1,10 @@
+public async Task<CarrinhoDTO> ObterOuCriarCarrinhoAtivoAsync(int usuarioId)
+{
+    // Validando a posse do carrinho.
+    if (usuarioId != _user.UsuarioId)
+        throw new UnauthorizedAccessException("Você não tem permissão para acessar o carrinho de outro usuário.");
+
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+
+    return MapCarrinhoToDTO(carrinho);
+}
