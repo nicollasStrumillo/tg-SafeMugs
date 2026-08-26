@@ -40,6 +40,9 @@ public enum DesafiosEnum
     [Display(Name = "Produto inválido")]
     AdicionarProdutoIndisponivel,
 
-    [Display(Name = "Visualizar carrinho de outro usuário")]
-    VisualizarCarrinhoAlheio
+    [Display(Name = "Visualizar o carrinho de outro usuário")]
+    VisualizarCarrinhoAlheio,
+
+    [Display(Name = "Modificar o carrinho de outro usuário")]
+    ModificarCarrinhoAlheio,
 }

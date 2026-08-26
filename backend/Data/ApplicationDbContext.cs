@@ -1003,6 +1003,16 @@ public class ApplicationDBContext : DbContext
                 Categoria = CategoriaDesafio.IDOR,
                 Dificuldade = 2,
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 14,
+                Nome = DesafiosEnum.ModificarCarrinhoAlheio.GetNomeDisplay(),
+                Descricao = "Modifique o carrinho de compras de outro usuário.",
+                DescricaoDetalhes = "As requisições que alteram o carrinho — adicionar e remover produtos — carregam o identificador do dono no corpo da requisição, e o servidor o utiliza diretamente para localizar o carrinho a ser modificado, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, é possível adicionar produtos ao carrinho alheio ou remover itens que ele continha — inclusive esvaziá-lo por completo.\nO servidor confia que o identificador recebido no corpo da requisição identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de alterar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
+                Categoria = CategoriaDesafio.IDOR,
+                Dificuldade = 2,
+                Resolvido = false
             }
         );
 
@@ -1227,6 +1237,21 @@ public class ApplicationDBContext : DbContext
                 NrDica = 2,
                 Texto = "Troque o identificador da requisição pelo de outro usuário e observe a resposta.",
                 DesafioId = 13
+            },
+
+            new DicaDesafio
+            {
+                Id = 31,
+                NrDica = 1,
+                Texto = "As requisições que adicionam e removem produtos do carrinho carregam o identificador do usuário no corpo.",
+                DesafioId = 14
+            },
+            new DicaDesafio
+            {
+                Id = 32,
+                NrDica = 2,
+                Texto = "Troque o identificador pelo de outro usuário e observe o carrinho dele mudar.",
+                DesafioId = 14
             }
         );
 

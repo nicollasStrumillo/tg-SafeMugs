@@ -674,7 +674,17 @@ namespace backend.Migrations
                             Descricao = "Visualize o carrinho de compras de outro usuário.",
                             DescricaoDetalhes = "A rota que busca o carrinho de compras recebe o identificador do usuário diretamente pela URL e o utiliza para localizar o carrinho, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, o servidor devolve o carrinho completo do alvo: itens, quantidades e preços — acompanhados dos dados pessoais do dono, como nome, e-mail, telefone e endereço.\nO servidor confia que o parâmetro recebido na URL identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de retornar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
                             Dificuldade = 2,
-                            Nome = "Visualizar carrinho de outro usuário",
+                            Nome = "Visualizar o carrinho de outro usuário",
+                            Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Categoria = "IDOR",
+                            Descricao = "Modifique o carrinho de compras de outro usuário.",
+                            DescricaoDetalhes = "As requisições que alteram o carrinho — adicionar e remover produtos — carregam o identificador do dono no corpo da requisição, e o servidor o utiliza diretamente para localizar o carrinho a ser modificado, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, é possível adicionar produtos ao carrinho alheio ou remover itens que ele continha — inclusive esvaziá-lo por completo.\nO servidor confia que o identificador recebido no corpo da requisição identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de alterar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
+                            Dificuldade = 2,
+                            Nome = "Modificar o carrinho de outro usuário",
                             Resolvido = false
                         });
                 });
@@ -915,6 +925,20 @@ namespace backend.Migrations
                             DesafioId = 13,
                             NrDica = 2,
                             Texto = "Troque o identificador da requisição pelo de outro usuário e observe a resposta."
+                        },
+                        new
+                        {
+                            Id = 31,
+                            DesafioId = 14,
+                            NrDica = 1,
+                            Texto = "As requisições que adicionam e removem produtos do carrinho carregam o identificador do usuário no corpo."
+                        },
+                        new
+                        {
+                            Id = 32,
+                            DesafioId = 14,
+                            NrDica = 2,
+                            Texto = "Troque o identificador pelo de outro usuário e observe o carrinho dele mudar."
                         });
                 });
 
