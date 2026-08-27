@@ -170,6 +170,8 @@ public class ProdutoService : IProdutoService
         _ = await _usuarioReprository.BuscarPorIdAsync(usuarioId) ??
             throw new NotFoundException("Usuário não encontrado.");
 
+        await _desafioService.SolveIfAsync(DesafiosEnum.CriarAvaliacaoOutroUsuario, () => _user.UsuarioId != usuarioId);
+
         await _avaliacaoRepository.EscreverAvaliacaoAsync(comentario, nota, usuarioId, produtoId);
     }
 

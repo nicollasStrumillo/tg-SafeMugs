@@ -1,0 +1,10 @@
+public async Task AvaliarProdutoAsync(int produtoId, float nota, string comentario)
+{
+    // O autor deriva sempre da sessão autenticada, nunca de um campo controlável pelo cliente.
+    var autorId = _user.UsuarioId;
+
+    _ = await _usuarioReprository.BuscarPorIdAsync(autorId) ??
+        throw new NotFoundException("Usuário não encontrado.");
+
+    await _avaliacaoRepository.EscreverAvaliacaoAsync(comentario, nota, autorId, produtoId);
+}

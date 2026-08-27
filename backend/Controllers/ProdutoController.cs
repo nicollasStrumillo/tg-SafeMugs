@@ -1,6 +1,7 @@
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using backend.DTOs.Produto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace backend.Controllers;
 
@@ -58,6 +59,7 @@ public class ProdutoController : ControllerBase
         return Ok(new { mensagem = "Comentário atualizado com sucesso."});
     }
 
+    [Authorize]
     [HttpPost("avaliacoes/{produtoId}")]
     public async Task<IActionResult> AvaliarProduto(int produtoId, [FromBody] FazerAvaliacaoRequest request)
     {

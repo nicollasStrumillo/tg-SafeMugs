@@ -24,7 +24,7 @@
 					</div>
 
 					<span class="hint-count" [class.sem-dicas]="!temDicas()">
-						<mat-icon class="icon-tip-qt">help_outline</mat-icon> {{ quantidadeDicas() }} dicas
+						<mat-icon class="icon-tip-qt">help_outline</mat-icon> {{ quantidadeDicas() }} {{ quantidadeDicas() == 1 ? "Dica" : "Dicas" }}
 					</span>
 
 					<button

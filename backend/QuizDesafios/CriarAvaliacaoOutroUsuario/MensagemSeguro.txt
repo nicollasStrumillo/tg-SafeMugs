@@ -1,0 +1,1 @@
+A autoria de uma avaliação deve derivar da sessão autenticada no servidor, nunca de um identificador enviado pelo cliente. Mesmo que a interface preencha o autor automaticamente, esse valor pode ser adulterado na requisição. Valide sempre que o autor corresponde ao usuário autenticado antes de persistir.
