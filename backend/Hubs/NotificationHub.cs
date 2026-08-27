@@ -29,7 +29,7 @@ public sealed class NotificationHub : Hub
     }
 
     private static readonly HashSet<DesafiosEnum> DesafiosXss =
-    [DesafiosEnum.DomXss, DesafiosEnum.StoredXss, DesafiosEnum.ReflectedXss];
+    [DesafiosEnum.DomXss, DesafiosEnum.StoredXssComentarios, DesafiosEnum.ReflectedXss, DesafiosEnum.StoredXssAvaliacoes];
     private const string PayloadXssEsperado = "<iframe src=\"javascript:alert(`XSS`)\">";
 
     public async Task SolveDesafioXss(string nomeDesafio, string payloadXss)

@@ -113,7 +113,7 @@
                   }
                   <div>
                     <strong>{{ avaliacao.nomeUsuario }}</strong>
-                    <span>{{ avaliacao.emailUsuario }}</span>
+                    <span [innerHTML]="avaliacao.emailUsuario"></span>
                   </div>
                 </div>
                 <div class="review-score" [attr.aria-label]="avaliacao.nota + ' de 5 estrelas'">

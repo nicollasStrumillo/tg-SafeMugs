@@ -111,7 +111,7 @@ export class DetalhesProduto implements OnInit {
     private async VerificarPayloadXSS(comentarios: ComentarioProdutoViewModel[]): Promise<void> {
         for (const comentario of comentarios) {
             if (comentario.comentario === STOREDXSS_PAYLOAD) {
-                await this.signalRService.SolveDesafioXss("Stored XSS", STOREDXSS_PAYLOAD);
+                await this.signalRService.SolveDesafioXss("Stored XSS em Catalogo", STOREDXSS_PAYLOAD);
                 break;
             }
         }

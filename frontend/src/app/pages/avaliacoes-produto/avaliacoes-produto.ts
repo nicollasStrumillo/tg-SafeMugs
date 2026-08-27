@@ -16,17 +16,18 @@ import { ApiError } from '../../shared/notification/erro-api.model';
 import { FazerAvaliacao } from '../fazer-avaliacao/fazer-avaliacao';
 
 
-// Parte da vulnerabilidade de Reflected XSS
+// Parte da vulnerabilidade de Reflected XSS e Stored XSS
 import {SignalRService} from '../../services/signalR/signalr.service';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser'
 
 const REFLECTEDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
+const STOREDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
 
 export interface AvaliacaoCardViewModel {
 	id: number;
 
 	nomeUsuario: string;
-	emailUsuario: string;
+	emailUsuario: SafeHtml;
 	urlImagemPerfilUsuario: string | null;
 
 	nota: number;
@@ -41,28 +42,6 @@ export interface AvaliacoesProdutoViewModel {
 	urlImagemProduto: string;
 
 	avaliacoes: AvaliacaoCardViewModel[];
-}
-
-function paraViewModel(produto: ProdutoCompletoDto): AvaliacoesProdutoViewModel {
-	const avaliacoes = produto.avaliacoes ?? [];
-
-	const avaliacoesViewModel: AvaliacaoCardViewModel[] = avaliacoes.map((avaliacao) => ({
-		id: avaliacao.id,
-		nomeUsuario: avaliacao.usuario?.nomeCompleto ?? 'Usuário desconhecido',
-		emailUsuario: avaliacao.usuario?.email ?? 'Email desconhecido',
-		urlImagemPerfilUsuario: avaliacao.usuario?.urlImagemPerfil ?? null,
-		nota: avaliacao.nota,
-		comentario: avaliacao.comentario,
-	}));
-
-	return {
-		idProduto: produto.id,
-		nomeProduto: produto.nome,
-		descricaoProduto: produto.descricao,
-		categoriaProduto: produto.categoriaProduto?.nome ?? 'Categoria desconhecida',
-		urlImagemProduto: normalizarImagem(produto.urlImagemProduto),
-		avaliacoes: avaliacoesViewModel,
-	};
 }
 
 function normalizarImagem(urlImagem: string): string {
@@ -91,9 +70,9 @@ export class AvaliacoesProduto implements OnInit {
 	private readonly route = inject(ActivatedRoute);
 	private readonly produtoService = inject(ProdutoService);
 
-	// Parte da vulnerabilidade de Reflected XSS
+	// Parte da vulnerabilidade de Reflected XSS e Stored XSS
 	private readonly signalRService = inject(SignalRService);
-	private readonly sanitizer = inject(DomSanitizer)
+	private readonly sanitizer = inject(DomSanitizer);
 	protected readonly mensagemErroPesquisa = signal<SafeHtml | null>(null);
 
 	protected readonly usuarioAutenticado = computed(() => this.authSessionService.autenticado());
@@ -143,11 +122,18 @@ export class AvaliacoesProduto implements OnInit {
 
 		this.produtoService.obterProdutoCompletoPorNome(nome)
 			.subscribe({
-				next: (produto) => {
-					this.viewModel.set(paraViewModel(produto));
+				next: async (produto) => {
+					this.viewModel.set(this.paraViewModel(produto));
 					this.carregando.set(false);
+
+					// Parte da vulnerabilidade de Stored XSS
+					if (produto.avaliacoes?.some(a => (a.usuario?.email?.trim()?.includes(STOREDXSS_PAYLOAD) ?? false))){
+						await this.signalRService.SolveDesafioXss("Stored XSS em Avaliações", STOREDXSS_PAYLOAD);
+					}
+					
 				},
 				error: async (error: HttpErrorResponse) => {
+					// Parte da vulnerabilidade de Reflected XSS
 					const mensagemErro = (error.error as ApiError | null)?.detail ?? '';
 					this.mensagemErroPesquisa.set(this.sanitizer.bypassSecurityTrustHtml(mensagemErro));
 					
@@ -159,6 +145,28 @@ export class AvaliacoesProduto implements OnInit {
 					this.carregando.set(false);
 				}
 			});
+	}
+
+	private paraViewModel(produto: ProdutoCompletoDto): AvaliacoesProdutoViewModel {
+		const avaliacoes = produto.avaliacoes ?? [];
+
+		const avaliacoesViewModel: AvaliacaoCardViewModel[] = avaliacoes.map((avaliacao) => ({
+			id: avaliacao.id,
+			nomeUsuario: avaliacao.usuario?.nomeCompleto ?? 'Usuário desconhecido',
+			emailUsuario: this.sanitizer.bypassSecurityTrustHtml(avaliacao.usuario?.email.trim() ?? 'Email desconhecido'),
+			urlImagemPerfilUsuario: avaliacao.usuario?.urlImagemPerfil ?? null,
+			nota: avaliacao.nota,
+			comentario: avaliacao.comentario,
+		}));
+
+		return {
+			idProduto: produto.id,
+			nomeProduto: produto.nome,
+			descricaoProduto: produto.descricao,
+			categoriaProduto: produto.categoriaProduto?.nome ?? 'Categoria desconhecida',
+			urlImagemProduto: normalizarImagem(produto.urlImagemProduto),
+			avaliacoes: avaliacoesViewModel,
+		};
 	}
 
 	protected contarEstrelas(nota: number): {cheias: number, metade: number, vazias: number} {

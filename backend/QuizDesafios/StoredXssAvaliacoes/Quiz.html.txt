@@ -1,0 +1,8 @@
+@for (avaliacao of avaliacoesFiltradas(); track avaliacao.id) {
+  <article class="review-card">
+    <div class="reviewer">
+      <strong>{{ avaliacao.nomeUsuario }}</strong> // neutra
+      <span [innerHTML]="avaliacao.emailUsuario"></span> // correta
+    </div>
+  </article>
+}
