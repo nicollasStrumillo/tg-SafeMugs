@@ -59,5 +59,8 @@ public enum DesafiosEnum
     ReflectedXss,
 
     [Display(Name = "Stored XSS em Avaliações")]
-    StoredXssAvaliacoes 
+    StoredXssAvaliacoes,
+
+    [Display(Name = "Avaliação ilegítima")]
+    CriarAvaliacaoOutroUsuario
 }

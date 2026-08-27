@@ -561,7 +561,7 @@ namespace backend.Migrations
                         {
                             Id = 2,
                             Categoria = "DomXSS",
-                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de DOM XSS na página do catalogo",
+                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de DOM XSS na página do catalogo.",
                             DescricaoDetalhes = "O campo de busca do catálogo reflete, no próprio DOM do navegador, o termo digitado sem qualquer tratamento. A entrada do usuário é inserida diretamente no HTML da página, permitindo que tags e atributos perigosos sejam interpretados pelo navegador. Como a manipulação acontece inteiramente no lado do cliente, nenhum dado malicioso precisa trafegar pelo servidor: tudo ocorre no DOM. O payload |<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, é interpretado ao ser renderizado no catálogo, comprovando uma injeção de HTML tipicamente conhecida como DOM XSS.",
                             Dificuldade = 2,
                             Nome = "DOM XSS",
@@ -611,7 +611,7 @@ namespace backend.Migrations
                         {
                             Id = 7,
                             Categoria = "StoredXSS",
-                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página do catalogo",
+                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página do catalogo.",
                             DescricaoDetalhes = "Na tela de detalhes do produto, os comentários deixados pelos usuários são renderizados diretamente no HTML, sem qualquer sanitização. Como o comentário é salvo no banco de dados e exibido a todos que abrem o produto, enviar o payload |<iframe src=\"javascript:alert(`XSS`)\">| como texto do comentário faz com que o código seja armazenado e, posteriormente, interpretado no navegador de qualquer pessoa que visualize a página. Diferente do DOM XSS, aqui o conteúdo malicioso persiste no servidor, atingindo múltiplas vítimas.",
                             Dificuldade = 3,
                             Nome = "Stored XSS em Catalogo",
@@ -620,7 +620,7 @@ namespace backend.Migrations
                         new
                         {
                             Id = 8,
-                            Categoria = "BrokenAuthentication",
+                            Categoria = "IDOR",
                             Descricao = "Escreva um comentário que não pertence ao seu usuário.",
                             DescricaoDetalhes = "Todo comentário enviado ao servidor carrega um campo que identifica o autor a ser atribuído a ele. O servidor não valida se esse nome corresponde ao usuário autenticado: ele apenas procura o usuário pelo nome informado e o vincula ao comentário. Interceptando a requisição de criação e alterando o nome pelo de outro usuário (por exemplo |Bruno Costa|), é possível registrar um comentário em nome de outra pessoa, simulando uma identidade indevida.",
                             Dificuldade = 2,
@@ -731,10 +731,20 @@ namespace backend.Migrations
                         {
                             Id = 19,
                             Categoria = "StoredXSS",
-                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de avaliações",
+                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de avaliações.",
                             DescricaoDetalhes = "Na página de avaliações do produto, o e-mail do autor de cada avaliação é renderizado diretamente no HTML sem sanitização. O e-mail é um dado persistido da conta do usuário e exibido a qualquer visitante que abra as avaliações daquele produto. Ao interceptar a requisição de cadastro e registrar um usuário com o e-mail |<iframe src=\"javascript:alert(`XSS`)\">|, depois publicar uma avaliação com essa conta, o payload fica armazenado no banco e é interpretado no navegador de quem visualiza a página em |/avaliacoes-produto?nome=...|. Diferente do Reflected XSS, aqui o conteúdo malicioso persiste no servidor e atinge múltiplas vítimas, caracterizando Stored XSS via campo de e-mail.",
                             Dificuldade = 4,
                             Nome = "Stored XSS em Avaliações",
+                            Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Categoria = "IDOR",
+                            Descricao = "Crie uma avaliação em nome de outro usuário.",
+                            DescricaoDetalhes = "Ao criar uma avaliação, o cliente envia no corpo da requisição o identificador do autor (usuarioId) junto com nota e comentario para POST /api/produtos/avaliacoes/{produtoId}. O servidor apenas verifica se o usuário informado existe e o vincula à avaliação, sem conferir se corresponde ao usuário autenticado. Interceptando a requisição disparada pelo diálogo de avaliação e trocando usuarioId pelo de outro usuário, é possível registrar uma avaliação em nome de outra pessoa.",
+                            Dificuldade = 2,
+                            Nome = "Avaliação ilegítima",
                             Resolvido = false
                         });
                 });
@@ -1051,14 +1061,21 @@ namespace backend.Migrations
                             Id = 41,
                             DesafioId = 19,
                             NrDica = 1,
-                            Texto = "O campo vulnerável não é o comentário da avaliação"
+                            Texto = "O campo vulnerável não é o comentário da avaliação."
                         },
                         new
                         {
                             Id = 42,
                             DesafioId = 19,
                             NrDica = 2,
-                            Texto = "O dado que foi mal sanitizado faz parte do cadastro de usuários"
+                            Texto = "O dado que foi mal sanitizado faz parte do cadastro de usuários."
+                        },
+                        new
+                        {
+                            Id = 43,
+                            DesafioId = 20,
+                            NrDica = 1,
+                            Texto = "O autor da avaliação vem do corpo da requisição, não da sessão autenticada."
                         });
                 });
 

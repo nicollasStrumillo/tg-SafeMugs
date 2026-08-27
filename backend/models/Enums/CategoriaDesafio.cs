@@ -41,12 +41,6 @@ public enum CategoriaDesafio
     SecurityMisconfiguration,
 
     [Display(
-        Name = "Broken Authentication",
-        Description = "Ocorre quando o processo de autenticação ou gerenciamento de sessões apresenta falhas que permitem a um atacante se passar por outro usuário. Senhas fracas, validações inadequadas, sessões previsíveis ou tokens inseguros podem resultar em acesso não autorizado à aplicação."
-    )]
-    BrokenAuthentication,
-
-    [Display(
         Name = "XXE",
         Description = "Ocorre quando um processador XML aceita entidades externas sem as devidas restrições. Um atacante pode explorar esse comportamento para ler arquivos do servidor, acessar recursos internos da rede ou provocar negação de serviço."
     )]
