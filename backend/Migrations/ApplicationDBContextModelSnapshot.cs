@@ -614,7 +614,7 @@ namespace backend.Migrations
                             Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página do catalogo",
                             DescricaoDetalhes = "Na tela de detalhes do produto, os comentários deixados pelos usuários são renderizados diretamente no HTML, sem qualquer sanitização. Como o comentário é salvo no banco de dados e exibido a todos que abrem o produto, enviar o payload |<iframe src=\"javascript:alert(`XSS`)\">| como texto do comentário faz com que o código seja armazenado e, posteriormente, interpretado no navegador de qualquer pessoa que visualize a página. Diferente do DOM XSS, aqui o conteúdo malicioso persiste no servidor, atingindo múltiplas vítimas.",
                             Dificuldade = 3,
-                            Nome = "Stored XSS",
+                            Nome = "Stored XSS em Catalogo",
                             Resolvido = false
                         },
                         new
@@ -725,6 +725,16 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Ao buscar um produto pelo nome, a API recebe o termo pesquisado como parâmetro da requisição. Quando o produto não é encontrado, a resposta de erro devolve esse mesmo termo de volta, sem tratamento, dentro da mensagem. No cliente, esse conteúdo refletido é inserido diretamente na página sem sanitização, de modo que qualquer HTML presente no termo é interpretado pelo navegador. O payload |?nome=<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, faz o servidor devolver o |<iframe>| na resposta, que então é renderizado e executado. Por se tratar de um conteúdo que parte do servidor e volta no corpo da resposta, trata-se de um Reflected XSS — diferente do DOM XSS, em que o payload nunca sai do navegador.",
                             Dificuldade = 3,
                             Nome = "Reflected XSS",
+                            Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Categoria = "StoredXSS",
+                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de avaliações",
+                            DescricaoDetalhes = "Na página de avaliações do produto, o e-mail do autor de cada avaliação é renderizado diretamente no HTML sem sanitização. O e-mail é um dado persistido da conta do usuário e exibido a qualquer visitante que abra as avaliações daquele produto. Ao interceptar a requisição de cadastro e registrar um usuário com o e-mail |<iframe src=\"javascript:alert(`XSS`)\">|, depois publicar uma avaliação com essa conta, o payload fica armazenado no banco e é interpretado no navegador de quem visualiza a página em |/avaliacoes-produto?nome=...|. Diferente do Reflected XSS, aqui o conteúdo malicioso persiste no servidor e atinge múltiplas vítimas, caracterizando Stored XSS via campo de e-mail.",
+                            Dificuldade = 4,
+                            Nome = "Stored XSS em Avaliações",
                             Resolvido = false
                         });
                 });
@@ -1035,6 +1045,20 @@ namespace backend.Migrations
                             DesafioId = 18,
                             NrDica = 1,
                             Texto = "Procure uma funcionalidade de busca que devolva, na resposta, algo que você enviou na requisição."
+                        },
+                        new
+                        {
+                            Id = 41,
+                            DesafioId = 19,
+                            NrDica = 1,
+                            Texto = "O campo vulnerável não é o comentário da avaliação"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            DesafioId = 19,
+                            NrDica = 2,
+                            Texto = "O dado que foi mal sanitizado faz parte do cadastro de usuários"
                         });
                 });
 

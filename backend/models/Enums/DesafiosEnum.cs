@@ -22,8 +22,8 @@ public enum DesafiosEnum
     [Display(Name = "Altere o comentário de outro usuário")]
     AlterarComentarioOutroUsuario,
 
-    [Display(Name = "Stored XSS")]
-    StoredXss,
+    [Display(Name = "Stored XSS em Catalogo")]
+    StoredXssComentarios,
 
     [Display(Name = "Crie um comentário por outro usuário")]
     CriarComentarioOutroUsuario,
@@ -56,5 +56,8 @@ public enum DesafiosEnum
     PathTraversalFotoPerfil,
     
     [Display(Name = "Reflected XSS")]
-    ReflectedXss    
+    ReflectedXss,
+
+    [Display(Name = "Stored XSS em Avaliações")]
+    StoredXssAvaliacoes 
 }
