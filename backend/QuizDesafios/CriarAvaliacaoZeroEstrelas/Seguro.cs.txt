@@ -1,0 +1,10 @@
+public async Task AvaliarProdutoAsync(int produtoId, int usuarioId, float nota, string comentario)
+{
+    if (nota < 0.5f || nota > 5f)
+        throw new ValidationException("Nota deve estar entre 0,5 e 5.");
+
+    _ = await _usuarioReprository.BuscarPorIdAsync(usuarioId) ??
+        throw new NotFoundException("Usuário não encontrado.");
+
+    await _avaliacaoRepository.EscreverAvaliacaoAsync(comentario, nota, usuarioId, produtoId);
+}

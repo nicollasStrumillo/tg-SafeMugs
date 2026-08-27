@@ -1,0 +1,7 @@
+public async Task AvaliarProdutoAsync(int produtoId, int usuarioId, float nota, string comentario)
+{
+    _ = await _usuarioReprository.BuscarPorIdAsync(usuarioId) ?? // neutra
+        throw new NotFoundException("Usuário não encontrado."); // neutra
+
+    await _avaliacaoRepository.EscreverAvaliacaoAsync(comentario, nota, usuarioId, produtoId); // correta
+}

@@ -1,0 +1,1 @@
+Validação de entrada deve acontecer no servidor, não apenas no cliente. Mesmo que a interface limite a nota entre 0,5 e 5, o valor pode ser adulterado na requisição, permitindo persistir uma avaliação com zero estrelas. Valide o intervalo no backend antes de salvar.
