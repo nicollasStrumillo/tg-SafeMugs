@@ -1069,8 +1069,18 @@ public class ApplicationDBContext : DbContext
                 Id = 20,
                 Nome = DesafiosEnum.CriarAvaliacaoOutroUsuario.GetNomeDisplay(),
                 Descricao = "Crie uma avaliação em nome de outro usuário.",
-                DescricaoDetalhes = "Ao criar uma avaliação, o cliente envia no corpo da requisição o identificador do autor (usuarioId) junto com nota e comentario para POST /api/produtos/avaliacoes/{produtoId}. O servidor apenas verifica se o usuário informado existe e o vincula à avaliação, sem conferir se corresponde ao usuário autenticado. Interceptando a requisição disparada pelo diálogo de avaliação e trocando usuarioId pelo de outro usuário, é possível registrar uma avaliação em nome de outra pessoa.",
+                DescricaoDetalhes = "Ao criar uma avaliação, o cliente envia no corpo da requisição o identificador do autor (usuarioId) junto com nota e comentario para POST |/api/produtos/avaliacoes/{produtoId}|. O servidor apenas verifica se o usuário informado existe e o vincula à avaliação, sem conferir se corresponde ao usuário autenticado. Interceptando a requisição disparada pelo diálogo de avaliação e trocando usuarioId pelo de outro usuário, é possível registrar uma avaliação em nome de outra pessoa.",
                 Categoria = CategoriaDesafio.IDOR,
+                Dificuldade = 2,
+                Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 21,
+                Nome = DesafiosEnum.CriarAvaliacaoZeroEstrelas.GetNomeDisplay(),
+                Descricao = "Envie uma avaliação com nota zero.",
+                DescricaoDetalhes = "A interface de avaliação permite apenas notas de 0,5 a 5, mas o servidor não valida o intervalo. Interceptando POST |/api/produtos/avaliacoes/{produtoId}| e enviando nota com valor 0, a avaliação é persistida com zero estrelas.",
+                Categoria = CategoriaDesafio.ImproperInputValidation,
                 Dificuldade = 2,
                 Resolvido = false
             }
@@ -1390,6 +1400,13 @@ public class ApplicationDBContext : DbContext
                 NrDica = 1,
                 Texto = "O autor da avaliação vem do corpo da requisição, não da sessão autenticada.",
                 DesafioId = 20
+            },
+            new DicaDesafio
+            {
+                Id = 44,
+                NrDica = 1,
+                Texto = "A validação da nota acontece só no navegador.",
+                DesafioId = 21
             }
         );
 

@@ -742,9 +742,19 @@ namespace backend.Migrations
                             Id = 20,
                             Categoria = "IDOR",
                             Descricao = "Crie uma avaliação em nome de outro usuário.",
-                            DescricaoDetalhes = "Ao criar uma avaliação, o cliente envia no corpo da requisição o identificador do autor (usuarioId) junto com nota e comentario para POST /api/produtos/avaliacoes/{produtoId}. O servidor apenas verifica se o usuário informado existe e o vincula à avaliação, sem conferir se corresponde ao usuário autenticado. Interceptando a requisição disparada pelo diálogo de avaliação e trocando usuarioId pelo de outro usuário, é possível registrar uma avaliação em nome de outra pessoa.",
+                            DescricaoDetalhes = "Ao criar uma avaliação, o cliente envia no corpo da requisição o identificador do autor (usuarioId) junto com nota e comentario para POST |/api/produtos/avaliacoes/{produtoId}|. O servidor apenas verifica se o usuário informado existe e o vincula à avaliação, sem conferir se corresponde ao usuário autenticado. Interceptando a requisição disparada pelo diálogo de avaliação e trocando usuarioId pelo de outro usuário, é possível registrar uma avaliação em nome de outra pessoa.",
                             Dificuldade = 2,
                             Nome = "Avaliação ilegítima",
+                            Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Categoria = "ImproperInputValidation",
+                            Descricao = "Envie uma avaliação com nota zero.",
+                            DescricaoDetalhes = "A interface de avaliação permite apenas notas de 0,5 a 5, mas o servidor não valida o intervalo. Interceptando POST |/api/produtos/avaliacoes/{produtoId}| e enviando nota com valor 0, a avaliação é persistida com zero estrelas.",
+                            Dificuldade = 2,
+                            Nome = "Avaliação insatisfeita",
                             Resolvido = false
                         });
                 });
@@ -1076,6 +1086,13 @@ namespace backend.Migrations
                             DesafioId = 20,
                             NrDica = 1,
                             Texto = "O autor da avaliação vem do corpo da requisição, não da sessão autenticada."
+                        },
+                        new
+                        {
+                            Id = 44,
+                            DesafioId = 21,
+                            NrDica = 1,
+                            Texto = "A validação da nota acontece só no navegador."
                         });
                 });
 

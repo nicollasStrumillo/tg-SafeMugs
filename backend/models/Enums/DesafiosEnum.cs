@@ -62,5 +62,8 @@ public enum DesafiosEnum
     StoredXssAvaliacoes,
 
     [Display(Name = "Avaliação ilegítima")]
-    CriarAvaliacaoOutroUsuario
+    CriarAvaliacaoOutroUsuario,
+
+    [Display(Name = "Avaliação insatisfeita")]
+    CriarAvaliacaoZeroEstrelas
 }
