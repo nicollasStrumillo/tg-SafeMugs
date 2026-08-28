@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 const BACKUP_DESAFIOS_COOKIE_NAME = 'backupCookie';
 const BACKUP_QUIZZES_COOKIE_NAME = 'backupQuizzesCookie';
 const COOKIE_STATUS_NAME = 'cookieStatus';
+const BOASVINDAS_STATUS_NAME = 'boasvindasStatus';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,23 @@ export class BrowserCookieService {
 
     public removeCookieStatus(): void {
         this.remove(COOKIE_STATUS_NAME);
+    }
+
+    // Boas-Vindas
+    public setBoasVindasStatus(value: string): void{
+        this.set(BOASVINDAS_STATUS_NAME, value);
+    }
+
+    public getBoasVindasStatus(): string | null {
+        return this.get(BOASVINDAS_STATUS_NAME);
+    }
+
+    public existsBoasVindasStatus(): boolean {
+        return this.exists(BOASVINDAS_STATUS_NAME);
+    }
+
+    public removeBoasVindas(): void {
+        this.remove(BOASVINDAS_STATUS_NAME);
     }
 
     // Utils

@@ -1,0 +1,49 @@
+@if (showNotification()) {
+  <div
+    class="overlay"
+    animate.enter="overlay-enter"
+    animate.leave="overlay-exit"
+    aria-hidden="true"
+  ></div>
+  <section
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="bv-title"
+    animate.enter="modal-enter"
+    animate.leave="modal-exit"
+  >
+    <header class="header">
+      <span class="icon-wrap" aria-hidden="true">
+        <mat-icon>emoji_food_beverage</mat-icon>
+      </span>
+      <h2 id="bv-title" class="title">Bem-vindo ao SafeMugs!</h2>
+    </header>
+
+    <div class="body">
+      <p class="text">
+        O <strong>SafeMugs</strong> é uma loja de canecas <strong>deliberadamente vulnerável</strong>, criada como
+        laboratório para estudos práticos de segurança.
+      </p>
+
+      <div class="hint" role="note" aria-label="Primeiro desafio">
+        <mat-icon class="hint-icon" aria-hidden="true">flag</mat-icon>
+        <div class="hint-copy">
+          <strong>Seu primeiro desafio:</strong>
+          <span>encontrar a página da <strong>Score-Board</strong>.</span>
+        </div>
+      </div>
+
+      <p class="text text--muted">
+        Tente por <strong>enumeração de diretórios</strong> ou inspecionando o
+        <strong>código-fonte da página</strong> para descobrir o caminho.
+      </p>
+    </div>
+
+    <footer class="footer">
+      <button mat-flat-button color="primary" type="button" class="button" (click)="fecharNotificacao()">
+        Entendido.
+      </button>
+    </footer>
+  </section>
+}
