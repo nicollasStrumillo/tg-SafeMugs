@@ -16,13 +16,16 @@ public class UsuarioController : ControllerBase
 
     private readonly IDesafioService _desafioService;
     private readonly SsrfSettings _ssrf;
+    private readonly IWebHostEnvironment _env;
 
 
-    public UsuarioController(IUsuarioService authService, IDesafioService desafioService, IOptions<SsrfSettings> ssrf)
+
+    public UsuarioController(IUsuarioService authService, IDesafioService desafioService, IOptions<SsrfSettings> ssrf, IWebHostEnvironment env)
     {
         _usuarioService = authService;
         _desafioService = desafioService;
         _ssrf = ssrf.Value;
+        _env = env;
     }
 
     [HttpPost("cadastro")]
@@ -99,7 +102,7 @@ public class UsuarioController : ControllerBase
         && string.Equals(valor.ToString(), _ssrf.SecretHeaderValue,StringComparison.OrdinalIgnoreCase ))
         {
             await _desafioService.SolveIfAsync(DesafiosEnum.SsrfUploadFotoPerfil, () => true);
-            return Ok(new {mensagem = "Desafio interna atingida!"});
+            return PhysicalFile(Path.Combine(_env.WebRootPath, "imagens", "produto", "mug_brava.jpg"), "image/jpeg");
         }
 
         return Unauthorized(new {detail = "Acesso não autorizado."});
