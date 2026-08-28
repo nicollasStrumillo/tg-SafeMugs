@@ -1,9 +1,10 @@
 import {
   ApplicationConfig,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
-   provideEnvironmentInitializer,
-   inject
+  provideEnvironmentInitializer,
+  inject,
 } from '@angular/core';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -14,6 +15,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { SignalRService } from './services/signalR/signalr.service';
 import { authInterceptor } from './services/usuario/auth/auth-interceptor';
+import { AuthInitService } from './services/usuario/auth/auth-init.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },
     },
+    provideAppInitializer(() => inject(AuthInitService).verificarSessao()),
     provideEnvironmentInitializer(() => {
       const signalRService = inject(SignalRService);
       signalRService.startSignalRConnection();
