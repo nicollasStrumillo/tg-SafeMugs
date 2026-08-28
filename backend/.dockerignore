@@ -1,0 +1,8 @@
+bin
+obj
+.git
+Properties
+appsettings.Development.json
+Dockerfile
+.dockerignore
+*.user

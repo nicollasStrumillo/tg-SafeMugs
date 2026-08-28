@@ -133,6 +133,25 @@ builder.Services.AddHttpClient("fotoPerfil", client =>
 
 var app = builder.Build();
 
+// Auto Recover: quando ativo, restaura banco e imagens ao estado de seed a cada inicialização
+var autoRecoverEnabled = app.Configuration.GetValue<bool>("AutoRecover:Enabled");
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+    if (autoRecoverEnabled)
+    {
+        await db.Database.EnsureDeletedAsync(); // dropa a database
+    }
+    await db.Database.MigrateAsync();
+}
+
+if (autoRecoverEnabled)
+{
+    var environment = app.Services.GetRequiredService<IWebHostEnvironment>();
+    AutoRecover.RestaurarImagens(environment.WebRootPath!);
+}
+
 // Incializa e monta o dicionário do QuizDesafioService
 var quizDesafioService = app.Services.GetRequiredService<IQuizDesafioService>();
 await quizDesafioService.MontarDicionario();

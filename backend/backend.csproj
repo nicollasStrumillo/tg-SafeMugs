@@ -22,6 +22,7 @@
     <!-- Mas são copiados para o output do publish, preservando a estrutura de pastas -->
     <None Include="QuizDesafios\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
   </ItemGroup>
 
