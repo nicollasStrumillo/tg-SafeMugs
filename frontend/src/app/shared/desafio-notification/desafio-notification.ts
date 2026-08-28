@@ -162,7 +162,7 @@ export class DesafioNotification implements OnInit {
 	protected async copiar(texto: string){
 		await navigator.clipboard.writeText(texto);
 		
-		this.notificationService.info("Payload copiado!");
+		this.notificationService.info("Texto copiado!");
 		
 	}
 }

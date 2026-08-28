@@ -276,7 +276,7 @@ export class ScoreBoard implements OnInit {
 		event?.stopPropagation();
 		await navigator.clipboard.writeText(texto);
 		
-		this.notificationService.info("Payload copiado!");
+		this.notificationService.info("Texto copiado!");
 		
 	}
 }

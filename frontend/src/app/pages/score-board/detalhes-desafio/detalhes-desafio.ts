@@ -191,7 +191,7 @@ export class DetalhesDesafio implements OnInit {
 
 	protected async copiar(texto: string): Promise<void> {
 		await navigator.clipboard.writeText(texto);
-		this.notificationService.info('Payload copiado!');
+		this.notificationService.info('Texto copiado!');
 	}
 
 	protected trackByLinha(index: number): number {
