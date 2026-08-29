@@ -211,6 +211,266 @@ namespace backend.Migrations
                             Nota = 4.5f,
                             ProdutoId = 6,
                             UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Comentario = "Acabamento artesanal lindo e ceramica muito bem feita.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 8,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Comentario = "Detalhe em relevo da um charme especial, adorei o tom terracota.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 8,
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Comentario = "Caneca charmosa e diferente, combina bem com decoracao.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4f,
+                            ProdutoId = 8,
+                            UsuarioId = 7
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Comentario = "Frase divertida e estampa muito nitida, perfeita para o trabalho.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 9,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Comentario = "Otima para presentear colegas da area de tecnologia.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 9,
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Comentario = "Material de boa qualidade e impressao bem feita.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4f,
+                            ProdutoId = 9,
+                            UsuarioId = 5
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Comentario = "Chegou bem embalada e o acabamento e excelente.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 9,
+                            UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Comentario = "Ilustracoes muito fofas e detalhadas, adorei a proposta.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 10,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Comentario = "Estampa criativa e cores muito bonitas.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 10,
+                            UsuarioId = 7
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Comentario = "Design elegante e tema de cafe muito bem representado.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 11,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Comentario = "Visual delicado e acabamento caprichado.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4f,
+                            ProdutoId = 11,
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Comentario = "Perfeita para a rotina do cafe da manha.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 11,
+                            UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Comentario = "Acabamento fosco muito bonito e sofisticado.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 12,
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Comentario = "Minimalista e versatil, combina com tudo.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 12,
+                            UsuarioId = 5
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Comentario = "Tom de rosa suave e acabamento impecavel.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 13,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Comentario = "Caneca delicada e com tamanho otimo para o dia a dia.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4f,
+                            ProdutoId = 13,
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Comentario = "Cor linda e material de otima qualidade.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 13,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Comentario = "Visual moderno e muito agradavel.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 13,
+                            UsuarioId = 7
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Comentario = "Rostinho sonolento muito fofo e acabamento rustico lindo.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 14,
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Comentario = "Peca diferente e com personalidade, gostei bastante.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4f,
+                            ProdutoId = 14,
+                            UsuarioId = 5
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Comentario = "Ceramica bem trabalhada e detalhe gravado caprichado.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 14,
+                            UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Comentario = "Rosto sorridente traz bom humor para o dia.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 15,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Comentario = "Caneca leve e com estampa muito simpatica.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 15,
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Comentario = "Frase divertida e otima ideia para presente.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4.5f,
+                            ProdutoId = 16,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Comentario = "Estampa bem feita e caneca de boa qualidade.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 5f,
+                            ProdutoId = 16,
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Comentario = "Gostei do acabamento e da proposta descontraida.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Nota = 4f,
+                            ProdutoId = 16,
+                            UsuarioId = 7
                         });
                 });
 
@@ -499,6 +759,172 @@ namespace backend.Migrations
                             Comentario = "Produto conforme anunciado.",
                             ProdutoId = 6,
                             UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Comentario = "Adorei o tom azul e o detalhe em relevo.",
+                            ProdutoId = 8,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Comentario = "Chegou bem embalada.",
+                            ProdutoId = 8
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Comentario = "Acabamento artesanal muito bonito.",
+                            ProdutoId = 8,
+                            UsuarioId = 5
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Comentario = "Frase muito divertida.",
+                            ProdutoId = 9,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Comentario = "Presente perfeito para devs.",
+                            ProdutoId = 9
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Comentario = "Ilustrações muito fofas.",
+                            ProdutoId = 10,
+                            UsuarioId = 7
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Comentario = "Os desenhos ficaram lindos.",
+                            ProdutoId = 10
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Comentario = "Minha coleção favorita.",
+                            ProdutoId = 10,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Comentario = "Cores bem vivas.",
+                            ProdutoId = 10,
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Comentario = "Tema café ficou ótimo.",
+                            ProdutoId = 11,
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Comentario = "Muito elegante.",
+                            ProdutoId = 11
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Comentario = "Uso todo dia no trabalho.",
+                            ProdutoId = 11,
+                            UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Comentario = "Preta fosca muito chique.",
+                            ProdutoId = 12,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Comentario = "Combina com qualquer ambiente.",
+                            ProdutoId = 12
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Comentario = "Tonalidade rosa bem delicada.",
+                            ProdutoId = 13,
+                            UsuarioId = 4
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Comentario = "Linda ao vivo.",
+                            ProdutoId = 13
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Comentario = "Tamanho ideal.",
+                            ProdutoId = 13,
+                            UsuarioId = 2
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Comentario = "Rostinho muito simpático.",
+                            ProdutoId = 14,
+                            UsuarioId = 6
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Comentario = "Acabamento rústico lindo.",
+                            ProdutoId = 14
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Comentario = "Sorriso deixa o dia mais leve.",
+                            ProdutoId = 15,
+                            UsuarioId = 3
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Comentario = "Bem divertida.",
+                            ProdutoId = 15
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Comentario = "Ótima para o café da tarde.",
+                            ProdutoId = 15,
+                            UsuarioId = 5
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Comentario = "Estampa bem nítida.",
+                            ProdutoId = 15,
+                            UsuarioId = 1
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Comentario = "Presenteei meu chefe e ele adorou.",
+                            ProdutoId = 16,
+                            UsuarioId = 7
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Comentario = "Frase muito criativa.",
+                            ProdutoId = 16
                         });
                 });
 
@@ -1241,6 +1667,102 @@ namespace backend.Migrations
                             PrecoUnitario = 64.90m,
                             ProdutoId = 3,
                             Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CarrinhoId = 3,
+                            PrecoUnitario = 69.90m,
+                            ProdutoId = 8,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CarrinhoId = 6,
+                            PrecoUnitario = 52.90m,
+                            ProdutoId = 9,
+                            Quantidade = 2
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CarrinhoId = 7,
+                            PrecoUnitario = 61.90m,
+                            ProdutoId = 10,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CarrinhoId = 3,
+                            PrecoUnitario = 55.90m,
+                            ProdutoId = 11,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CarrinhoId = 8,
+                            PrecoUnitario = 47.90m,
+                            ProdutoId = 12,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CarrinhoId = 2,
+                            PrecoUnitario = 53.90m,
+                            ProdutoId = 13,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CarrinhoId = 1,
+                            PrecoUnitario = 58.90m,
+                            ProdutoId = 14,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CarrinhoId = 5,
+                            PrecoUnitario = 49.90m,
+                            ProdutoId = 15,
+                            Quantidade = 2
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CarrinhoId = 6,
+                            PrecoUnitario = 54.90m,
+                            ProdutoId = 16,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CarrinhoId = 7,
+                            PrecoUnitario = 69.90m,
+                            ProdutoId = 8,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CarrinhoId = 3,
+                            PrecoUnitario = 47.90m,
+                            ProdutoId = 12,
+                            Quantidade = 1
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CarrinhoId = 8,
+                            PrecoUnitario = 52.90m,
+                            ProdutoId = 9,
+                            Quantidade = 1
                         });
                 });
 
@@ -1468,6 +1990,123 @@ namespace backend.Migrations
                             Nome = "Caneca Gato Cinza",
                             Preco = 56.90m,
                             UrlImagemProduto = "/imagens/produto/mug_gato_morango.jpg"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Ativo = true,
+                            CategoriaProdutoId = 3,
+                            Descricao = "Caneca de ceramica artesanal em tons azuis e terracota, com selo em relevo Purrista Cat Cafe.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 8,
+                            Nome = "Caneca Purrista Cat Cafe",
+                            Preco = 69.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_cat_cafe.jpg"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Ativo = true,
+                            CategoriaProdutoId = 1,
+                            Descricao = "Caneca branca com frase divertida CSS is Amazing, ideal para programadores e devs.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 22,
+                            Nome = "Caneca CSS is Amazing",
+                            Preco = 52.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_css.jpg"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Ativo = true,
+                            CategoriaProdutoId = 2,
+                            Descricao = "Caneca branca ilustrada com diversas raças de gatos e seus nomes em japones e ingles.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 14,
+                            Nome = "Caneca Desenhos de Gatos",
+                            Preco = 61.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_desenhos_gatos.jpg"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Ativo = true,
+                            CategoriaProdutoId = 1,
+                            Descricao = "Caneca clara com ilustracao de cafeteira italiana e xicara fumegante, tema cafe.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 17,
+                            Nome = "Caneca Icones Cafe",
+                            Preco = 55.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_icones_cafe.jpg"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Ativo = true,
+                            CategoriaProdutoId = 1,
+                            Descricao = "Caneca preta fosca de design minimalista, combina com qualquer ambiente.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 30,
+                            Nome = "Caneca Preta Fosca",
+                            Preco = 47.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_preta.jpg"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Ativo = true,
+                            CategoriaProdutoId = 1,
+                            Descricao = "Caneca rosa clara de acabamento fosco, visual delicado e moderno.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 19,
+                            Nome = "Caneca Rosa",
+                            Preco = 53.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_rosa.jpg"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Ativo = true,
+                            CategoriaProdutoId = 3,
+                            Descricao = "Caneca de ceramica artesanal com rosto sonolento gravado, acabamento rustico.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 11,
+                            Nome = "Caneca Sono",
+                            Preco = 58.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_sono.jpg"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Ativo = true,
+                            CategoriaProdutoId = 1,
+                            Descricao = "Caneca branca com rosto sorridente, para o dia a dia com bom humor.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 16,
+                            Nome = "Caneca Sorriso Engraçado",
+                            Preco = 49.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_sorriso.jpg"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Ativo = true,
+                            CategoriaProdutoId = 1,
+                            Descricao = "Caneca branca com a frase World's Best Boss, otima opção de presente para chefes.",
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Estoque = 13,
+                            Nome = "Caneca World's Best Boss",
+                            Preco = 54.90m,
+                            UrlImagemProduto = "/imagens/produto/mug_worlds_best_boss.jpg"
                         });
                 });
 

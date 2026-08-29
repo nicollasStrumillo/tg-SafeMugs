@@ -449,7 +449,125 @@ public class ApplicationDBContext : DbContext
                 DtAtualizacao = seedDate,
                 CategoriaProdutoId = 2,
                 UrlImagemProduto = "/imagens/produto/mug_gato_morango.jpg"
-            });
+            },
+            new Produto
+            {
+                Id = 8,
+                Nome = "Caneca Purrista Cat Cafe",
+                Descricao = "Caneca de ceramica artesanal em tons azuis e terracota, com selo em relevo Purrista Cat Cafe.",
+                Preco = 69.90m,
+                Estoque = 8,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 3,
+                UrlImagemProduto = "/imagens/produto/mug_cat_cafe.jpg"
+            },
+            new Produto
+            {
+                Id = 9,
+                Nome = "Caneca CSS is Amazing",
+                Descricao = "Caneca branca com frase divertida CSS is Amazing, ideal para programadores e devs.",
+                Preco = 52.90m,
+                Estoque = 22,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_css.jpg"
+            },
+            new Produto
+            {
+                Id = 10,
+                Nome = "Caneca Desenhos de Gatos",
+                Descricao = "Caneca branca ilustrada com diversas raças de gatos e seus nomes em japones e ingles.",
+                Preco = 61.90m,
+                Estoque = 14,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 2,
+                UrlImagemProduto = "/imagens/produto/mug_desenhos_gatos.jpg"
+            },
+            new Produto
+            {
+                Id = 11,
+                Nome = "Caneca Icones Cafe",
+                Descricao = "Caneca clara com ilustracao de cafeteira italiana e xicara fumegante, tema cafe.",
+                Preco = 55.90m,
+                Estoque = 17,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_icones_cafe.jpg"
+            },
+            new Produto
+            {
+                Id = 12,
+                Nome = "Caneca Preta Fosca",
+                Descricao = "Caneca preta fosca de design minimalista, combina com qualquer ambiente.",
+                Preco = 47.90m,
+                Estoque = 30,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_preta.jpg"
+            },
+            new Produto
+            {
+                Id = 13,
+                Nome = "Caneca Rosa",
+                Descricao = "Caneca rosa clara de acabamento fosco, visual delicado e moderno.",
+                Preco = 53.90m,
+                Estoque = 19,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_rosa.jpg"
+            },
+            new Produto
+            {
+                Id = 14,
+                Nome = "Caneca Sono",
+                Descricao = "Caneca de ceramica artesanal com rosto sonolento gravado, acabamento rustico.",
+                Preco = 58.90m,
+                Estoque = 11,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 3,
+                UrlImagemProduto = "/imagens/produto/mug_sono.jpg"
+            },
+            new Produto
+            {
+                Id = 15,
+                Nome = "Caneca Sorriso Engraçado",
+                Descricao = "Caneca branca com rosto sorridente, para o dia a dia com bom humor.",
+                Preco = 49.90m,
+                Estoque = 16,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_sorriso.jpg"
+            },
+            new Produto
+            {
+                Id = 16,
+                Nome = "Caneca World's Best Boss",
+                Descricao = "Caneca branca com a frase World's Best Boss, otima opção de presente para chefes.",
+                Preco = 54.90m,
+                Estoque = 13,
+                Ativo = true,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                CategoriaProdutoId = 1,
+                UrlImagemProduto = "/imagens/produto/mug_worlds_best_boss.jpg"
+            }
+        );
 
         modelBuilder.Entity<Avaliacao>().HasData(
             new Avaliacao
@@ -601,6 +719,275 @@ public class ApplicationDBContext : DbContext
                 DtAtualizacao = seedDate,
                 UsuarioId = 6,
                 ProdutoId = 6
+            },
+            // Produto 8 - Caneca Purrista Cat Cafe (3 avaliacoes)
+            new Avaliacao
+            {
+                Id = 16,
+                Nota = 5f,
+                Comentario = "Acabamento artesanal lindo e ceramica muito bem feita.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 8
+            },
+            new Avaliacao
+            {
+                Id = 17,
+                Nota = 4.5f,
+                Comentario = "Detalhe em relevo da um charme especial, adorei o tom terracota.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4,
+                ProdutoId = 8
+            },
+            new Avaliacao
+            {
+                Id = 18,
+                Nota = 4f,
+                Comentario = "Caneca charmosa e diferente, combina bem com decoracao.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 7,
+                ProdutoId = 8
+            },
+            // Produto 9 - Caneca CSS is Amazing (4 avaliacoes)
+            new Avaliacao
+            {
+                Id = 19,
+                Nota = 5f,
+                Comentario = "Frase divertida e estampa muito nitida, perfeita para o trabalho.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 9
+            },
+            new Avaliacao
+            {
+                Id = 20,
+                Nota = 4.5f,
+                Comentario = "Otima para presentear colegas da area de tecnologia.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3,
+                ProdutoId = 9
+            },
+            new Avaliacao
+            {
+                Id = 21,
+                Nota = 4f,
+                Comentario = "Material de boa qualidade e impressao bem feita.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 5,
+                ProdutoId = 9
+            },
+            new Avaliacao
+            {
+                Id = 22,
+                Nota = 5f,
+                Comentario = "Chegou bem embalada e o acabamento e excelente.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 6,
+                ProdutoId = 9
+            },
+            // Produto 10 - Caneca Desenhos de Gatos (2 avaliacoes)
+            new Avaliacao
+            {
+                Id = 23,
+                Nota = 5f,
+                Comentario = "Ilustracoes muito fofas e detalhadas, adorei a proposta.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 10
+            },
+            new Avaliacao
+            {
+                Id = 24,
+                Nota = 4.5f,
+                Comentario = "Estampa criativa e cores muito bonitas.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 7,
+                ProdutoId = 10
+            },
+            // Produto 11 - Caneca Icones Cafe (3 avaliacoes)
+            new Avaliacao
+            {
+                Id = 25,
+                Nota = 4.5f,
+                Comentario = "Design elegante e tema de cafe muito bem representado.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 11
+            },
+            new Avaliacao
+            {
+                Id = 26,
+                Nota = 4f,
+                Comentario = "Visual delicado e acabamento caprichado.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4,
+                ProdutoId = 11
+            },
+            new Avaliacao
+            {
+                Id = 27,
+                Nota = 5f,
+                Comentario = "Perfeita para a rotina do cafe da manha.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 6,
+                ProdutoId = 11
+            },
+            // Produto 12 - Caneca Preta Fosca (2 avaliacoes)
+            new Avaliacao
+            {
+                Id = 28,
+                Nota = 4.5f,
+                Comentario = "Acabamento fosco muito bonito e sofisticado.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3,
+                ProdutoId = 12
+            },
+            new Avaliacao
+            {
+                Id = 29,
+                Nota = 5f,
+                Comentario = "Minimalista e versatil, combina com tudo.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 5,
+                ProdutoId = 12
+            },
+            // Produto 13 - Caneca Rosa (4 avaliacoes)
+            new Avaliacao
+            {
+                Id = 30,
+                Nota = 4.5f,
+                Comentario = "Tom de rosa suave e acabamento impecavel.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 13
+            },
+            new Avaliacao
+            {
+                Id = 31,
+                Nota = 4f,
+                Comentario = "Caneca delicada e com tamanho otimo para o dia a dia.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4,
+                ProdutoId = 13
+            },
+            new Avaliacao
+            {
+                Id = 32,
+                Nota = 5f,
+                Comentario = "Cor linda e material de otima qualidade.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 13
+            },
+            new Avaliacao
+            {
+                Id = 33,
+                Nota = 4.5f,
+                Comentario = "Visual moderno e muito agradavel.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 7,
+                ProdutoId = 13
+            },
+            // Produto 14 - Caneca Sono (3 avaliacoes)
+            new Avaliacao
+            {
+                Id = 34,
+                Nota = 5f,
+                Comentario = "Rostinho sonolento muito fofo e acabamento rustico lindo.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3,
+                ProdutoId = 14
+            },
+            new Avaliacao
+            {
+                Id = 35,
+                Nota = 4f,
+                Comentario = "Peca diferente e com personalidade, gostei bastante.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 5,
+                ProdutoId = 14
+            },
+            new Avaliacao
+            {
+                Id = 36,
+                Nota = 4.5f,
+                Comentario = "Ceramica bem trabalhada e detalhe gravado caprichado.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 6,
+                ProdutoId = 14
+            },
+            // Produto 15 - Caneca Sorriso (2 avaliacoes)
+            new Avaliacao
+            {
+                Id = 37,
+                Nota = 5f,
+                Comentario = "Rosto sorridente traz bom humor para o dia.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 1,
+                ProdutoId = 15
+            },
+            new Avaliacao
+            {
+                Id = 38,
+                Nota = 4.5f,
+                Comentario = "Caneca leve e com estampa muito simpatica.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 4,
+                ProdutoId = 15
+            },
+            // Produto 16 - Caneca World's Best Boss (3 avaliacoes)
+            new Avaliacao
+            {
+                Id = 39,
+                Nota = 4.5f,
+                Comentario = "Frase divertida e otima ideia para presente.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 2,
+                ProdutoId = 16
+            },
+            new Avaliacao
+            {
+                Id = 40,
+                Nota = 5f,
+                Comentario = "Estampa bem feita e caneca de boa qualidade.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 3,
+                ProdutoId = 16
+            },
+            new Avaliacao
+            {
+                Id = 41,
+                Nota = 4f,
+                Comentario = "Gostei do acabamento e da proposta descontraida.",
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                UsuarioId = 7,
+                ProdutoId = 16
             });
 
         modelBuilder.Entity<ComentarioProduto>().HasData(
@@ -734,6 +1121,199 @@ public class ApplicationDBContext : DbContext
                 ProdutoId = 6,
                 UsuarioId = 6,
                 Comentario = "Produto conforme anunciado."
+            },
+
+            // Produto 8 - Caneca Purrista Cat Cafe (3 comentarios)
+            new ComentarioProduto
+            {
+                Id = 19,
+                ProdutoId = 8,
+                UsuarioId = 2,
+                Comentario = "Adorei o tom azul e o detalhe em relevo."
+            },
+            new ComentarioProduto
+            {
+                Id = 20,
+                ProdutoId = 8,
+                UsuarioId = null,
+                Comentario = "Chegou bem embalada."
+            },
+            new ComentarioProduto
+            {
+                Id = 21,
+                ProdutoId = 8,
+                UsuarioId = 5,
+                Comentario = "Acabamento artesanal muito bonito."
+            },
+
+            // Produto 9 - Caneca CSS is Amazing (2 comentarios)
+            new ComentarioProduto
+            {
+                Id = 22,
+                ProdutoId = 9,
+                UsuarioId = 1,
+                Comentario = "Frase muito divertida."
+            },
+            new ComentarioProduto
+            {
+                Id = 23,
+                ProdutoId = 9,
+                UsuarioId = null,
+                Comentario = "Presente perfeito para devs."
+            },
+
+            // Produto 10 - Caneca Desenhos de Gatos (4 comentarios)
+            new ComentarioProduto
+            {
+                Id = 24,
+                ProdutoId = 10,
+                UsuarioId = 7,
+                Comentario = "Ilustrações muito fofas."
+            },
+            new ComentarioProduto
+            {
+                Id = 25,
+                ProdutoId = 10,
+                UsuarioId = null,
+                Comentario = "Os desenhos ficaram lindos."
+            },
+            new ComentarioProduto
+            {
+                Id = 26,
+                ProdutoId = 10,
+                UsuarioId = 2,
+                Comentario = "Minha coleção favorita."
+            },
+            new ComentarioProduto
+            {
+                Id = 27,
+                ProdutoId = 10,
+                UsuarioId = 4,
+                Comentario = "Cores bem vivas."
+            },
+
+            // Produto 11 - Caneca Icones Cafe (3 comentarios)
+            new ComentarioProduto
+            {
+                Id = 28,
+                ProdutoId = 11,
+                UsuarioId = 3,
+                Comentario = "Tema café ficou ótimo."
+            },
+            new ComentarioProduto
+            {
+                Id = 29,
+                ProdutoId = 11,
+                UsuarioId = null,
+                Comentario = "Muito elegante."
+            },
+            new ComentarioProduto
+            {
+                Id = 30,
+                ProdutoId = 11,
+                UsuarioId = 6,
+                Comentario = "Uso todo dia no trabalho."
+            },
+
+            // Produto 12 - Caneca Preta Fosca (2 comentarios)
+            new ComentarioProduto
+            {
+                Id = 31,
+                ProdutoId = 12,
+                UsuarioId = 1,
+                Comentario = "Preta fosca muito chique."
+            },
+            new ComentarioProduto
+            {
+                Id = 32,
+                ProdutoId = 12,
+                UsuarioId = null,
+                Comentario = "Combina com qualquer ambiente."
+            },
+
+            // Produto 13 - Caneca Rosa (3 comentarios)
+            new ComentarioProduto
+            {
+                Id = 33,
+                ProdutoId = 13,
+                UsuarioId = 4,
+                Comentario = "Tonalidade rosa bem delicada."
+            },
+            new ComentarioProduto
+            {
+                Id = 34,
+                ProdutoId = 13,
+                UsuarioId = null,
+                Comentario = "Linda ao vivo."
+            },
+            new ComentarioProduto
+            {
+                Id = 35,
+                ProdutoId = 13,
+                UsuarioId = 2,
+                Comentario = "Tamanho ideal."
+            },
+
+            // Produto 14 - Caneca Sono (2 comentarios)
+            new ComentarioProduto
+            {
+                Id = 36,
+                ProdutoId = 14,
+                UsuarioId = 6,
+                Comentario = "Rostinho muito simpático."
+            },
+            new ComentarioProduto
+            {
+                Id = 37,
+                ProdutoId = 14,
+                UsuarioId = null,
+                Comentario = "Acabamento rústico lindo."
+            },
+
+            // Produto 15 - Caneca Sorriso Kawaii (4 comentarios)
+            new ComentarioProduto
+            {
+                Id = 38,
+                ProdutoId = 15,
+                UsuarioId = 3,
+                Comentario = "Sorriso deixa o dia mais leve."
+            },
+            new ComentarioProduto
+            {
+                Id = 39,
+                ProdutoId = 15,
+                UsuarioId = null,
+                Comentario = "Bem divertida."
+            },
+            new ComentarioProduto
+            {
+                Id = 40,
+                ProdutoId = 15,
+                UsuarioId = 5,
+                Comentario = "Ótima para o café da tarde."
+            },
+            new ComentarioProduto
+            {
+                Id = 41,
+                ProdutoId = 15,
+                UsuarioId = 1,
+                Comentario = "Estampa bem nítida."
+            },
+
+            // Produto 16 - Caneca World's Best Boss (2 comentarios)
+            new ComentarioProduto
+            {
+                Id = 42,
+                ProdutoId = 16,
+                UsuarioId = 7,
+                Comentario = "Presenteei meu chefe e ele adorou."
+            },
+            new ComentarioProduto
+            {
+                Id = 43,
+                ProdutoId = 16,
+                UsuarioId = null,
+                Comentario = "Frase muito criativa."
             }
 
         );
@@ -869,6 +1449,102 @@ public class ApplicationDBContext : DbContext
                 PrecoUnitario = 64.90m,
                 CarrinhoId = 5,
                 ProdutoId = 3
+            },
+            new ItemCarrinho
+            {
+                Id = 9,
+                Quantidade = 1,
+                PrecoUnitario = 69.90m,
+                CarrinhoId = 3,
+                ProdutoId = 8
+            },
+            new ItemCarrinho
+            {
+                Id = 10,
+                Quantidade = 2,
+                PrecoUnitario = 52.90m,
+                CarrinhoId = 6,
+                ProdutoId = 9
+            },
+            new ItemCarrinho
+            {
+                Id = 11,
+                Quantidade = 1,
+                PrecoUnitario = 61.90m,
+                CarrinhoId = 7,
+                ProdutoId = 10
+            },
+            new ItemCarrinho
+            {
+                Id = 12,
+                Quantidade = 1,
+                PrecoUnitario = 55.90m,
+                CarrinhoId = 3,
+                ProdutoId = 11
+            },
+            new ItemCarrinho
+            {
+                Id = 13,
+                Quantidade = 1,
+                PrecoUnitario = 47.90m,
+                CarrinhoId = 8,
+                ProdutoId = 12
+            },
+            new ItemCarrinho
+            {
+                Id = 14,
+                Quantidade = 1,
+                PrecoUnitario = 53.90m,
+                CarrinhoId = 2,
+                ProdutoId = 13
+            },
+            new ItemCarrinho
+            {
+                Id = 15,
+                Quantidade = 1,
+                PrecoUnitario = 58.90m,
+                CarrinhoId = 1,
+                ProdutoId = 14
+            },
+            new ItemCarrinho
+            {
+                Id = 16,
+                Quantidade = 2,
+                PrecoUnitario = 49.90m,
+                CarrinhoId = 5,
+                ProdutoId = 15
+            },
+            new ItemCarrinho
+            {
+                Id = 17,
+                Quantidade = 1,
+                PrecoUnitario = 54.90m,
+                CarrinhoId = 6,
+                ProdutoId = 16
+            },
+            new ItemCarrinho
+            {
+                Id = 18,
+                Quantidade = 1,
+                PrecoUnitario = 69.90m,
+                CarrinhoId = 7,
+                ProdutoId = 8
+            },
+            new ItemCarrinho
+            {
+                Id = 19,
+                Quantidade = 1,
+                PrecoUnitario = 47.90m,
+                CarrinhoId = 3,
+                ProdutoId = 12
+            },
+            new ItemCarrinho
+            {
+                Id = 20,
+                Quantidade = 1,
+                PrecoUnitario = 52.90m,
+                CarrinhoId = 8,
+                ProdutoId = 9
             }
         );
 
