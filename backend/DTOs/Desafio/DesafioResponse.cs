@@ -12,6 +12,8 @@ public class DesafioResponse
 
     public int Dificuldade { get; set; }
     
+    public string? Rota { get; set; }
+    
     public bool Resolvido { get; set; }
 
     public bool PossuiQuiz { get; set; } = false;

@@ -46,6 +46,7 @@ public class DesafioService : IDesafioService
             Categoria = desafio.Categoria.GetNomeDisplay(),
             Dificuldade = desafio.Dificuldade,
             Resolvido = desafio.Resolvido,
+            Rota = desafio.Rota,
             IsRestored = isRestored,
 
             PossuiQuiz = quiz != null,
@@ -92,6 +93,7 @@ public class DesafioService : IDesafioService
             Categoria = desafio.Categoria.GetNomeDisplay(),
             DescricaoCategoria = desafio.Categoria.GetDescription(),
             Dificuldade = desafio.Dificuldade,
+            Rota = desafio.Rota,
             Resolvido = desafio.Resolvido,
 
             PossuiQuiz = quiz != null,

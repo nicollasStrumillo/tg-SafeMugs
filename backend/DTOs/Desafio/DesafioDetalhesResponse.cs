@@ -12,6 +12,7 @@ public class DesafioDetalhesResponse
     public string DescricaoCategoria { get; set; } = string.Empty;
 
     public int Dificuldade { get; set; }
+    public string? Rota { get; set; }
     public bool Resolvido { get; set; }
     
     public bool PossuiQuiz { get; set; } = false;

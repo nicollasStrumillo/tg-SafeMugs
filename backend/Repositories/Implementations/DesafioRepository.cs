@@ -26,6 +26,7 @@ public class DesafioRepository : IDesafioRepository
                 Categoria = d.Categoria,
                 Dificuldade = d.Dificuldade,
                 Resolvido = d.Resolvido,
+                Rota = d.Rota,
                 DicasDesafio = d.DicasDesafio.Select(dd => new DicaDesafio
                 {
                     Id = dd.Id,
