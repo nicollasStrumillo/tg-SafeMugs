@@ -91,6 +91,7 @@ $azul-escuro-border: rgba(133, 163, 218, 0.28);
 	border-left: 4px solid $azul-escuro;
 	border-radius: 0.35rem;
 	padding: 1.5rem;
+	padding-right: 3.4rem;
 	box-shadow: 0 4px 12px rgba(13, 23, 40, 0.06);
 	position: relative;
 
@@ -107,6 +108,61 @@ $azul-escuro-border: rgba(133, 163, 218, 0.28);
 	}
 }
 
+.pin-button {
+	position: absolute;
+	top: 0.6rem;
+	right: 0.6rem;
+	width: 2.4rem;
+	height: 2.4rem;
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	line-height: 1;
+	z-index: 2;
+
+	&:hover {
+		background: rgba(15, 29, 54, 0.06);
+	}
+
+	.material-symbols-outlined {
+		font-family: 'Material Symbols Outlined';
+		font-size: 20px;
+		width: 20px;
+		height: 20px;
+		line-height: 1;
+		font-weight: normal;
+		font-style: normal;
+		letter-spacing: normal;
+		text-transform: none;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		white-space: nowrap;
+		word-wrap: normal;
+		direction: ltr;
+		-webkit-font-smoothing: antialiased;
+		vertical-align: middle;
+	}
+}
+
+.icon-pin {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+	line-height: 1;
+	color: #5a6b82;
+	font-variation-settings:
+		'FILL' 0,
+		'wght' 400,
+		'GRAD' 0,
+		'opsz' 24;
+}
+
 .bloco-header {
 	display: grid;
 	gap: 0.75rem;
@@ -120,6 +176,21 @@ $azul-escuro-border: rgba(133, 163, 218, 0.28);
 	line-height: 1.1;
 	letter-spacing: -0.02em;
 	color: $ink-dialog;
+}
+
+.rota-desafio {
+	margin: -0.4rem 0 -0.2rem 0;
+	font-family: Consolas, 'JetBrains Mono', monospace;
+	font-size: 0.82rem;
+	font-weight: 500;
+	color: #5a6b82;
+	line-height: 1.4;
+	letter-spacing: 0.01em;
+	word-break: break-all;
+}
+
+.nome-rota {
+	font-weight: 900;
 }
 
 .meta-info-row {

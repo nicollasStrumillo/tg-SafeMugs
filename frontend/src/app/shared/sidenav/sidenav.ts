@@ -24,7 +24,6 @@ export class SidenavComponent implements OnInit {
 	protected readonly showScoreBoard = signal(false);
 
 	protected readonly toggleIcon = computed(() => (this.expanded() ? 'chevron_left' : 'chevron_right'));
-	protected readonly toggleLabel = computed(() => (this.expanded() ? '' : ''));
 	protected readonly toggleTooltip = computed(() => (this.expanded() ? 'Recolher menu' : 'Expandir menu'));
 
 	protected readonly githubUrl = 'https://github.com/nicollasStrumillo/tg-SafeMugs';
@@ -50,11 +49,6 @@ export class SidenavComponent implements OnInit {
 	protected logout(): void {
 		this.auth.limparSessao();
 		void this.router.navigate(['/catalogo']);
-	}
-
-	protected onFotoError(event: Event): void {
-		const img = event.target as HTMLImageElement;
-		img.src = '/imagens/perfil/generic_profile.jpg';
 	}
 
 	protected openGitHub(): void {

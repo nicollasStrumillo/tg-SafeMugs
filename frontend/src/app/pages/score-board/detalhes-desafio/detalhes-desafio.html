@@ -13,8 +13,22 @@
 
 	<div class="detalhes-container">		
 		<section class="bloco-destaque">
+			<button
+				mat-icon-button
+				type="button"
+				class="pin-button"
+				[matTooltip]="estaFixado() ? 'Retirar' : 'Fixar'"
+				[attr.aria-label]="(estaFixado() ? 'Desafixar desafio ' : 'Fixar desafio ') + desafio().nome"
+				(click)="alternarFixar($event)"
+			>
+				<span class="material-symbols-outlined icon-pin" aria-hidden="true">{{ estaFixado() ? 'keep_off' : 'keep' }}</span>
+			</button>
+
 			<header class="bloco-header">
 				<h1 class="titulo-desafio">{{ desafio().nome }}</h1>
+				@if (desafio().rota) {
+					<p class="rota-desafio">Rota: <span class="nome-rota">{{ desafio().rota }}</span></p>
+				}
 
 				<div class="meta-info-row">
 					<div class="dificuldade-row" [attr.aria-label]="'Dificuldade ' + desafio().dificuldade + ' de 5'">

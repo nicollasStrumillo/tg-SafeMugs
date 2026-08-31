@@ -16,6 +16,7 @@ import { DetalhesDesafioModel, DicaDesafioDto } from '../score-board.models';
 import { ScoreBoardService } from '../score-board.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
 import { BrowserCookieService } from '../../../services/cookies/browser-cookies.service';
+import { DesafiosnavService } from '../../../shared/desafiosnav/desafiosnav.service';
 
 hljs.registerLanguage('csharp', csharp);
 hljs.registerLanguage('typescript', typescript);
@@ -45,6 +46,7 @@ export class DetalhesDesafio implements OnInit {
 	private readonly scoreBoardService = inject(ScoreBoardService);
 	private readonly notificationService = inject(NotificationService);
 	private readonly cookieService = inject(BrowserCookieService);
+	private readonly desafiosNavService = inject(DesafiosnavService);
 	protected readonly desafio = signal<DetalhesDesafioModel>({} as DetalhesDesafioModel);
 	protected readonly linhasSelecionadas = signal<Set<number>>(new Set<number>());
 	protected readonly mensagemResultadoQuiz = signal<string | null>(null);
@@ -63,6 +65,10 @@ export class DetalhesDesafio implements OnInit {
 	protected readonly dicaAtual = signal<DicaDesafioDto | null>(null);
 
 	protected readonly niveisDificuldade = [1, 2, 3, 4, 5];
+
+	protected readonly estaFixado = computed(() =>
+		this.desafiosNavService.itensDesafio().some((d) => d.id === this.desafio().id),
+	);
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public data: { detalhesDesafio: DetalhesDesafioModel },
@@ -196,5 +202,24 @@ export class DetalhesDesafio implements OnInit {
 
 	protected trackByLinha(index: number): number {
 		return index + 1;
+	}
+
+	protected alternarFixar(event?: Event): void {
+		event?.stopPropagation();
+		const d = this.desafio();
+		if (!d?.id) return;
+
+		if (this.estaFixado()) {
+			this.desafiosNavService.removerItemDesafio(d.id);
+		} else {
+			this.desafiosNavService.adicionarItemDesafio(
+				d.id,
+				d.nome,
+				d.descricao,
+				d.dificuldade,
+				d.resolvido,
+				d.rota,
+			);
+		}
 	}
 }

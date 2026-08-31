@@ -1,3 +1,4 @@
+import { map } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +15,7 @@ import { DesafioResponse, DetalhesDesafioModel, DicaDesafioDto } from './score-b
 import { ScoreBoardService } from './score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 import { DetalhesDesafio } from './detalhes-desafio/detalhes-desafio';
+import { DesafiosnavService } from './../../shared/desafiosnav/desafiosnav.service';
 
 interface FragmentoTexto{
 	texto: string;
@@ -41,6 +43,7 @@ export class ScoreBoard implements OnInit {
 	private readonly scoreBoardService = inject(ScoreBoardService);
 	private readonly notificationService = inject(NotificationService);
 	private readonly signalRService = inject(SignalRService);
+	private readonly desafionavService = inject(DesafiosnavService);
 
 	protected readonly niveisDificuldade = [1, 2, 3, 4, 5];
 	protected readonly desafios = signal<DesafioResponse[]>([]);
@@ -55,11 +58,12 @@ export class ScoreBoard implements OnInit {
 
 	protected readonly totalDesafios = computed(() => this.desafios().length);
 	protected readonly totalResolvidos = computed(() => this.desafios().filter((d) => d.resolvido).length);
+	protected readonly desafiosFixados = computed(() => this.desafionavService.itensDesafio().map((d) => d.id));
 	protected readonly desafiosFiltrados = computed(() => {
 		const termo = this.normalizarTexto(this.termoBusca());
 		const dificuldade = this.dificuldadeSelecionada();
 		const categoriasSelecionadas = this.categoriasSelecionadas();
-
+	
 		return this.desafios().filter((desafio) => {
 			if (termo) {
 				const textoBusca = `${desafio.nome} ${desafio.descricao}`;
@@ -277,6 +281,22 @@ export class ScoreBoard implements OnInit {
 		await navigator.clipboard.writeText(texto);
 		
 		this.notificationService.info("Texto copiado!");
+	}
+
+	protected mudarEstadoFixarDesafio(desafio: DesafioResponse, event?: Event): void {
+		event?.stopPropagation();
 		
+		if (this.desafiosFixados().find((d) => d == desafio.id)){
+			this.desafionavService.removerItemDesafio(desafio.id);
+		} else{
+			this.desafionavService.adicionarItemDesafio(
+				desafio.id,
+				desafio.nome,
+				desafio.descricao,
+				desafio.dificuldade,
+				desafio.resolvido,
+				desafio.rota,
+			);
+		}
 	}
 }

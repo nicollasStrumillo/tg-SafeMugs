@@ -1,6 +1,10 @@
 <div class="app-shell">
 	<sm-sidenav />
 
+	@if (this.showDesafiosNav()){
+		<sm-desafionav />
+	}
+	
 	<div class="app-content">
 		<header class="shell-header">
 			<mat-toolbar class="topbar">

@@ -11,6 +11,7 @@ export interface DesafioResponse {
 	categoria: string;
 	dificuldade: number;
 	resolvido: boolean;
+	rota: string | null;
 	dicasDesafio: DicaDesafioDto[];
 
 	possuiQuiz: boolean;
@@ -45,6 +46,7 @@ export interface DetalhesDesafioModel{
 	descricaoCategoria: string;
 
 	dificuldade: number;
+	rota: string | null;
 	resolvido: boolean;
 
 	possuiQuiz: boolean;

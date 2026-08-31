@@ -4,6 +4,7 @@ const BACKUP_DESAFIOS_COOKIE_NAME = 'backupCookie';
 const BACKUP_QUIZZES_COOKIE_NAME = 'backupQuizzesCookie';
 const COOKIE_STATUS_NAME = 'cookieStatus';
 const BOASVINDAS_STATUS_NAME = 'boasvindasStatus';
+const ITENS_DESAIONAV_NAME = 'itensDesafionavCookie';
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,30 @@ export class BrowserCookieService {
 
     public removeBoasVindas(): void {
         this.remove(BOASVINDAS_STATUS_NAME);
+    }
+
+    public setItensDesafionav(ids: number[]): void {
+        this.set(ITENS_DESAIONAV_NAME, JSON.stringify(ids));
+    }
+
+    public getItensDesafionav(): number[] | null {
+        const raw = this.get(ITENS_DESAIONAV_NAME);
+        if (!raw) return null;
+        try {
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? (parsed as number[]) : null;
+        } catch {
+            this.remove(ITENS_DESAIONAV_NAME);
+            return null;
+        }
+    }
+
+    public existsItensDesafionav(): boolean {
+        return this.exists(ITENS_DESAIONAV_NAME);
+    }
+
+    public removeItensDesafionav(): void {
+        this.remove(ITENS_DESAIONAV_NAME);
     }
 
     // Utils

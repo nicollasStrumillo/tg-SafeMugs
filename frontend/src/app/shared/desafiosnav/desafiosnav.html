@@ -1,0 +1,235 @@
+<aside
+	class="sidenav-panel"
+	[class.expanded]="expanded()"
+	aria-label="Menu lateral de desafios fixados"
+>
+	<header class="desafios-header">
+		<span class="material-symbols-outlined header-pin-icon" aria-hidden="true">keep</span>
+		<span class="header-text">Fixados</span>
+	</header>
+
+	@if (expanded()) {
+		<div class="desafios-list">
+			@for (desafio of itensRotaAtiva(); track desafio.id) {
+				<article class="desafio-card is-rota-ativa">
+					<button
+						type="button"
+						mat-icon-button
+						class="unpin-button"
+						matTooltip="Retirar"
+						[attr.aria-label]="'Retirar ' + desafio.nome + ' dos desafios fixados'"
+						(click)="removerItemDesafio(desafio.id)"
+					>
+						<span class="material-symbols-outlined icon-unpin" aria-hidden="true">keep_off</span>
+					</button>
+
+					<div class="card-nome-row">
+						<h3 class="card-nome">{{ desafio.nome }}</h3>
+						@if (desafio.resolvido) {
+							<mat-icon class="resolved-mark" aria-label="Resolvido">check_circle</mat-icon>
+						}
+					</div>
+
+					<p class="card-descricao">
+						@for (fragmento of dividirDescricaoEPaylaod(desafio.descricao); track $index) {
+							@if (!fragmento.payload) {
+								{{ fragmento.texto }}
+							} @else {
+								<span
+									class="payload-chip"
+									(click)="copiar(fragmento.texto, $event)"
+									(keydown.enter)="copiar(fragmento.texto)"
+									(keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+									matTooltip="Clique para copiar"
+									role="button"
+									tabindex="0"
+									>{{ fragmento.texto }}</span
+								>
+							}
+						}
+					</p>
+
+					<div class="card-meta">
+						<span class="card-dificuldade" [attr.aria-label]="'Dificuldade ' + desafio.dificuldade">
+							@for (estrela of niveisDificuldade; track estrela) {
+								<mat-icon class="star" aria-hidden="true">{{
+									estrela <= desafio.dificuldade ? 'star' : 'star_border'
+								}}</mat-icon>
+							}
+						</span>
+						@if (desafio.rota != null) {
+							<mat-icon class="rota-mark" matTooltip="Rota associada" aria-hidden="true">pageview</mat-icon>
+						}
+					</div>
+				</article>
+			}
+
+			@for (desafio of itensNaoResolvidos(); track desafio.id) {
+				<article class="desafio-card">
+					<button
+						type="button"
+						mat-icon-button
+						class="unpin-button"
+						matTooltip="Retirar"
+						[attr.aria-label]="'Retirar ' + desafio.nome + ' dos desafios fixados'"
+						(click)="removerItemDesafio(desafio.id)"
+					>
+						<span class="material-symbols-outlined icon-unpin" aria-hidden="true">keep_off</span>
+					</button>
+
+					<div class="card-nome-row">
+						<h3 class="card-nome">{{ desafio.nome }}</h3>
+						@if (desafio.resolvido) {
+							<mat-icon class="resolved-mark" aria-label="Resolvido">check_circle</mat-icon>
+						}
+					</div>
+
+					<p class="card-descricao">
+						@for (fragmento of dividirDescricaoEPaylaod(desafio.descricao); track $index) {
+							@if (!fragmento.payload) {
+								{{ fragmento.texto }}
+							} @else {
+								<span
+									class="payload-chip"
+									(click)="copiar(fragmento.texto, $event)"
+									(keydown.enter)="copiar(fragmento.texto)"
+									(keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+									matTooltip="Clique para copiar"
+									role="button"
+									tabindex="0"
+									>{{ fragmento.texto }}</span
+								>
+							}
+						}
+					</p>
+
+					<div class="card-meta">
+						<span class="card-dificuldade" [attr.aria-label]="'Dificuldade ' + desafio.dificuldade">
+							@for (estrela of niveisDificuldade; track estrela) {
+								<mat-icon class="star" aria-hidden="true">{{
+									estrela <= desafio.dificuldade ? 'star' : 'star_border'
+								}}</mat-icon>
+							}
+						</span>
+						@if (desafio.rota != null) {
+							<mat-icon class="rota-mark" matTooltip="Rota associada" aria-hidden="true">pageview</mat-icon>
+						}
+					</div>
+				</article>
+			}
+
+			@for (desafio of itensResolvidos(); track desafio.id) {
+				<article class="desafio-card is-resolvido">
+					<button
+						type="button"
+						mat-icon-button
+						class="unpin-button"
+						matTooltip="Retirar"
+						[attr.aria-label]="'Retirar ' + desafio.nome + ' dos desafios fixados'"
+						(click)="removerItemDesafio(desafio.id)"
+					>
+						<span class="material-symbols-outlined icon-unpin" aria-hidden="true">keep_off</span>
+					</button>
+
+					<div class="card-nome-row">
+						<h3 class="card-nome">{{ desafio.nome }}</h3>
+						@if (desafio.resolvido) {
+							<mat-icon class="resolved-mark" aria-label="Resolvido">check_circle</mat-icon>
+						}
+					</div>
+
+					<p class="card-descricao">
+						@for (fragmento of dividirDescricaoEPaylaod(desafio.descricao); track $index) {
+							@if (!fragmento.payload) {
+								{{ fragmento.texto }}
+							} @else {
+								<span
+									class="payload-chip"
+									(click)="copiar(fragmento.texto, $event)"
+									(keydown.enter)="copiar(fragmento.texto)"
+									(keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+									matTooltip="Clique para copiar"
+									role="button"
+									tabindex="0"
+									>{{ fragmento.texto }}</span
+								>
+							}
+						}
+					</p>
+
+					<div class="card-meta">
+						<span class="card-dificuldade" [attr.aria-label]="'Dificuldade ' + desafio.dificuldade">
+							@for (estrela of niveisDificuldade; track estrela) {
+								<mat-icon class="star" aria-hidden="true">{{
+									estrela <= desafio.dificuldade ? 'star' : 'star_border'
+								}}</mat-icon>
+							}
+						</span>
+						@if (desafio.rota != null) {
+							<mat-icon class="rota-mark" matTooltip="Rota associada" aria-hidden="true">pageview</mat-icon>
+						}
+					</div>
+				</article>
+			}
+
+			@if (
+				itensRotaAtiva().length === 0 &&
+				itensNaoResolvidos().length === 0 &&
+				itensResolvidos().length === 0
+			) {
+				<div class="empty-state empty-state--info">
+					<mat-icon class="empty-info-icon" aria-hidden="true">info</mat-icon>
+					<p class="empty-text">
+						Você pode fixar desafios aqui. Itens com o símbolo
+						<mat-icon class="inline-pageview-icon" aria-hidden="true">pageview</mat-icon>
+						possuem uma rota associada e ficarão em <span class="text-destaque">destaque</span> quando você estiver nela.
+					</p>
+				</div>
+			}
+		</div>
+	} @else {
+		<div class="contadores" aria-label="Resumo dos desafios fixados">
+			@if (itensRotaAtiva().length !== 0) {
+				<span
+					class="contador contador--rota"
+					matTooltip="Desafios na rota atual"
+					[attr.aria-label]="'Desafios na rota atual: ' + itensRotaAtiva().length"
+				>
+					{{ itensRotaAtiva().length }}
+				</span>
+			}
+
+			@if (itensNaoResolvidos().length !== 0) {
+				<span
+					class="contador contador--pendente"
+					matTooltip="Desafios pendentes"
+					[attr.aria-label]="'Desafios pendentes: ' + itensNaoResolvidos().length"
+				>
+					{{ itensNaoResolvidos().length }}
+				</span>
+			}
+
+			@if (itensResolvidos().length !== 0) {
+				<span
+					class="contador contador--resolvido"
+					matTooltip="Desafios resolvidos"
+					[attr.aria-label]="'Desafios resolvidos: ' + itensResolvidos().length"
+				>
+					{{ itensResolvidos().length }}
+				</span>
+			}
+		</div>
+	}
+
+	<div class="sidenav-bottom">
+		<button
+			type="button"
+			class="sidenav-toggle"
+			(click)="toggle()"
+			[matTooltip]="toggleTooltip()"
+			[attr.aria-label]="toggleTooltip()"
+		>
+			<mat-icon aria-hidden="true">{{ toggleIcon() }}</mat-icon>
+		</button>
+	</div>
+</aside>

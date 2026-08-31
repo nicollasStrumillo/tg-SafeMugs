@@ -162,13 +162,6 @@
               <span class="category-pill">{{ desafio.categoria }}</span>
 
               <div class="topline-right">
-                @if (!desafio.resolvido) {
-                  <mat-icon
-                    class="lock-mark"
-                    aria-label="Desafio bloqueado"
-                    matTooltip="Resolva o desafio para ver detalhes"
-                  >lock</mat-icon>
-                }
                 <button
                   mat-icon-button
                   type="button"
@@ -180,6 +173,16 @@
                   [disabled]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0"
                 >
                   <mat-icon class="icon-tip" [class.no-tips]="desafio.dicasDesafio == null || desafio.dicasDesafio.length == 0">tips_and_updates</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  type="button"
+                  class="pin-button"
+                  [matTooltip]="desafiosFixados().includes(desafio.id) ? 'Retirar' : 'Fixar'"
+                  [attr.aria-label]="'Fixar desafio ' + desafio.nome"
+                  (click)="mudarEstadoFixarDesafio(desafio, $event)"
+                >
+                  <span class="material-symbols-outlined icon-pin" aria-hidden="true">{{ desafiosFixados().includes(desafio.id) ? "keep_off" : "keep" }}</span>
                 </button>
               </div>
             </div>
@@ -233,6 +236,13 @@
               </div>
 
               <div class="footer-right">
+                @if (!desafio.resolvido) {
+                  <mat-icon
+                    class="lock-mark"
+                    aria-label="Desafio bloqueado"
+                    matTooltip="Resolva o desafio para ver detalhes"
+                  >lock</mat-icon>
+                }
                 @if (desafio.possuiQuiz) {
                   <mat-icon
                     class="quiz-indicator"
