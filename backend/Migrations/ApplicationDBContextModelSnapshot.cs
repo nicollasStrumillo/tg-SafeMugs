@@ -962,6 +962,9 @@ namespace backend.Migrations
                     b.Property<bool>("Resolvido")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("Rota")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Nome")
@@ -981,7 +984,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "A consulta SQL que busca o usuário no banco de dados não trata corretamente a entrada de parâmetros, permitindo que seja possível injetar código SQL malicioso. O payload |' OR p.Nome = \"Administrador\";-- |, por exemplo, utiliza a aspas simples para quebrar a string da consulta, o operador OR adiciona mais uma condição ao Select e \";-- \" finaliza a consulta e transforma o restante da linha em um comentário. Isso permite que você acesse a conta de um usuário com perfil administrativo sem precisar conhecer a senha.",
                             Dificuldade = 2,
                             Nome = "Login como Admin",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/login"
                         },
                         new
                         {
@@ -991,7 +995,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "O campo de busca do catálogo reflete, no próprio DOM do navegador, o termo digitado sem qualquer tratamento. A entrada do usuário é inserida diretamente no HTML da página, permitindo que tags e atributos perigosos sejam interpretados pelo navegador. Como a manipulação acontece inteiramente no lado do cliente, nenhum dado malicioso precisa trafegar pelo servidor: tudo ocorre no DOM. O payload |<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, é interpretado ao ser renderizado no catálogo, comprovando uma injeção de HTML tipicamente conhecida como DOM XSS.",
                             Dificuldade = 2,
                             Nome = "DOM XSS",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/catalogo"
                         },
                         new
                         {
@@ -1001,7 +1006,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "O fluxo de login do SafeMugs não implementa nenhum mecanismo de antiautomação: não há limite de tentativas por conta, bloqueio temporário, captcha nem atraso entre requisições. Conhecendo um e-mail válido do domínio |@safemugs.com|, é possível automatizar tentativas consecutivas de senha até acertar. As senhas dos usuários comuns são fracas e baseadas em padrões conhecidos (como 'welcome123' ou 'password123'), o que torna viável um ataque usando uma lista de palavras. Sem qualquer controle de velocidade, um script consegue testar milhares de combinações em poucos segundos, obtendo acesso a uma conta legítima.",
                             Dificuldade = 2,
                             Nome = "Brute force de login",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/login"
                         },
                         new
                         {
@@ -1011,7 +1017,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "O formulário de cadastro valida os dados apenas no navegador. No servidor, a checagem de formato do e-mail é insuficiente e não impede registros com valores malformados. Ao interceptar a requisição de cadastro e enviar um e-mail em formato inválido (como |ana@@safemugs..com|), o servidor aceita o registro. Isso demonstra que a validação do front-end pode ser facilmente contornada e que o servidor não deve confiar nos dados recebidos, precisando aplicar regras de formato e sanitização por conta própria.",
                             Dificuldade = 2,
                             Nome = "Cadastro inválido",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/register"
                         },
                         new
                         {
@@ -1021,7 +1028,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "O cadastro de um novo usuário é definido, em parte, por um parâmetro que indica o perfil da conta. Embora esse campo não apareça no formulário visível, ele trafega na requisição. Ao interceptar o cadastro e incluir |\"perfil\":\"Administrador\"| no corpo enviado, a conta é criada com privilégios administrativos, sem que o servidor questione o nível solicitado. Confiam-se cegamente nos parâmetros informados pelo cliente, o que permite a escalação de privilégio direta via adulteração de parâmetro.",
                             Dificuldade = 3,
                             Nome = "Manipular cadastro",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/register"
                         },
                         new
                         {
@@ -1031,7 +1039,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "A requisição que atualiza um comentário recebe apenas o identificador do comentário e o novo texto, sem verificar se ele pertence ao usuário autenticado. Ao interceptar a edição e trocar o identificador informado pelo de um comentário alheio, é possível alterá-lo livremente. O servidor não valida a posse do recurso, confiando apenas no parâmetro recebido, o que caracteriza uma Insecure Direct Object Reference (IDOR).",
                             Dificuldade = 3,
                             Nome = "Altere o comentário de outro usuário",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/catalogo"
                         },
                         new
                         {
@@ -1041,7 +1050,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Na tela de detalhes do produto, os comentários deixados pelos usuários são renderizados diretamente no HTML, sem qualquer sanitização. Como o comentário é salvo no banco de dados e exibido a todos que abrem o produto, enviar o payload |<iframe src=\"javascript:alert(`XSS`)\">| como texto do comentário faz com que o código seja armazenado e, posteriormente, interpretado no navegador de qualquer pessoa que visualize a página. Diferente do DOM XSS, aqui o conteúdo malicioso persiste no servidor, atingindo múltiplas vítimas.",
                             Dificuldade = 3,
                             Nome = "Stored XSS em Catalogo",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/catalogo"
                         },
                         new
                         {
@@ -1051,7 +1061,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Todo comentário enviado ao servidor carrega um campo que identifica o autor a ser atribuído a ele. O servidor não valida se esse nome corresponde ao usuário autenticado: ele apenas procura o usuário pelo nome informado e o vincula ao comentário. Interceptando a requisição de criação e alterando o nome pelo de outro usuário (por exemplo |Bruno Costa|), é possível registrar um comentário em nome de outra pessoa, simulando uma identidade indevida.",
                             Dificuldade = 2,
                             Nome = "Crie um comentário por outro usuário",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/catalogo"
                         },
                         new
                         {
@@ -1061,7 +1072,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "O SafeMugs possui uma página oculta que concentra o acompanhamento dos desafios e o progresso do jogador, sem estar referenciada em nenhum menu ou link visível. Para localizá-la, é preciso explorar nomes de rotas comuns e deduzir a URL por força bruta, ou inspecionar o código javascript da página. O objetivo aqui é treinar a descoberta do domínio sendo testado, prática comum em avaliações de segurança.",
                             Dificuldade = 1,
                             Nome = "Encontrar a Score-Board",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/score-board"
                         },
                         new
                         {
@@ -1081,7 +1093,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "A consulta SQL que pesquisa pedidos por número concatena o termo digitado diretamente na string da consulta, permitindo injeção de SQL. Como a consulta original retorna seis colunas, um |UNION SELECT| anexado ao payload só é aceito se trouxer exatamente o mesmo número de colunas, e as mensagens de erro da API expõem quando essa contagem está errada, funcionando como um oráculo para descobri-la. O MySQL mantém os metadados do banco na view |information_schema.tables|: selecionar a coluna |TABLE_NAME| com o filtro |WHERE TABLE_SCHEMA = DATABASE()| retorna o nome de todas as tabelas do esquema atual. O payload |' UNION SELECT 1,TABLE_NAME,3,4,CURDATE(),6 FROM information_schema.tables WHERE TABLE_SCHEMA = DATABASE()%23|, por exemplo, lista todas as tabelas na coluna do número do pedido, enquanto o |%23| ('#' encodado para URL) transforma o restante da linha em comentário, neutralizando o filtro que restringiria os resultados ao usuário autenticado.",
                             Dificuldade = 4,
                             Nome = "Enumere as tabelas do banco",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/pedidos"
                         },
                         new
                         {
@@ -1091,7 +1104,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Nem todos os produtos registrados no banco do SafeMugs aparecem no catálogo: existe um item com estoque zerado e marcado como inativo, invisível para qualquer cliente da loja. O fluxo que adiciona um produto ao carrinho recebe o identificador do produto no corpo da requisição e apenas verifica se ele existe no banco — não confere se o produto está ativo nem se há estoque disponível. Para explorá-lo, primeiro é preciso descobrir o produto oculto: consultando o carrinho de outro usuário pela rota |/api/carrinho/{usuarioId}|, que expõe todos os itens e seus produtos, ou extraindo os registros da tabela de produtos com a injeção de SQL da pesquisa de pedidos. Com o identificador em mãos, basta interceptar a requisição |PATCH /api/carrinho/adicionar| e substituir o |produtoId| pelo do produto indisponível: o servidor aceita o item e o adiciona ao carrinho sem qualquer questionamento. O backend confia cegamente que o cliente só referencia produtos que podem ser vendidos, quando deveria validar o estado do recurso — ativo e com estoque — antes de aceitá-lo em qualquer operação, caracterizando uma validação de entrada imprópria no servidor.",
                             Dificuldade = 3,
                             Nome = "Produto inválido",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/carrinho"
                         },
                         new
                         {
@@ -1101,7 +1115,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "A rota que busca o carrinho de compras recebe o identificador do usuário diretamente pela URL e o utiliza para localizar o carrinho, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, o servidor devolve o carrinho completo do alvo: itens, quantidades e preços — acompanhados dos dados pessoais do dono, como nome, e-mail, telefone e endereço.\nO servidor confia que o parâmetro recebido na URL identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de retornar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
                             Dificuldade = 2,
                             Nome = "Visualizar o carrinho de outro usuário",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/carrinho"
                         },
                         new
                         {
@@ -1111,7 +1126,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "As requisições que alteram o carrinho — adicionar e remover produtos — carregam o identificador do dono no corpo da requisição, e o servidor o utiliza diretamente para localizar o carrinho a ser modificado, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, é possível adicionar produtos ao carrinho alheio ou remover itens que ele continha — inclusive esvaziá-lo por completo.\nO servidor confia que o identificador recebido no corpo da requisição identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de alterar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
                             Dificuldade = 2,
                             Nome = "Modificar o carrinho de outro usuário",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/carrinho"
                         },
                         new
                         {
@@ -1131,7 +1147,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Existe um endpoint interno em |/api/usuario/requisicao-interna| que valida um header secreto adicionado apenas quando a requisição é disparada pelo próprio backend — por isso não pode ser alcançado diretamente pelo navegador ou pelo Burp. O caminho é induzir o servidor a emitir uma requisição HTTP para uma URL controlada por você, apontando-a para o loopback. O payload esperado é |http://127.0.0.1:8080/api/usuario/requisicao-interna|: o servidor faz a requisição em seu nome, alcança o endpoint interno e o desafio é marcado.",
                             Dificuldade = 3,
                             Nome = "Endpoint interno",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/perfil"
                         },
                         new
                         {
@@ -1141,7 +1158,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "O catálogo exibe imagens guardadas na pasta |/imagens/produto|, cada uma referenciada por um produto do banco. Um endpoint que recebe o upload de um arquivo monta o caminho de destino concatenando o nome do arquivo informado pelo cliente diretamente em Path.Combine, sem sanitizar separadores nem segmentos |..|. Como |..| permite navegar para cima na árvore de diretórios, basta interceptar o upload e trocar o metadado filename por |../../produto/mug_behappy.jpg| (ou outra imagem real da pasta) para que o arquivo enviado sobrescreva a imagem daquele produto.",
                             Dificuldade = 4,
                             Nome = "Alterar a imagem de um produto",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/perfil"
                         },
                         new
                         {
@@ -1151,7 +1169,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Ao buscar um produto pelo nome, a API recebe o termo pesquisado como parâmetro da requisição. Quando o produto não é encontrado, a resposta de erro devolve esse mesmo termo de volta, sem tratamento, dentro da mensagem. No cliente, esse conteúdo refletido é inserido diretamente na página sem sanitização, de modo que qualquer HTML presente no termo é interpretado pelo navegador. O payload |?nome=<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, faz o servidor devolver o |<iframe>| na resposta, que então é renderizado e executado. Por se tratar de um conteúdo que parte do servidor e volta no corpo da resposta, trata-se de um Reflected XSS — diferente do DOM XSS, em que o payload nunca sai do navegador.",
                             Dificuldade = 3,
                             Nome = "Reflected XSS",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/avaliacoes-produto"
                         },
                         new
                         {
@@ -1161,7 +1180,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Na página de avaliações do produto, o e-mail do autor de cada avaliação é renderizado diretamente no HTML sem sanitização. O e-mail é um dado persistido da conta do usuário e exibido a qualquer visitante que abra as avaliações daquele produto. Ao interceptar a requisição de cadastro e registrar um usuário com o e-mail |<iframe src=\"javascript:alert(`XSS`)\">|, depois publicar uma avaliação com essa conta, o payload fica armazenado no banco e é interpretado no navegador de quem visualiza a página em |/avaliacoes-produto?nome=...|. Diferente do Reflected XSS, aqui o conteúdo malicioso persiste no servidor e atinge múltiplas vítimas, caracterizando Stored XSS via campo de e-mail.",
                             Dificuldade = 4,
                             Nome = "Stored XSS em Avaliações",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/avaliacoes-produto"
                         },
                         new
                         {
@@ -1171,7 +1191,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Ao criar uma avaliação, o cliente envia no corpo da requisição o identificador do autor (usuarioId) junto com nota e comentario para POST |/api/produtos/avaliacoes/{produtoId}|. O servidor apenas verifica se o usuário informado existe e o vincula à avaliação, sem conferir se corresponde ao usuário autenticado. Interceptando a requisição disparada pelo diálogo de avaliação e trocando usuarioId pelo de outro usuário, é possível registrar uma avaliação em nome de outra pessoa.",
                             Dificuldade = 2,
                             Nome = "Avaliação ilegítima",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/avaliacoes-produto"
                         },
                         new
                         {
@@ -1181,7 +1202,8 @@ namespace backend.Migrations
                             DescricaoDetalhes = "A interface de avaliação permite apenas notas de 0,5 a 5, mas o servidor não valida o intervalo. Interceptando POST |/api/produtos/avaliacoes/{produtoId}| e enviando nota com valor 0, a avaliação é persistida com zero estrelas.",
                             Dificuldade = 2,
                             Nome = "Avaliação insatisfeita",
-                            Resolvido = false
+                            Resolvido = false,
+                            Rota = "/avaliacoes-produto"
                         });
                 });
 

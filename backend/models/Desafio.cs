@@ -10,6 +10,7 @@ public class Desafio
     public string DescricaoDetalhes { get; set; } = string.Empty;
     public CategoriaDesafio Categoria { get; set; }
     public int Dificuldade { get; set; }
+    public string? Rota { get; set; }
     public bool Resolvido { get; set; }
 
     public ICollection<DicaDesafio> DicasDesafio { get; set; } = new List<DicaDesafio>();
