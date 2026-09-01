@@ -1,6 +1,6 @@
 # SafeMugs | Loja Vulnerável
 
-Projeto de Trabalho de Graduação (TG) — loja virtual **intencionalmente vulnerável** para ensino de segurança ofensiva, inspirada no OWASP Juice Shop. Ambiente controlado, não usar em produção.
+Projeto de Trabalho de Graduação (TG) — loja virtual **intencionalmente vulnerável** para ensino de segurança ofensiva.
 
 ## Integrantes
 
