@@ -47,7 +47,7 @@ Projeto de Trabalho de Graduação (TG) — loja virtual **intencionalmente vuln
 | Modo | O que precisa |
 |---|---|
 | **Desenvolvimento** | .NET SDK `9.0`, Node.js `22` (ou `^20.19`/`>=24` para Angular 20), MySQL `8.0+` rodando local |
-| **Docker** | Docker Desktop (Engine + Compose v2) — Node/.NET/MySQL **não** precisam estar instalados |
+| **Docker (qualquer opção abaixo)** | Docker Desktop (Engine + Compose v2) — Node/.NET/MySQL **não** precisam estar instalados |
 
 ## Como Rodar — Desenvolvimento (sem Docker)
 
@@ -61,40 +61,57 @@ cd SafeMugs
 # 2. backend — em um terminal
 cd backend
 dotnet restore
-dotnet ef database update          
-dotnet run --launch-profile https  
+dotnet ef database update
+dotnet run --launch-profile https
 
 # 3. frontend — em outro terminal
 cd frontend
 npm install
-npx ng serve --configuration development 
+npx ng serve --configuration development
 ```
 
 Acesse `http://localhost:4200`. Conexão dev em `backend/appsettings.Development.json`: `server=localhost;port=3306;Database=Mugs;uid=root;password=root;`.
 
 Após `git pull` com nova migration: `cd backend && dotnet ef database update`.
 
-## Como Rodar — Docker (do zero)
+## Como Rodar — Docker
 
-> Sobe 3 containers: `db` (MySQL 8.4), `backend` (`8080`) e `frontend` (nginx em `4200` proxies `/api` e `/notifications` para `backend:8080`). Build aplica migrations e seed automaticamente (`AutoRecover`).
+> Sobe 3 containers: `db` (MySQL 8.4), `backend` (`8080`) e `frontend` (nginx em `4200` proxies `/api` e `/notifications` para `backend:8080`). Migrations e seed são aplicados automaticamente no boot (`MigrateAsync` / `AutoRecover`). Não precisa `dotnet ef database update` nem `npm install`.
+
+### Opção A — Sem código-fonte (puxa imagens do Docker Hub)
+
+Só precisa do arquivo `docker-compose.yml` na sua máquina. O compose usa as imagens `nicollasstrumillo/mugs-backend` e `nicollasstrumillo/mugs-frontend` já publicadas.
+
+```powershell
+# 1. baixe apenas o docker-compose.yml do repositório (via download manual)
+
+# 2. na pasta onde está o docker-compose.yml
+docker compose up -d              # puxa as imagens do Hub e sobe db + backend + frontend
+
+# logs / parar
+docker compose logs -f
+docker compose down               # mantém dados do MySQL
+docker compose down -v            # apaga também o volume do banco (reset total)
+```
+
+### Opção B — Com código-fonte local (builda da sua máquina)
+
+Usa o código em `backend/` e `frontend/` ao invés de puxar do Hub. O `docker-compose.yml` tem `build` + `image`, então `up --build` força o build local.
 
 ```powershell
 git clone <url-do-repo> SafeMugs
 cd SafeMugs
 
-docker compose up --build -d      
-
-# parar
-docker compose down            
+docker compose up --build -d      # --build = builda backend e frontend do código local
+docker compose logs -f backend
+docker compose down               # ou docker compose down -v para reset total
 ```
 
-Acesse:
+Acesse em qualquer opção Docker:
 
 - Frontend: `http://localhost:4200`
 - Backend: `http://localhost:8080` (`/api`, `/imagens`, `/notifications`)
 - MySQL: interno `db:3306` (externo não exposto; backend usa `server=db` via `ConnectionStrings__DefaultConnection`)
-
-Não precisa `dotnet ef database update` nem `npm install` no Docker — o backend roda `MigrateAsync()` no boot.
 
 ## Atribuição de créditos
 
