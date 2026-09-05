@@ -227,6 +227,9 @@ export class ScoreBoard implements OnInit {
 
 	protected abrirDesafio(desafio: DesafioResponse): void {
 		if (!desafio.resolvido) return;
+
+		this.dialog.closeAll(); // para corrigir o bug de abrir múltiplos diálogos ao mesmo tempo através da desafio-notification
+
 		this.scoreBoardService.detalhesDesafio(desafio.id).subscribe({
 			next: (detalhesDesafio) => {
 				this.dialog.open(DetalhesDesafio, {
