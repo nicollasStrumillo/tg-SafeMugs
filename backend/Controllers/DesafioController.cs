@@ -11,11 +11,13 @@ public class DesafioController : ControllerBase
 {
     private readonly IDesafioService _desafioService;
     private readonly IDesafiosBackupService _desafiosBackupService;
+    private readonly ISugestaoDesafioService _sugestaoDesafioService;
 
-    public DesafioController(IDesafioService desafioService, IDesafiosBackupService desafiosBackupService)
+    public DesafioController(IDesafioService desafioService, IDesafiosBackupService desafiosBackupService, ISugestaoDesafioService sugestaoDesafioService)
     {
         _desafioService = desafioService;
         _desafiosBackupService = desafiosBackupService;
+        _sugestaoDesafioService = sugestaoDesafioService;
     }
 
     [HttpGet("lista")]
@@ -90,5 +92,12 @@ public class DesafioController : ControllerBase
     {
         var restoredCount = _desafiosBackupService.RestoreQuizzesAsync(request.BackupString);
         return Ok(restoredCount);
+    }
+
+    [HttpGet("sugestoes")]
+    public async Task<ActionResult<IEnumerable<DesafioResponse>>> ObterSugestoes([FromQuery] int quantidade = 3)
+    {
+        var sugestoes = await _sugestaoDesafioService.GerarSugestoesAsync(quantidade);
+        return Ok(sugestoes);
     }
 }

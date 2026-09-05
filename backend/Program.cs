@@ -121,6 +121,9 @@ builder.Services.AddSignalR();
 // DesafiosBackupService
 builder.Services.AddScoped<IDesafiosBackupService, DesafiosBackupService>();
 
+// SugestaoDesafioService
+builder.Services.AddScoped<ISugestaoDesafioService, SugestaoDesafioService>();
+
 // QuizDesafioService
 builder.Services.AddSingleton<IQuizDesafioService, QuizDesafioService>();
 

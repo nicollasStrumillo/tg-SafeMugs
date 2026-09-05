@@ -41,28 +41,10 @@ public enum CategoriaDesafio
     SecurityMisconfiguration,
 
     [Display(
-        Name = "XXE",
-        Description = "Ocorre quando um processador XML aceita entidades externas sem as devidas restrições. Um atacante pode explorar esse comportamento para ler arquivos do servidor, acessar recursos internos da rede ou provocar negação de serviço."
-    )]
-    XXE,
-
-    [Display(
-        Name = "Insecure Deserialization",
-        Description = "Ocorre quando a aplicação desserializa dados fornecidos pelo usuário sem validação adequada. Um atacante pode manipular esses dados para alterar o comportamento da aplicação, executar ações não autorizadas ou, em alguns casos, executar código malicioso."
-    )]
-    InsecureDeserialization,
-
-    [Display(
         Name = "IDOR",
         Description = "Ocorre quando a aplicação permite o acesso direto a objetos ou recursos utilizando identificadores previsíveis, sem verificar se o usuário possui autorização."
     )]
     IDOR,
-
-    [Display(
-        Name = "Excessive Data Exposure",
-        Description = "Ocorre quando a aplicação retorna mais informações do que o necessário em suas respostas. Mesmo que a interface exiba apenas parte dos dados, informações sensíveis podem ser expostas em APIs ou respostas HTTP e utilizadas por um atacante."
-    )]
-    ExcessiveDataExposure,
 
     [Display(
         Name = "Improper Input Validation",
