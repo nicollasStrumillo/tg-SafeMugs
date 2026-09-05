@@ -204,7 +204,7 @@ export class Perfil implements OnInit {
 		}
 
 		this.dialog
-			.open(PerfilConfirmarExclusao, { width: '520px' })
+			.open(PerfilConfirmarExclusao, { width: '520px', autoFocus: false})
 			.afterClosed()
 			.subscribe((confirmado: boolean | undefined) => {
 				if (confirmado) {
