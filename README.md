@@ -87,11 +87,6 @@ Só precisa do arquivo `docker-compose.yml` na sua máquina. O compose usa as im
 
 # 2. na pasta onde está o docker-compose.yml
 docker compose up -d              # puxa as imagens do Hub e sobe db + backend + frontend
-
-# logs / parar
-docker compose logs -f
-docker compose down               # mantém dados do MySQL
-docker compose down -v            # apaga também o volume do banco (reset total)
 ```
 
 ### Opção B — Com código-fonte local (builda da sua máquina)
@@ -103,8 +98,6 @@ git clone <url-do-repo> SafeMugs
 cd SafeMugs
 
 docker compose up --build -d      # --build = builda backend e frontend do código local
-docker compose logs -f backend
-docker compose down               # ou docker compose down -v para reset total
 ```
 
 Acesse em qualquer opção Docker:

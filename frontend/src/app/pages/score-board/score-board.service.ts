@@ -44,4 +44,8 @@ export class ScoreBoardService {
 	public restaurarQuizzes(backupString: string): Observable<number> {
 		return this.http.post<number>(`/api/desafios/restoreQuizzes`, {backupString});
 	}
+
+	public ObterSugestoes(quantidade: number): Observable<DesafioResponse[]> {
+		return this.http.get<DesafioResponse[]>(`/api/desafios/sugestoes?quantidade=${quantidade}`);
+	}
 }

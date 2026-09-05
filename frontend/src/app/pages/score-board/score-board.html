@@ -1,11 +1,125 @@
 <section class="scoreboard-shell">
   <header class="scoreboard-hero">
-    <div class="scoreboard-copy">
-      <p class="eyebrow">Score-board</p>
-      <h1>Exploração guiada dos desafios do SafeMugs.</h1>
-      <p class="lead">
-        Acompanhe o progresso, filtre as vulnerabilidades e navegue pelos desafios.
-      </p>
+    <div class="scoreboard-side">
+      <p class="eyebrow">Score-Board</p>
+
+      <mat-card class="suggestions-panel sm-elevated-panel" aria-label="Sugestões de desafios">
+        @if (carregandoSugestoes()) {
+          <div class="inline-state">Carregando sugestões...</div>
+        } @else if (erroSugestoes()) {
+          <div class="inline-state inline-state-error">{{ erroSugestoes() }}</div>
+        } @else if (itensSugestoes().length === 0) {
+          <div class="suggestions-empty">
+            <mat-icon aria-hidden="true">emoji_events</mat-icon>
+            <p>Você resolveu todos os desafios do SafeMugs!</p>
+          </div>
+        } @else {
+          @if (sugestaoAtual(); as item) {
+            <div class="panel-content" aria-live="polite">
+              <div class="panel-header">
+                @if (item.tipo === 'quiz') {
+                  <h2>Encontre o trecho vulnerável!</h2>
+                  <p>Veja os detalhes de um Desafio resolvido e encontre o trecho vulnerável do código.</p>
+                } @else {
+                  <h2>Sugestão de Desafio</h2>
+                  <p>Sugestões são feitas baseadas no seu progresso e na dificuldade dos Desafios.</p>
+                }
+              </div>
+
+              <mat-card
+                class="challenge-card panel-card"
+                [class.is-resolved]="item.tipo === 'quiz'"
+                (click)="abrirDesafio(item.desafio)"
+                (keyup.enter)="abrirDesafio(item.desafio)"
+                (keyup.space)="abrirDesafio(item.desafio)"
+                tabindex="0"
+                role="button"
+              >
+                <div class="challenge-topline">
+                  <span class="category-pill">{{ item.desafio.categoria }}</span>
+
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="pin-button"
+                    [matTooltip]="desafiosFixados().includes(item.desafio.id) ? 'Retirar' : 'Fixar'"
+                    [attr.aria-label]="'Fixar desafio ' + item.desafio.nome"
+                    (click)="mudarEstadoFixarDesafio(item.desafio, $event)"
+                  >
+                    <span class="material-symbols-outlined icon-pin">{{ desafiosFixados().includes(item.desafio.id) ? "keep_off" : "keep" }}</span>
+                  </button>
+                </div>
+
+                <div class="challenge-title-row">
+                  <h2>{{ item.desafio.nome }}</h2>
+                  @if (item.tipo === 'quiz') {
+                    <mat-icon class="resolved-mark" aria-label="Resolvido">check_circle</mat-icon>
+                  }
+                </div>
+
+                <p class="challenge-description">
+                  @for (fragmento of dividirDescricaoEPaylaod(item.desafio.descricao); track $index) {
+                    @if (!fragmento.payload) {
+                      {{ fragmento.texto }}
+                    } @else {
+                      <span
+                        class="payload-chip"
+                        (click)="copiar(fragmento.texto, $event)"
+                        (keydown.enter)="copiar(fragmento.texto)"
+                        (keydown.space)="copiar(fragmento.texto); $event.preventDefault()"
+                        matTooltip="Clique para copiar"
+                        role="button"
+                        tabindex="0">{{ fragmento.texto }}</span>
+                    }
+                  }
+                </p>
+
+                <div class="challenge-footer">
+                  <div class="difficulty-inline" [attr.aria-label]="'Dificuldade ' + item.desafio.dificuldade">
+                    @for (estrela of niveisDificuldade; track estrela) {
+                      <mat-icon class="star"> {{ estrela <= item.desafio.dificuldade ? 'star' : 'star_border' }} </mat-icon>
+                    }
+                  </div>
+
+                  <div class="footer-right">
+                    @if (!item.desafio.resolvido) {
+                      <mat-icon
+                        class="lock-mark"
+                        aria-label="Desafio bloqueado"
+                        matTooltip="Resolva o desafio para ver detalhes"
+                      >lock</mat-icon>
+                    }
+                    @if (item.desafio.possuiQuiz) {
+                      <mat-icon
+                        class="quiz-indicator"
+                        [class.quiz-pending]="!item.desafio.quizResolvido"
+                        [class.quiz-solved]="item.desafio.quizResolvido"
+                        [attr.aria-label]="item.desafio.quizResolvido ? 'Quiz resolvido' : 'Quiz pendente'"
+                      >code</mat-icon>
+                    }
+                    <span class="hint-count">
+                      <mat-icon class="icon-tip-qt">help_outline</mat-icon>
+                      {{ item.desafio.dicasDesafio.length }} {{ item.desafio.dicasDesafio.length == 1 ? "Dica" : "Dicas" }}
+                    </span>
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+
+            <div class="panel-navigation">
+              <button mat-icon-button type="button" aria-label="Sugestão anterior" (click)="mudarSugestao(false)">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+
+              <span>{{ indiceSugestaoAtual() + 1 }}/{{ itensSugestoes().length }}</span>
+
+              <button mat-icon-button type="button" aria-label="Próxima sugestão" (click)="mudarSugestao(true)">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+            </div>
+          }
+        }
+      </mat-card>
     </div>
 
     <mat-card class="score-summary sm-elevated-panel">
@@ -38,6 +152,15 @@
             <strong [class.is-solved]="item.quantidadeResolvida === item.quantidadeTotal">{{ item.quantidadeResolvida }}/{{ item.quantidadeTotal }}</strong>
           </article>
         }
+        <article class="summary-tile">
+          <div class="summary-tile-top">
+            <span class="code-label">Trecho vulnerável</span>
+          </div>
+          <div class="code-count">
+            <mat-icon class="code-main" aria-hidden="true">code</mat-icon>
+            <strong [class.is-solved]="totalQuizzesResolvidos() === totalQuizzes()">{{ totalQuizzesResolvidos() }}/{{ totalQuizzes() }}</strong>
+          </div>
+        </article>
       </div>
     </mat-card>
   </header>
@@ -83,8 +206,8 @@
       <button
         type="button"
         class="difficulty-chip difficulty-chip-all"
-        [class.is-active]="dificuldadeSelecionada() === null"
-        (click)="selecionarDificuldade(null)"
+        [class.is-active]="todasDificuldadesSelecionadas()"
+        (click)="selecionarTodasDificuldades()"
       >
         Todos os níveis
       </button>
@@ -93,8 +216,8 @@
         <button
           type="button"
           class="difficulty-chip"
-          [class.is-active]="dificuldadeSelecionada() === nivel"
-          (click)="selecionarDificuldade(nivel)"
+          [class.is-active]="dificuldadeEstaSelecionada(nivel)"
+          (click)="alternarDificuldade(nivel)"
           [attr.aria-label]="'Filtrar dificuldade ' + nivel"
         >
           <span class="chip-stars" aria-hidden="true">

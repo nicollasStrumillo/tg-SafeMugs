@@ -1,3 +1,4 @@
+import { ResetSenhaRequest } from './../../shared/senha/senha-service';
 import { map } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -11,7 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 
 import { NotificationService } from '../../shared/notification/notification.service';
-import { DesafioResponse, DetalhesDesafioModel, DicaDesafioDto } from './score-board.models';
+import { DesafioResponse, DetalhesDesafioModel, DicaDesafioDto, QuizDesafio } from './score-board.models';
 import { ScoreBoardService } from './score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 import { DetalhesDesafio } from './detalhes-desafio/detalhes-desafio';
@@ -21,6 +22,11 @@ interface FragmentoTexto{
 	texto: string;
 	payload: boolean;
 } 
+
+type ItemSugestao = {
+	tipo: 'quiz' | 'desafio';
+	desafio: DesafioResponse;
+};
 
 @Component({
 	selector: 'sm-score-board',
@@ -53,7 +59,7 @@ export class ScoreBoard implements OnInit {
 	protected readonly erroDesafios = signal<string | null>(null);
 	protected readonly erroCategorias = signal<string | null>(null);
 	protected readonly termoBusca = signal('');
-	protected readonly dificuldadeSelecionada = signal<number | null>(null);
+	protected readonly dificuldadesSelecionadas = signal<Set<number>>(new Set<number>());
 	protected readonly categoriasSelecionadas = signal<Set<string>>(new Set<string>());
 
 	protected readonly totalDesafios = computed(() => this.desafios().length);
@@ -61,7 +67,7 @@ export class ScoreBoard implements OnInit {
 	protected readonly desafiosFixados = computed(() => this.desafionavService.itensDesafio().map((d) => d.id));
 	protected readonly desafiosFiltrados = computed(() => {
 		const termo = this.normalizarTexto(this.termoBusca());
-		const dificuldade = this.dificuldadeSelecionada();
+		const dificuldadesSelecionadas = this.dificuldadesSelecionadas();
 		const categoriasSelecionadas = this.categoriasSelecionadas();
 	
 		return this.desafios().filter((desafio) => {
@@ -72,7 +78,7 @@ export class ScoreBoard implements OnInit {
 				}
 			}
 
-			if (dificuldade !== null && desafio.dificuldade !== dificuldade) {
+			if (dificuldadesSelecionadas.size > 0 && !dificuldadesSelecionadas.has(desafio.dificuldade)) {
 				return false;
 			}
 
@@ -94,11 +100,49 @@ export class ScoreBoard implements OnInit {
 		}));
 	});
 
+	protected readonly totalQuizzes = computed(() => {
+		const desafios = this.desafios();
+
+		return desafios.filter((d) => d.possuiQuiz).length;
+	});
+	protected readonly totalQuizzesResolvidos = computed(() => {
+		const desafios = this.desafios();
+
+		return desafios.filter((d) => d.possuiQuiz && d.quizResolvido).length;
+	});
+
+	protected readonly todasDificuldadesSelecionadas = computed(() => this.dificuldadesSelecionadas().size === 0);
 	protected readonly todasSelecionadas = computed(() => this.categoriasSelecionadas().size === 0);
 
 	protected readonly dicaAtual = signal<DicaDesafioDto | null>(null);
 
 	private readonly mudancasPendentes: number[] = []; //variavel criada exclusivamente para lidar com a race condition entre o WebSocket e a requisição HTTP
+
+	// Painel de sugestões
+	protected readonly carregandoSugestoes = signal(true);
+	protected readonly erroSugestoes = signal<string | null>(null);
+
+	protected readonly desafiosSugeridos = signal<DesafioResponse[]>([]);
+	protected readonly QuizDesafioSugerido = signal<DesafioResponse | null>(null);
+
+	protected readonly indiceSugestaoAtual = signal(0);
+
+	protected readonly itensSugestoes = computed<ItemSugestao[]>(() => {
+		const itens: ItemSugestao[] = [];
+
+		const quizSugerido = this.QuizDesafioSugerido();
+		if (quizSugerido !== null) itens.push({ tipo: 'quiz', desafio: quizSugerido });
+
+		for (const desafio of this.desafiosSugeridos()) {
+			itens.push({ tipo: 'desafio', desafio });
+		}
+
+		return itens;
+	});
+
+	protected readonly sugestaoAtual = computed<ItemSugestao | null>(
+		() => this.itensSugestoes()[this.indiceSugestaoAtual()] ?? null,
+	);
 
 	constructor(private readonly dialog: MatDialog) {}
 
@@ -127,8 +171,24 @@ export class ScoreBoard implements OnInit {
 		this.termoBusca.set('');
 	}
 
-	protected selecionarDificuldade(nivel: number | null): void {
-		this.dificuldadeSelecionada.set(this.dificuldadeSelecionada() === nivel ? null : nivel);
+	protected dificuldadeEstaSelecionada(nivel: number): boolean {
+		return this.dificuldadesSelecionadas().has(nivel);
+	}
+
+	protected selecionarTodasDificuldades(): void {
+		this.dificuldadesSelecionadas.set(new Set<number>());
+	}
+
+	protected alternarDificuldade(nivel: number): void {
+		const selecionadas = new Set(this.dificuldadesSelecionadas());
+
+		if (selecionadas.has(nivel)) {
+			selecionadas.delete(nivel);
+		} else {
+			selecionadas.add(nivel);
+		}
+
+		this.dificuldadesSelecionadas.set(selecionadas);
 	}
 
 	protected categoriaEstaSelecionada(categoria: string): boolean {
@@ -153,7 +213,7 @@ export class ScoreBoard implements OnInit {
 
 	protected limparFiltros(): void {
 		this.termoBusca.set('');
-		this.dificuldadeSelecionada.set(null);
+		this.dificuldadesSelecionadas.set(new Set<number>());
 		this.categoriasSelecionadas.set(new Set<string>());
 	}
 
@@ -235,13 +295,18 @@ export class ScoreBoard implements OnInit {
 				this.desafios.set(desafios);
 				this.erroDesafios.set(null);
 				this.carregandoDesafios.set(false);
+
+				// Depois de obter os desafios, monta as sugestões de desafios
+				this.montarSugestoes();
 			},
-			error: (erro) => {
-				console.error('Erro ao carregar lista de desafios:', erro);
-				this.erroDesafios.set('Nenhum desafio carregado');
-				this.notificationService.erro('Erro ao carregar lista de desafios');
-				this.carregandoDesafios.set(false);
-			},
+		error: (erro) => {
+			console.error('Erro ao carregar lista de desafios:', erro);
+			this.erroDesafios.set('Nenhum desafio carregado');
+			this.notificationService.erro('Erro ao carregar lista de desafios');
+			this.carregandoDesafios.set(false);
+			this.erroSugestoes.set('Nenhuma sugestão carregada');
+			this.carregandoSugestoes.set(false);
+		},
 		});
 	}
 
@@ -298,5 +363,41 @@ export class ScoreBoard implements OnInit {
 				desafio.rota,
 			);
 		}
+	}
+
+	// Painel de sugestões
+	protected mudarSugestao(avancar: boolean): void {
+		const total = this.itensSugestoes().length;
+		if (total === 0) return;
+
+		const indice = this.indiceSugestaoAtual();
+		this.indiceSugestaoAtual.set((indice + (avancar ? 1 : -1) + total) % total);
+	}
+
+	private montarSugestoes(): void {
+		this.carregandoSugestoes.set(true);
+
+		this.scoreBoardService.ObterSugestoes(3).subscribe({
+			next: (desafios) => {
+				this.desafiosSugeridos.set(desafios);
+				this.indiceSugestaoAtual.set(0);
+
+				this.atribuirSugestaoQuizDesafio();
+				this.erroSugestoes.set(null);
+				this.carregandoSugestoes.set(false);
+			},
+			error: () => {
+				this.notificationService.erro('Erro ao carregar sugestões de desafios');
+				this.erroSugestoes.set('Nenhuma sugestão carregada');
+				this.carregandoSugestoes.set(false);
+			},
+		});
+	}
+
+	private atribuirSugestaoQuizDesafio(): void {
+		if (this.desafios().length == 0) return;
+
+		const desafio = this.desafios().find((d) => d.possuiQuiz && !d.quizResolvido && d.resolvido) ?? null;
+		this.QuizDesafioSugerido.set(desafio);
 	}
 }

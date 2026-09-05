@@ -290,7 +290,7 @@
 }
 
 .star {
-	color: #e3b341;
+	color: var(--sm-difficulty-star);
 	-webkit-text-stroke: 1px rgba(11, 19, 33, 0.7);
 	font-size: 13px;
 	width: 13px;
