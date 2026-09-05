@@ -1004,7 +1004,7 @@ namespace backend.Migrations
                             Categoria = "BrokenAntiAutomation",
                             Descricao = "Acesse a conta de um dos usuários do domínio @safemugs.com utilizando força bruta.",
                             DescricaoDetalhes = "O fluxo de login do SafeMugs não implementa nenhum mecanismo de antiautomação: não há limite de tentativas por conta, bloqueio temporário, captcha nem atraso entre requisições. Conhecendo um e-mail válido do domínio |@safemugs.com|, é possível automatizar tentativas consecutivas de senha até acertar. As senhas dos usuários comuns são fracas e baseadas em padrões conhecidos (como 'welcome123' ou 'password123'), o que torna viável um ataque usando uma lista de palavras. Sem qualquer controle de velocidade, um script consegue testar milhares de combinações em poucos segundos, obtendo acesso a uma conta legítima.",
-                            Dificuldade = 2,
+                            Dificuldade = 3,
                             Nome = "Brute force de login",
                             Resolvido = false,
                             Rota = "/login"
@@ -1135,7 +1135,7 @@ namespace backend.Migrations
                             Categoria = "OpenRedirect",
                             Descricao = "Faça a API redirecionar para um domínio que não seja o GitHub, burlando a allowlist de redirect.",
                             DescricaoDetalhes = "O botão do GitHub na navegação lateral não abre o link diretamente: ele chama o endpoint |/api/redirect?url=...|, que deve garantir que o destino seja um host confiável antes de redirecionar. Para isso, o backend mantém uma allowlist com o host permitido e valida a URL recebida checando se ela contém o host como substring — ou seja, basta que a string |https://github.com| apareça em qualquer posição da URL para que ela seja considerada segura. Como essa checagem ignora a estrutura real da URL, é possível embutir o host permitido em posições que não correspondem ao destino efetivo. Em uma URL, o trecho antes do |@| é tratado como informação de usuário e o host vem depois dele: o payload |https://github.com@evil.com| passa pela allowlist (contém |https://github.com|), mas o navegador direciona ao host |evil.com|. Outro bypass análogo usa a query string — |https://evil.com?https://github.com| — em que o host permitido aparece após o |?|, como parte dos parâmetros, sem identificar o host real. Um redirect confiável deve analisar a URL como uma estrutura (parseando host, esquema e caminho) e comparar o host efetivo contra a allowlist, nunca realizar um simples casamento de substring.",
-                            Dificuldade = 2,
+                            Dificuldade = 3,
                             Nome = "Burlar a allowlist de redirect",
                             Resolvido = false
                         },
