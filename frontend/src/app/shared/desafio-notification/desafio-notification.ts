@@ -7,6 +7,7 @@ import { SignalRService } from '../../services/signalR/signalr.service';
 import { BrowserCookieService } from '../../services/cookies/browser-cookies.service';
 import { ScoreBoardService } from '../../pages/score-board/score-board.service';
 import { NotificationService } from '../notification/notification.service';
+import { Router } from '@angular/router';
 
 
 interface DesafioSolvedNotification {
@@ -38,6 +39,7 @@ export class DesafioNotification implements OnInit {
   private readonly cookieService = inject(BrowserCookieService);
   private readonly scoreBoardService = inject(ScoreBoardService);
   private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
 
   protected readonly notifications = signal<DesafioSolvedNotification[]>([]);
   protected readonly indiceAtual = signal(0);
@@ -164,5 +166,9 @@ export class DesafioNotification implements OnInit {
 		
 		this.notificationService.info("Texto copiado!");
 		
+	}
+
+  protected abrirDetalhesDesafio(desafioId: number): void {
+    this.router.navigate(['/score-board'], { queryParams: { idDesafio: desafioId } });
 	}
 }

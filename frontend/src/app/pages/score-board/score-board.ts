@@ -1,5 +1,3 @@
-import { ResetSenhaRequest } from './../../shared/senha/senha-service';
-import { map } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 import { NotificationService } from '../../shared/notification/notification.service';
 import { DesafioResponse, DetalhesDesafioModel, DicaDesafioDto, QuizDesafio } from './score-board.models';
@@ -50,6 +49,7 @@ export class ScoreBoard implements OnInit {
 	private readonly notificationService = inject(NotificationService);
 	private readonly signalRService = inject(SignalRService);
 	private readonly desafionavService = inject(DesafiosnavService);
+	private readonly route = inject(ActivatedRoute);
 
 	protected readonly niveisDificuldade = [1, 2, 3, 4, 5];
 	protected readonly desafios = signal<DesafioResponse[]>([]);
@@ -144,9 +144,17 @@ export class ScoreBoard implements OnInit {
 		() => this.itensSugestoes()[this.indiceSugestaoAtual()] ?? null,
 	);
 
+	// Para abrir Detalhes Desafio imediatamente se o parametro de query idDesafio estiver presente na URL
+	private idDesafioQuery: number | null = null;
+
 	constructor(private readonly dialog: MatDialog) {}
 
 	ngOnInit(): void {
+		this.route.queryParamMap.subscribe((params) => {
+			const id = params.get('idDesafio') ?? '';
+			if (id) this.idDesafioQuery = Number(id);
+		});
+
 		this.carregarDesafios();
 		this.carregarCategorias();
 
@@ -226,7 +234,8 @@ export class ScoreBoard implements OnInit {
 					width: '1200px',
 					maxWidth: 'none',
 					maxHeight: '92vh',
-					panelClass: 'detalhes-desafio-dialog'
+					panelClass: 'detalhes-desafio-dialog',
+					autoFocus: false
 				});
 			},
 			error: () => {
@@ -298,15 +307,22 @@ export class ScoreBoard implements OnInit {
 
 				// Depois de obter os desafios, monta as sugestões de desafios
 				this.montarSugestoes();
+
+				// Para abrir Detalhes Desafio imediatamente se o parametro de query idDesafio estiver presente na URL
+				if (this.idDesafioQuery !== null) {
+					const cardViewModel = this.desafios().find(p => p.id === Number(this.idDesafioQuery));
+					if (cardViewModel) 
+						this.abrirDesafio(cardViewModel);
+				}
 			},
-		error: (erro) => {
-			console.error('Erro ao carregar lista de desafios:', erro);
-			this.erroDesafios.set('Nenhum desafio carregado');
-			this.notificationService.erro('Erro ao carregar lista de desafios');
-			this.carregandoDesafios.set(false);
-			this.erroSugestoes.set('Nenhuma sugestão carregada');
-			this.carregandoSugestoes.set(false);
-		},
+			error: (erro) => {
+				console.error('Erro ao carregar lista de desafios:', erro);
+				this.erroDesafios.set('Nenhum desafio carregado');
+				this.notificationService.erro('Erro ao carregar lista de desafios');
+				this.carregandoDesafios.set(false);
+				this.erroSugestoes.set('Nenhuma sugestão carregada');
+				this.carregandoSugestoes.set(false);
+			},
 		});
 	}
 
