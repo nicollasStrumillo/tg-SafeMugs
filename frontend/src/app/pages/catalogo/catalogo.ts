@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -49,11 +49,7 @@ export class Catalogo implements OnInit {
   readonly termoBusca = signal<string>('');
 
   // Parte da vulnerabilidade de DOM XSS
-  readonly termoBuscaInseguro = computed<SafeHtml>(() => {
-    let termo = this.termoBusca();
-    termo = termo.trim();
-    return this.sanitizer.bypassSecurityTrustHtml(termo);
-  });
+  readonly termoBuscaInseguro = signal<SafeHtml>(this.sanitizer.bypassSecurityTrustHtml(''));
 
   readonly produtosFiltrados = signal<ProdutoCardViewModel[]>([]);
 
@@ -94,17 +90,21 @@ export class Catalogo implements OnInit {
   }
 
   async buscar() {
-    // Parte da vulnerabilidade de DOM XSS
-    if (this.termoBusca().trim() === DOMXSS_PAYLOAD) {
-      await this.signalRService.SolveDesafioXss("DOM XSS", DOMXSS_PAYLOAD);
-    }
-
-    const termo = this.normalizarTexto(this.termoBusca());
+    let termo = this.termoBusca().trim();
     if (!termo) {
       this.produtosFiltrados.set(this.todosProdutos());
+      this.termoBuscaInseguro.set(this.sanitizer.bypassSecurityTrustHtml(''));
       return;
     }
 
+    this.termoBuscaInseguro.set(this.sanitizer.bypassSecurityTrustHtml(termo));
+
+    // Parte da vulnerabilidade de DOM XSS
+    if (termo === DOMXSS_PAYLOAD) {
+      await this.signalRService.SolveDesafioXss("DOM XSS", DOMXSS_PAYLOAD);
+    }
+
+    termo = this.normalizarTexto(termo);
     this.produtosFiltrados.set(this.todosProdutos().filter((produto) => {
       const camposBusca = [produto.nome, produto.descricao, produto.categoria].join(' ');
       return this.normalizarTexto(camposBusca).includes(termo);
@@ -117,6 +117,7 @@ export class Catalogo implements OnInit {
 
   limparBusca(): void {
     this.termoBusca.set('');
+    this.termoBuscaInseguro.set(this.sanitizer.bypassSecurityTrustHtml(''));
     this.produtosFiltrados.set(this.todosProdutos());
   }
 
