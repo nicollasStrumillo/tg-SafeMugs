@@ -17,6 +17,7 @@ using backend.Services.Interfaces.Util.QuizDesafios;
 using backend.Services.Implementations.Util.QuizDesafios;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -135,6 +136,8 @@ builder.Services.AddHttpClient("fotoPerfil", client =>
 });
 
 var app = builder.Build();
+const int JwtSecretPort = 9090;
+const string JwtSecretPath = "/";
 
 // Auto Recover: quando ativo, restaura banco e imagens ao estado de seed a cada inicialização
 var autoRecoverEnabled = app.Configuration.GetValue<bool>("AutoRecover:Enabled");
@@ -171,6 +174,20 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Desafio de SSRF
+app.MapGet(JwtSecretPath,
+(HttpContext context, IOptions<JwtSettings> configuredJwtSettings) =>
+{
+    if (context.Connection.LocalPort != JwtSecretPort)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Text(
+        "JWT Secret: " + configuredJwtSettings.Value.SecretKey,
+        contentType: "text/plain; charset=utf-8");
+});
 
 app.MapHub<NotificationHub>("/notifications");
 

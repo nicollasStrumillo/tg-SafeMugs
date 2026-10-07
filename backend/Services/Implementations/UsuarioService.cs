@@ -8,6 +8,7 @@ using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 using System.Net.Mail;
+using System.Text;
 using backend.SsrfConfiguration;
 using Microsoft.Extensions.Options;
 
@@ -335,22 +336,41 @@ public class UsuarioService : IUsuarioService
             ?? throw new NotFoundException("Usuário não encontrado.");
 
         var client = _httpClientFactory.CreateClient("fotoPerfil");
+        using var requestTimeout = new CancellationTokenSource(client.Timeout);
 
         // Verirfica se o desafio de SSRF foi solucionado
         using var req = new HttpRequestMessage(HttpMethod.Get, request.Url);
         if (EhTargetSsrf(uri))
             req.Headers.Add(_ssrf.SecretHeaderName, _ssrf.SecretHeaderValue);
 
-        using var response = await client.SendAsync(req);
+        using var response = await EnviarRequisicaoFotoUrlAsync(client, req, uri, requestTimeout.Token);
 
         if (!response.IsSuccessStatusCode)
-            throw new BusinessException($"Falha ao baixar a imagem: {(int)response.StatusCode} {response.StatusCode}");
+        {
+            var trechoResposta = await LerTrechoCorpoRespostaAsync(response.Content, requestTimeout.Token);
+            throw new BusinessException(
+                $"Falha ao baixar a imagem: {(int)response.StatusCode}. " +
+                $"Resposta: {trechoResposta}");
+        }
+
+        await _desafioService.SolveIfAsync(
+            DesafiosEnum.SsrfServicoInternoOculto,
+            () => uri.Port == 9090
+                && _ssrf.TargetHost.Contains(uri.Host.ToLowerInvariant())
+                && string.Equals(uri.AbsolutePath.TrimEnd('/'), string.Empty, StringComparison.OrdinalIgnoreCase)
+        );
 
         var contentType = response.Content.Headers.ContentType?.MediaType;
         if (string.IsNullOrEmpty(contentType) || !contentType.Equals("image/jpeg", StringComparison.OrdinalIgnoreCase))
-            throw new ValidationException("A URL não retornou uma imagem JPEG.");
+        {
+            var trechoResposta = await LerTrechoCorpoRespostaAsync(response.Content, requestTimeout.Token);
+            var contentTypeDescricao = contentType ?? "ausente";
+            throw new ValidationException(
+                $"A URL não retornou uma imagem JPEG (Content-Type: {contentTypeDescricao}). " +
+                $"Resposta: {trechoResposta}");
+        }
 
-        var bytes = await response.Content.ReadAsByteArrayAsync();
+        var bytes = await response.Content.ReadAsByteArrayAsync(requestTimeout.Token);
 
         string pastaUsuario = "Usuario_" + usuario.Id.ToString();
 
@@ -375,6 +395,63 @@ public class UsuarioService : IUsuarioService
             UrlImagemPerfil = usuario.UrlImagemPerfil,
             Perfil = usuario.Perfil.Nome
         });
+    }
+
+    private const int MaxTrechoRespostaCaracteres = 200;
+
+    private static async Task<HttpResponseMessage> EnviarRequisicaoFotoUrlAsync(
+        HttpClient client,
+        HttpRequestMessage request,
+        Uri uri,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await client.SendAsync(
+                request,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken);
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new BusinessException(
+                $"Falha de conexão com {uri.Host}:{uri.Port}: {ex.Message}");
+        }
+        catch (OperationCanceledException)
+        {
+            throw new BusinessException(
+                $"Tempo limite ao conectar com {uri.Host}:{uri.Port}.");
+        }
+    }
+
+    private static async Task<string> LerTrechoCorpoRespostaAsync(HttpContent content, CancellationToken cancellationToken)
+    {
+        using var reader = new StreamReader(
+            await content.ReadAsStreamAsync(cancellationToken),
+            Encoding.UTF8,
+            detectEncodingFromByteOrderMarks: true);
+        var buffer = new char[MaxTrechoRespostaCaracteres + 1];
+        var totalLido = 0;
+
+        while (totalLido < buffer.Length)
+        {
+            var lido = await reader.ReadAsync(buffer.AsMemory(totalLido), cancellationToken);
+            if (lido == 0)
+                break;
+
+            totalLido += lido;
+        }
+
+        if (totalLido == 0)
+            return "(corpo vazio)";
+
+        var trecho = new string(buffer, 0, Math.Min(totalLido, MaxTrechoRespostaCaracteres)).Trim();
+        if (string.IsNullOrWhiteSpace(trecho))
+            return "(corpo vazio)";
+
+        return totalLido > MaxTrechoRespostaCaracteres
+            ? $"{trecho}…"
+            : trecho;
     }
 
     private bool EhTargetSsrf(Uri uri)

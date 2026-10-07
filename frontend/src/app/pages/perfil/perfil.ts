@@ -15,6 +15,7 @@ import { UsuarioApiService } from '../../services/usuario/usuario-api.service';
 import { AuthTokenResponse, DetalhesUsuarioResponse, EditarUsuarioRequest, UsuarioLogado } from '../../services/usuario/usuario.models';
 import { NotificationService } from '../../shared/notification/notification.service';
 import { PerfilConfirmarExclusao } from './perfil-confirmar-exclusao';
+import { ApiError } from '../../shared/notification/erro-api.model';
 
 const FOTO_GENERICA = '/imagens/perfil/generic_profile.jpg';
 
@@ -231,7 +232,13 @@ export class Perfil implements OnInit {
 					this.urlFotoForm.reset({ url: '' });
 					this.notification.sucesso('Foto de perfil atualizada.');
 				},
-				error: (erro: HttpErrorResponse) => this.notification.notificarErroApi(erro),
+				error: (erro: HttpErrorResponse) => {
+					const apiError = erro.error as ApiError;
+					if (apiError.detail.startsWith('A URL não retornou uma imagem JPEG')) {
+						this.notification.erro('A URL não retornou uma imagem JPEG.');
+					}
+					else this.notification.notificarErroApi(erro);	
+				}
 			});
 	}
 
