@@ -1204,6 +1204,17 @@ namespace backend.Migrations
                             Nome = "Avaliação insatisfeita",
                             Resolvido = false,
                             Rota = "/avaliacoes-produto"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Categoria = "ServerSideRequestForgery",
+                            Descricao = "Descubra o serviço escondido em uma porta interna do servidor e recupere o segredo que ele guarda.",
+                            DescricaoDetalhes = "O campo de URL da foto de perfil faz o próprio backend buscar o endereço informado — inclusive endereços que apontam para o próprio servidor. Isso permite usá-lo como sonda para enumerar portas internas: uma porta fechada devolve um erro controlado de conexão, enquanto uma porta em que algum serviço responde devolve uma resposta HTTP; quando essa resposta não é uma imagem, o corpo é refletido na mensagem de erro da requisição. Varrendo portas comuns de serviços web encontra-se um listener interno em |http://127.0.0.1:9090|, não publicado no host, cujo GET na raiz devolve em texto puro um segredo usado internamente pela aplicação. Como a porta não é exposta externamente, nenhum scan externo a encontra: a descoberta só é possível induzindo o próprio servidor a fazer a requisição — um Server-Side Request Forgery usado como varredura de portas internas.",
+                            Dificuldade = 5,
+                            Nome = "Serviço interno oculto",
+                            Resolvido = false,
+                            Rota = "/perfil"
                         });
                 });
 
@@ -1541,6 +1552,27 @@ namespace backend.Migrations
                             DesafioId = 21,
                             NrDica = 1,
                             Texto = "A validação da nota acontece só no navegador."
+                        },
+                        new
+                        {
+                            Id = 45,
+                            DesafioId = 22,
+                            NrDica = 1,
+                            Texto = "O campo de URL da foto de perfil faz o próprio servidor buscar o endereço informado — inclusive endereços que apontam para ele mesmo."
+                        },
+                        new
+                        {
+                            Id = 46,
+                            DesafioId = 22,
+                            NrDica = 2,
+                            Texto = "Compare a resposta da API para uma porta fechada com a resposta de uma porta em que algum serviço responde."
+                        },
+                        new
+                        {
+                            Id = 47,
+                            DesafioId = 22,
+                            NrDica = 3,
+                            Texto = "Serviços web internos costumam escutar em portas como 8080, 8443 e 9090. Faça um GET nelas pelo campo de URL."
                         });
                 });
 

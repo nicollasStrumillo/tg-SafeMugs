@@ -65,5 +65,8 @@ public enum DesafiosEnum
     CriarAvaliacaoOutroUsuario,
 
     [Display(Name = "Avaliação insatisfeita")]
-    CriarAvaliacaoZeroEstrelas
+    CriarAvaliacaoZeroEstrelas,
+
+    [Display(Name = "Serviço interno oculto")]
+    SsrfServicoInternoOculto
 }
