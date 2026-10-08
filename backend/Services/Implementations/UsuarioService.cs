@@ -99,7 +99,7 @@ public class UsuarioService : IUsuarioService
 
         var usuario = await _usuarioRepository.RealizarLoginAsync(request);
 
-        if (usuario == null)
+        if (usuario == null || string.Equals(usuario.Email, EmailsESenhasUsuarios.usuarioInvalidoDesafio.GetNomeDisplay()))
             return null;
 
         await _desafioService.SolveIfAsync(DesafiosEnum.LoginAdmin, () => usuario.Perfil == "Administrador" && request.ResolverDesafioSqlInjection);
@@ -464,16 +464,18 @@ public class UsuarioService : IUsuarioService
 
     public async Task MudarSenhaAsync(MudarSenhaRequest request)
     {
-        if (request.NovaSenha.Length < 8)
+        if (request.NovaSenha?.Length < 8)
             throw new ValidationException("A nova senha deve ter pelo menos 8 caracteres.");
 
         var usuario = await _usuarioRepository.BuscarPorIdAsync(_user.UsuarioId)
             ?? throw new NotFoundException("Usuário não encontrado.");
 
-        usuario.HashSenha = HashHelper.GerarMD5(request.NovaSenha);
+        usuario.HashSenha = HashHelper.GerarMD5(request.NovaSenha!);
         usuario.DtAtualizacao = DateTime.UtcNow;
 
         await _usuarioRepository.AtualizarAsync(usuario);
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.MudarSenhaUsuarioInvalido, () => usuario.Email == EmailsESenhasUsuarios.usuarioInvalidoDesafio.GetNomeDisplay());
     }
 
     public async Task DesativarUsuarioAsync(int usuarioId)

@@ -127,6 +127,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
             [
                 DesafiosEnum.SsrfUploadFotoPerfil
             ] },
+
+        new() { Desafio = DesafiosEnum.MudarSenhaUsuarioInvalido, Dependencias =
+            [
+                DesafiosEnum.SsrfServicoInternoOculto
+            ] },
     };
     #endregion
 
