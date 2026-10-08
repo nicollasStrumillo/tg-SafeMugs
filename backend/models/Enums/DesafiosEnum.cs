@@ -68,5 +68,8 @@ public enum DesafiosEnum
     CriarAvaliacaoZeroEstrelas,
 
     [Display(Name = "Serviço interno oculto")]
-    SsrfServicoInternoOculto
+    SsrfServicoInternoOculto,
+
+    [Display(Name = "Mude a senha do usuário inválido")]
+    MudarSenhaUsuarioInvalido
 }

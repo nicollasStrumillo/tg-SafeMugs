@@ -26,6 +26,8 @@ public enum EmailsESenhasUsuarios
     MarinaAlves,
 
     [Display(Name = "admin@email.com", Description = "df49d9fce01a137041d6d89e6629abbf")] // --> SafeAdminMugs!
-    Admin
+    Admin,
 
+    [Display(Name = "usuario.invalido@safemugs.com", Description = "9c334b849a164533484ff4ca484645bb")] // --> invalido123
+    usuarioInvalidoDesafio
 }

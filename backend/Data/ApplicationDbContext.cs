@@ -356,6 +356,19 @@ public class ApplicationDBContext : DbContext
                 DtAtualizacao = seedDate,
                 PerfilId = 2,
                 UrlImagemPerfil = "/imagens/perfil/generic_admin_profile.jpg"
+            },
+            new Usuario
+            {
+                Id = 9,
+                NomeCompleto = "Usuario Inválido",
+                Email = EmailsESenhasUsuarios.usuarioInvalidoDesafio.GetNomeDisplay(),
+                HashSenha = EmailsESenhasUsuarios.usuarioInvalidoDesafio.GetDescription(),
+                Telefone = "11990000009",
+                Ativo = false,
+                DtCadastro = seedDate,
+                DtAtualizacao = seedDate,
+                PerfilId = 1,
+                UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
             }
             );
 
@@ -1792,6 +1805,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 5,
                 Rota = RotasEnum.Perfil.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 23,
+                Nome = DesafiosEnum.MudarSenhaUsuarioInvalido.GetNomeDisplay(),
+                Descricao = $"Mude a senha do usuário inválido: |{EmailsESenhasUsuarios.usuarioInvalidoDesafio.GetNomeDisplay()}|.",
+                DescricaoDetalhes = "A funcionalidade de trocar senha na tela de perfil identifica o usuário a partir do JWT enviado pelo navegador. Como o segredo usado para assinar esse token foi exposto pelo serviço interno da porta 9090, é possível criar um token próprio e se passar por qualquer usuário. A descrição informa o e-mail do alvo, mas o método usa o identificador numérico para localizar o registro, por isso é preciso descobri-lo enumerando |GET /api/usuario/detalhes/{id}| com valores sequenciais até encontrar o e-mail procurado. Com esse identificador, basta gerar um token válido para o alvo, substituir o cookie atual e concluir a troca de senha pelo fluxo normal da tela de perfil chamando |PATCH /api/usuario/mudar-senha|.",
+                Categoria = CategoriaDesafio.SecurityMisconfiguration,
+                Dificuldade = 5,
+                Rota = RotasEnum.Perfil.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2138,6 +2162,21 @@ public class ApplicationDBContext : DbContext
                 NrDica = 3,
                 Texto = "Serviços web internos costumam escutar em portas como 8080, 8443 e 9090. Faça um GET nelas pelo campo de URL.",
                 DesafioId = 22
+            },
+
+            new DicaDesafio
+            {
+                Id = 48,
+                NrDica = 1,
+                Texto = "A troca de senha em /perfil identifica o usuário apenas pelos dados do JWT guardado no cookie safemugs.token.",
+                DesafioId = 23
+            },
+            new DicaDesafio
+            {
+                Id = 49,
+                NrDica = 2,
+                Texto = "Enumere os usuários pela rota GET /api/usuario/detalhes/{id} para descobrir o Id do usuário que deve ter a senha alterada.",
+                DesafioId = 23
             }
         );
 

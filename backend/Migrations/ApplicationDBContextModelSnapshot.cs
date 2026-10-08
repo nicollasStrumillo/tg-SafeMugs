@@ -1215,6 +1215,17 @@ namespace backend.Migrations
                             Nome = "Serviço interno oculto",
                             Resolvido = false,
                             Rota = "/perfil"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Categoria = "SecurityMisconfiguration",
+                            Descricao = "Mude a senha do usuário inválido: |usuario.invalido@safemugs.com|.",
+                            DescricaoDetalhes = "A funcionalidade de trocar senha na tela de perfil identifica o usuário a partir do JWT enviado pelo navegador. Como o segredo usado para assinar esse token foi exposto pelo serviço interno da porta 9090, é possível criar um token próprio e se passar por qualquer usuário. A descrição informa o e-mail do alvo, mas o método usa o identificador numérico para localizar o registro, por isso é preciso descobri-lo enumerando |GET /api/usuario/detalhes/{id}| com valores sequenciais até encontrar o e-mail procurado. Com esse identificador, basta gerar um token válido para o alvo, substituir o cookie atual e concluir a troca de senha pelo fluxo normal da tela de perfil chamando |PATCH /api/usuario/mudar-senha|.",
+                            Dificuldade = 5,
+                            Nome = "Mude a senha do usuário inválido",
+                            Resolvido = false,
+                            Rota = "/perfil"
                         });
                 });
 
@@ -1573,6 +1584,20 @@ namespace backend.Migrations
                             DesafioId = 22,
                             NrDica = 3,
                             Texto = "Serviços web internos costumam escutar em portas como 8080, 8443 e 9090. Faça um GET nelas pelo campo de URL."
+                        },
+                        new
+                        {
+                            Id = 48,
+                            DesafioId = 23,
+                            NrDica = 1,
+                            Texto = "A troca de senha em /perfil identifica o usuário apenas pelos dados do JWT guardado no cookie safemugs.token."
+                        },
+                        new
+                        {
+                            Id = 49,
+                            DesafioId = 23,
+                            NrDica = 2,
+                            Texto = "Enumere os usuários pela rota GET /api/usuario/detalhes/{id} para descobrir o Id do usuário que deve ter a senha alterada."
                         });
                 });
 
@@ -2329,6 +2354,19 @@ namespace backend.Migrations
                             PerfilId = 2,
                             Telefone = "11990000008",
                             UrlImagemPerfil = "/imagens/perfil/generic_admin_profile.jpg"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Ativo = false,
+                            DtAtualizacao = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            DtCadastro = new DateTime(2026, 6, 1, 8, 0, 0, 0, DateTimeKind.Utc),
+                            Email = "usuario.invalido@safemugs.com",
+                            HashSenha = "9c334b849a164533484ff4ca484645bb",
+                            NomeCompleto = "Usuario Inválido",
+                            PerfilId = 1,
+                            Telefone = "11990000009",
+                            UrlImagemPerfil = "/imagens/perfil/generic_profile.jpg"
                         });
                 });
 
