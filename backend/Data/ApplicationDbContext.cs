@@ -1816,6 +1816,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 5,
                 Rota = RotasEnum.Perfil.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 24,
+                Nome = DesafiosEnum.DomClobbering.GetNomeDisplay(),
+                Descricao = "Envie o cookie |safemugs.token| de um usuário para o endpoint GET |/api/desafios/xss-callback|, explorando DOM Clobbering no link do rodapé da aplicação.",
+                DescricaoDetalhes = "O botão do rodapé não usa a URL fixa do código: ele procura no documento inteiro o elemento com id githubLink e navega para o href encontrado. Como a página de avaliações renderiza o e-mail dos autores como HTML e o rodapé vem depois do conteúdo no documento, um elemento com o mesmo id plantado no e-mail é encontrado primeiro e assume o lugar do link legítimo. A partir daí, o href lido é o do atacante — e uma URL javascript: navega executando código no contexto da página da vítima. De forma geral, consultas globais por id em documentos que também exibem HTML de usuários são frágeis: prefira o próprio alvo do evento ou referências com escopo, e nunca navegue para esquemas não validados.",
+                Categoria = CategoriaDesafio.DomXSS,
+                Dificuldade = 5,
+                Rota = RotasEnum.AvaliacoesProduto.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2177,6 +2188,21 @@ public class ApplicationDBContext : DbContext
                 NrDica = 2,
                 Texto = "Enumere os usuários pela rota GET /api/usuario/detalhes/{id} para descobrir o Id do usuário que deve ter a senha alterada.",
                 DesafioId = 23
+            },
+
+            new DicaDesafio
+            {
+                Id = 50,
+                NrDica = 1,
+                Texto = "O link 'Abrir o GitHub' do rodapé é localizado pelo id githubLink: um elemento com esse id renderizado antes dele na página assume o seu lugar.",
+                DesafioId = 24
+            },
+            new DicaDesafio
+            {
+                Id = 51,
+                NrDica = 2,
+                Texto = "O e-mail exibido na tela de avaliações do produto é renderizado como HTML — ele pode carregar o elemento que sobrepõe o link.",
+                DesafioId = 24
             }
         );
 

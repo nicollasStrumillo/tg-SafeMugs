@@ -71,5 +71,8 @@ public enum DesafiosEnum
     SsrfServicoInternoOculto,
 
     [Display(Name = "Mude a senha do usuário inválido")]
-    MudarSenhaUsuarioInvalido
+    MudarSenhaUsuarioInvalido,
+
+    [Display(Name = "DOM Clobbering")]
+    DomClobbering
 }
