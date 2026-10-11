@@ -1,0 +1,1 @@
+Consultas globais ao DOM (getElementById, querySelector no documento) retornam o primeiro elemento correspondente — incluindo os injetados por outros usuários na mesma página. Resolva URLs a partir do próprio alvo do evento ou de constantes do código, e valide o esquema antes de navegar.

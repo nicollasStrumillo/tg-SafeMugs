@@ -52,6 +52,15 @@ div p {
 	justify-self: end;
 }
 
+.footer-meta a {
+	color: #85a3da;
+	text-decoration: underline;
+}
+
+.footer-meta a:hover {
+	color: var(--sm-ink);
+}
+
 @media (max-width: 760px) {
 	.site-footer {
 		grid-template-columns: 1fr;

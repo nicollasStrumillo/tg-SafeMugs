@@ -1,0 +1,5 @@
+protected openGitHub(event: MouseEvent): void { // neutra
+  event.preventDefault(); // neutra
+  const anchor = this.host.nativeElement.ownerDocument.getElementById('githubLink') as HTMLAnchorElement | null; // correta
+  window.location.href = anchor?.getAttribute('href') ?? 'https://github.com/nicollasStrumillo/tg-SafeMugs'; // correta
+}

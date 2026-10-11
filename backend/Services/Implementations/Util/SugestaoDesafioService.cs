@@ -132,6 +132,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
             [
                 DesafiosEnum.SsrfServicoInternoOculto
             ] },
+
+        new() { Desafio = DesafiosEnum.DomClobbering, Dependencias =
+            [
+                DesafiosEnum.StoredXssAvaliacoes
+            ] },
     };
     #endregion
 

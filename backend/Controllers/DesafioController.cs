@@ -1,7 +1,14 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using backend.Authentication;
 using backend.DTOs.Desafio;
+using backend.models.Enums;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Controllers;
 
@@ -9,15 +16,20 @@ namespace backend.Controllers;
 [Route("api/desafios")]
 public class DesafioController : ControllerBase
 {
+    private static readonly byte[] PixelXssCallback = Convert.FromBase64String("R0lGODlhAQABAIAAAP///////yH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==");
+
+    private const string CookieTokenName = "safemugs.token";
     private readonly IDesafioService _desafioService;
     private readonly IDesafiosBackupService _desafiosBackupService;
     private readonly ISugestaoDesafioService _sugestaoDesafioService;
+    private readonly JwtSettings _jwt;
 
-    public DesafioController(IDesafioService desafioService, IDesafiosBackupService desafiosBackupService, ISugestaoDesafioService sugestaoDesafioService)
+    public DesafioController(IDesafioService desafioService, IDesafiosBackupService desafiosBackupService, ISugestaoDesafioService sugestaoDesafioService, IOptions<JwtSettings> jwt)
     {
         _desafioService = desafioService;
         _desafiosBackupService = desafiosBackupService;
         _sugestaoDesafioService = sugestaoDesafioService;
+        _jwt = jwt.Value;
     }
 
     [HttpGet("lista")]
@@ -100,4 +112,63 @@ public class DesafioController : ControllerBase
         var sugestoes = await _sugestaoDesafioService.GerarSugestoesAsync(quantidade);
         return Ok(sugestoes);
     }
+
+    #region Desafio DOM clobbering
+    [HttpGet("xss-callback")]
+    [AllowAnonymous]
+    public async Task<IActionResult> ColetarXss([FromQuery] string? t)
+    {
+        try
+        {
+            var token = ExtrairToken(t);
+            if (token is not null && JwtValido(token))
+                await _desafioService.SolveIfAsync(DesafiosEnum.DomClobbering, () => true);
+        }
+        catch {}
+
+        return File(PixelXssCallback, "image/gif");
+    }
+
+    private static string? ExtrairToken(string? cookies)
+    {
+        if (string.IsNullOrWhiteSpace(cookies))
+            return null;
+
+        foreach (var parte in cookies.Split(';'))
+        {
+            var item = parte.Trim();
+            if (item.StartsWith(CookieTokenName + "=", StringComparison.Ordinal))
+            {
+                var valor = item[(CookieTokenName.Length + 1)..].Trim();
+                return string.IsNullOrEmpty(valor) ? null : valor;
+            }
+        }
+
+        return null;
+    }
+
+    private bool JwtValido(string token)
+    {
+        try
+        {
+            var handler = new JwtSecurityTokenHandler();
+            handler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = _jwt.Issuer,
+                ValidateAudience = true,
+                ValidAudience = _jwt.Audience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.SecretKey)),
+            }, out _);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    #endregion
 }
