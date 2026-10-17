@@ -74,5 +74,8 @@ public enum DesafiosEnum
     MudarSenhaUsuarioInvalido,
 
     [Display(Name = "DOM Clobbering")]
-    DomClobbering
+    DomClobbering,
+
+    [Display(Name = "Quantidade inválida no carrinho")]
+    CarrinhoQuantidadeInvalida
 }
