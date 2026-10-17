@@ -86,6 +86,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.VisualizarCarrinhoAlheio
             ] },
 
+        new() { Desafio = DesafiosEnum.CarrinhoQuantidadeInvalida, Dependencias = 
+            [
+                DesafiosEnum.VisualizarCarrinhoAlheio
+            ] },
+
         new() { Desafio = DesafiosEnum.BurlarAllowlistRedirect, Dependencias = 
             [
                 DesafiosEnum.EncontrarScoreBoard

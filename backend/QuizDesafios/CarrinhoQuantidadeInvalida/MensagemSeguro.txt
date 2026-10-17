@@ -1,0 +1,1 @@
+A quantidade de um item é um valor de negócio e precisa ser validada no servidor, não apenas na interface. Mesmo que a loja envie somente incrementos de ±1, o corpo da requisição pode ser interceptado e alterado, permitindo gravar um item com quantidade zero ou negativa. Antes de persistir, rejeite qualquer quantidade menor ou igual a zero.

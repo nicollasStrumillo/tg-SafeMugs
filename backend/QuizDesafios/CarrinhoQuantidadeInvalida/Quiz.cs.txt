@@ -1,0 +1,9 @@
+// Marque a linha onde você identifica que falta uma validação
+
+public async Task AdicionarUnidadeProdutoAoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    var produto = await _produtoService.ObterProdutoPorIdAsync(produtoId)
+        ?? throw new NotFoundException($"Produto com ID {produtoId} não encontrado."); // neutra
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId); // neutra
+    await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade); // correta
+}

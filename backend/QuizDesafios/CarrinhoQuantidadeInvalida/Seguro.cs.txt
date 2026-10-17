@@ -1,0 +1,11 @@
+public async Task AdicionarUnidadeProdutoAoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
+{
+    if (quantidade <= 0)
+        throw new ValidationException("Quantidade deve ser maior que zero.");
+
+    var produto = await _produtoService.ObterProdutoPorIdAsync(produtoId)
+        ?? throw new NotFoundException($"Produto com ID {produtoId} não encontrado.");
+
+    var carrinho = await _carrinhoRepository.ObterOuCriarCarrinhoAtivoAsync(usuarioId);
+    await _carrinhoRepository.AdicionarUnidadeProdutoAoCarrinhoAsync(carrinho, produto, quantidade);
+}

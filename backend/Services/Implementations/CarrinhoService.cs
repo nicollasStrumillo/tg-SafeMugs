@@ -102,6 +102,7 @@ public class CarrinhoService : ICarrinhoService
 
         await _desafioService.SolveIfAsync(DesafiosEnum.ModificarCarrinhoAlheio, () => _user.UsuarioId != usuarioId);
         await _desafioService.SolveIfAsync(DesafiosEnum.AdicionarProdutoIndisponivel, () => !produto.Ativo || produto.Estoque <= 0);
+        await _desafioService.SolveIfAsync(DesafiosEnum.CarrinhoQuantidadeInvalida, () => carrinho.Itens.Any(i => i.Quantidade <= 0));
     }
 
     public async Task RemoverUnidadeProdutoDoCarrinhoAsync(int usuarioId, int produtoId, int quantidade)
