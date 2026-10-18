@@ -1,0 +1,16 @@
+public async Task<List<PedidoResumoDTO>> ObterPedidoPorNumeroAsync(string numeroPedido, int usuarioId)
+{
+    var sql = $@"SELECT Id, NumeroPedido, ValorTotal, QuantidadeItens, DataPedido, UsuarioId // neutra
+                FROM pedidos // neutra
+                WHERE NumeroPedido LIKE '%{numeroPedido}%' AND UsuarioId = {usuarioId}"; // correta
+    try
+    {
+        return await _context.Database
+            .SqlQueryRaw<PedidoResumoDTO>(sql)
+            .ToListAsync();
+    }
+    catch
+    {
+        throw new DBException("Ocorreu um erro ao buscar os pedidos.");
+    }
+}

@@ -11,6 +11,7 @@ using backend.models;
 using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services.Implementations;
 
@@ -195,9 +196,23 @@ public class PedidoService : IPedidoService
 
         var pedidos = await _pedidoRepository.ObterPedidoPorNumeroAsync(numeroPedido, _user.UsuarioId);
 
-        await _desafioService.SolveIfAsync(DesafiosEnum.EnumerarTabelasBanco, () =>
-            TabelasDoBanco.All(tabela => pedidos.Any(pedido =>
-                string.Equals(pedido.NumeroPedido, tabela, StringComparison.OrdinalIgnoreCase))));
+
+        if (pedidos.Count != 0)
+        {
+            await _desafioService.SolveIfAsync(DesafiosEnum.EnumerarTabelasBanco, () =>
+                TabelasDoBanco.All(tabela => pedidos.Any(pedido =>
+                    string.Equals(pedido.NumeroPedido, tabela, StringComparison.OrdinalIgnoreCase))));
+        
+            var hashesAtuais = await _context.Usuarios
+                .Select(u => u.HashSenha)
+                .ToListAsync();
+            await _desafioService.SolveIfAsync(DesafiosEnum.ExtrairHashSenha, () =>
+                pedidos.Any(pedido =>
+                    !string.IsNullOrEmpty(pedido.NumeroPedido) &&
+                    hashesAtuais.Any(hash =>
+                        !string.IsNullOrEmpty(hash) &&
+                        pedido.NumeroPedido.Contains(hash, StringComparison.OrdinalIgnoreCase))));
+        }
 
         return pedidos;
     }

@@ -71,6 +71,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.LoginAdmin
             ] },
 
+        new() { Desafio = DesafiosEnum.ExtrairHashSenha, Dependencias =
+            [
+                DesafiosEnum.EnumerarTabelasBanco
+            ] },
+
         new() { Desafio = DesafiosEnum.AdicionarProdutoIndisponivel, Dependencias = 
             [
                 DesafiosEnum.VisualizarCarrinhoAlheio

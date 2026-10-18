@@ -90,7 +90,7 @@ public class UsuarioService : IUsuarioService
         if (resolverDesafio)
             await _desafioService.SolveIfAsync(DesafiosEnum.ManipularCadastro, () => true);
                
-        await _usuarioRepository.CadastrarUsuarioAsync(request);        
+        await _usuarioRepository.CadastrarAdministradorAsync(request);        
     }
 
     public async Task<AuthTokenResponse?> RealizarLoginAsync(LoginRequest request)
