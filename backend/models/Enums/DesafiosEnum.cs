@@ -77,5 +77,8 @@ public enum DesafiosEnum
     DomClobbering,
 
     [Display(Name = "Quantidade inválida no carrinho")]
-    CarrinhoQuantidadeInvalida
+    CarrinhoQuantidadeInvalida,
+
+    [Display(Name = "Capture o hash da senha de um usuário")]
+    ExtrairHashSenha
 }

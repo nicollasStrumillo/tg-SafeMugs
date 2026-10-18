@@ -1248,6 +1248,17 @@ namespace backend.Migrations
                             Nome = "Quantidade inválida no carrinho",
                             Resolvido = false,
                             Rota = "/carrinho"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Categoria = "SqlInjection",
+                            Descricao = "Obtenha a hash de senha de um usuário através de injeção SQL.",
+                            DescricaoDetalhes = "A consulta que pesquisa pedidos por número concatena o termo digitado diretamente na string SQL, permitindo injeção. Como ela retorna seis colunas, um |UNION SELECT| precisa trazer o mesmo número de colunas para ser aceito. A coluna do número do pedido é textual, então consegue exibir strings vindas de outras tabelas — como a coluna |HashSenha| (string) da tabela |usuarios|. Combinar colunas com |CONCAT| permite trazer mais de um dado na mesma coluna textual, e finalizar com |%23| comenta o restante da consulta original.",
+                            Dificuldade = 4,
+                            Nome = "Capture o hash da senha de um usuário",
+                            Resolvido = false,
+                            Rota = "/pedidos"
                         });
                 });
 
@@ -1641,6 +1652,20 @@ namespace backend.Migrations
                             DesafioId = 25,
                             NrDica = 1,
                             Texto = "Intercepte a requisição de adicionar um produto ao carrinho e analise os parâmetros que ela carrega."
+                        },
+                        new
+                        {
+                            Id = 53,
+                            DesafioId = 26,
+                            NrDica = 1,
+                            Texto = "A pesquisa de pedidos permite anexar um UNION SELECT ao termo pesquisado."
+                        },
+                        new
+                        {
+                            Id = 54,
+                            DesafioId = 26,
+                            NrDica = 2,
+                            Texto = "A coluna HashSenha, do tipo string na tabela usuarios, cabe na coluna textual do número do pedido."
                         });
                 });
 

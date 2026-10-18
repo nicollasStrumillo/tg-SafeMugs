@@ -1838,6 +1838,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 2,
                 Rota = RotasEnum.Carrinho.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 26,
+                Nome = DesafiosEnum.ExtrairHashSenha.GetNomeDisplay(),
+                Descricao = "Obtenha a hash de senha de um usuário através de injeção SQL.",
+                DescricaoDetalhes = "A consulta que pesquisa pedidos por número concatena o termo digitado diretamente na string SQL, permitindo injeção. Como ela retorna seis colunas, um |UNION SELECT| precisa trazer o mesmo número de colunas para ser aceito. A coluna do número do pedido é textual, então consegue exibir strings vindas de outras tabelas — como a coluna |HashSenha| (string) da tabela |usuarios|. Combinar colunas com |CONCAT| permite trazer mais de um dado na mesma coluna textual, e finalizar com |%23| comenta o restante da consulta original.",
+                Categoria = CategoriaDesafio.SqlInjection,
+                Dificuldade = 4,
+                Rota = RotasEnum.Pedidos.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2222,6 +2233,21 @@ public class ApplicationDBContext : DbContext
                 NrDica = 1,
                 Texto = "Intercepte a requisição de adicionar um produto ao carrinho e analise os parâmetros que ela carrega.",
                 DesafioId = 25
+            },
+
+            new DicaDesafio
+            {
+                Id = 53,
+                NrDica = 1,
+                Texto = "A pesquisa de pedidos permite anexar um UNION SELECT ao termo pesquisado.",
+                DesafioId = 26
+            },
+            new DicaDesafio
+            {
+                Id = 54,
+                NrDica = 2,
+                Texto = "A coluna HashSenha, do tipo string na tabela usuarios, cabe na coluna textual do número do pedido.",
+                DesafioId = 26
             }
         );
 
