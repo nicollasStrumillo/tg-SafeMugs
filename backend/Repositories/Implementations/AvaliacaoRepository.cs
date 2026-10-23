@@ -1,6 +1,7 @@
 using backend.Data;
 using backend.models;
 using backend.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repositories.Implementations;
 
@@ -26,6 +27,29 @@ public class AvaliacaoRepository : IAvaliacaoRepository
         };
 
         _dbContext.Avaliacoes.Add(avaliacao);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<Avaliacao>> ObterTodasAsync()
+    {
+        return await _dbContext.Avaliacoes
+            .Include(a => a.Usuario)
+            .Include(a => a.Produto)
+            .OrderByDescending(a => a.DtCadastro)
+            .ToListAsync();
+    }
+
+    public async Task<Avaliacao?> ObterPorIdAsync(int avaliacaoId)
+    {
+        return await _dbContext.Avaliacoes
+            .Include(a => a.Usuario)
+            .Include(a => a.Produto)
+            .FirstOrDefaultAsync(a => a.Id == avaliacaoId);
+    }
+
+    public async Task ExcluirAsync(Avaliacao avaliacao)
+    {
+        _dbContext.Avaliacoes.Remove(avaliacao);
         await _dbContext.SaveChangesAsync();
     }
 }

@@ -102,6 +102,7 @@ builder.Services.AddScoped<IAuthenticatedUserService, AuthenticatedUserService>(
 // Services e Repositories
 builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
+builder.Services.AddScoped<IReposicaoEstoqueService, ReposicaoEstoqueService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IDesafioRepository, DesafioRepository>();
 builder.Services.AddScoped<IDesafioService, DesafioService>();

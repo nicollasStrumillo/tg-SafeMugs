@@ -12,4 +12,8 @@ public interface IProdutoRepository
     Task FazerComentarioAsync(int produtoId, int? usuarioId, string comentario);
     Task AtualizarComentarioAsync(ComentarioProduto comentario, string novaDescricao);
     Task<ComentarioProduto?> ProcurarComentarioPorIdAsync(int comentarioId);
+
+    // Reposição de estoque (importação XML da administração)
+    Task<List<Produto>> ObterPorIdsAsync(IReadOnlyCollection<int> produtoIds);
+    Task AplicarReposicaoAsync(IReadOnlyDictionary<int, int> reposicoes);
 }

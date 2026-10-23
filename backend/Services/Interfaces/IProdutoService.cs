@@ -13,4 +13,6 @@ public interface IProdutoService
     Task FazerComentarioAsync(int produtoId, string? nomeCompleto, string comentario);
     Task AtualizarComentarioAsync(int comentarioId, string comentario);
     Task AvaliarProdutoAsync(int produtoId, int usuarioId, float nota, string comentario);
+    Task<List<AvaliacaoAdminDTO>> ObterTodasAvaliacoesAsync();
+    Task ExcluirAvaliacaoAsync(int avaliacaoId);
 }

@@ -176,4 +176,37 @@ public class ProdutoService : IProdutoService
         await _avaliacaoRepository.EscreverAvaliacaoAsync(comentario, nota, usuarioId, produtoId);
     }
 
+    public async Task<List<AvaliacaoAdminDTO>> ObterTodasAvaliacoesAsync()
+    {
+        var avaliacoes = await _avaliacaoRepository.ObterTodasAsync();
+
+        return avaliacoes.Select(MapAvaliacaoAdminToDTO).ToList();
+    }
+
+    public async Task ExcluirAvaliacaoAsync(int avaliacaoId)
+    {
+        var avaliacao = await _avaliacaoRepository.ObterPorIdAsync(avaliacaoId)
+            ?? throw new NotFoundException($"Avaliação com ID {avaliacaoId} não encontrada.");
+
+        await _avaliacaoRepository.ExcluirAsync(avaliacao);
+    }
+
+    private static AvaliacaoAdminDTO MapAvaliacaoAdminToDTO(Avaliacao avaliacao)
+    {
+        return new AvaliacaoAdminDTO
+        {
+            Id = avaliacao.Id,
+            Nota = avaliacao.Nota,
+            Comentario = avaliacao.Comentario,
+            DtCadastro = avaliacao.DtCadastro,
+            UsuarioId = avaliacao.Usuario.Id,
+            UsuarioNome = avaliacao.Usuario.NomeCompleto,
+            UsuarioEmail = avaliacao.Usuario.Email,
+            UsuarioUrlImagemPerfil = avaliacao.Usuario.UrlImagemPerfil,
+            UsuarioAtivo = avaliacao.Usuario.Ativo,
+            ProdutoId = avaliacao.Produto.Id,
+            ProdutoNome = avaliacao.Produto.Nome
+        };
+    }
+
 }

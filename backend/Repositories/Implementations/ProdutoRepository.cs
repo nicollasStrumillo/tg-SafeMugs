@@ -91,4 +91,30 @@ public class ProdutoRepository : IProdutoRepository
         var comentario = await _dbContext.ComentariosProduto.FindAsync([comentarioId]);
         return comentario;
     }
+
+    public async Task<List<Produto>> ObterPorIdsAsync(IReadOnlyCollection<int> produtoIds)
+    {
+        return await _dbContext.Produtos
+            .Where(p => produtoIds.Contains(p.Id))
+            .ToListAsync();
+    }
+
+    public async Task AplicarReposicaoAsync(IReadOnlyDictionary<int, int> reposicoes)
+    {
+        await using var transacao = await _dbContext.Database.BeginTransactionAsync();
+
+        var produtoIds = reposicoes.Keys.ToList();
+        var produtos = await _dbContext.Produtos
+            .Where(p => produtoIds.Contains(p.Id))
+            .ToListAsync();
+
+        foreach (var produto in produtos)
+        {
+            produto.Estoque += reposicoes[produto.Id];
+            produto.DtAtualizacao = DateTime.UtcNow;
+        }
+
+        await _dbContext.SaveChangesAsync();
+        await transacao.CommitAsync();
+    }
 }
