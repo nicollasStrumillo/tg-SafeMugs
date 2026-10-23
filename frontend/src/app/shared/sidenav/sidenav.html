@@ -58,6 +58,19 @@
 			<span class="nav-label">GitHub</span>
 		</a>
 
+		@if (auth.isAdmin()) {
+			<a
+				class="nav-item nav-item--admin"
+				routerLink="/administracao"
+				routerLinkActive="active"
+				matTooltip="Administração"
+				[matTooltipDisabled]="expanded()"
+			>
+				<mat-icon aria-hidden="true">admin_panel_settings</mat-icon>
+				<span class="nav-label">Administração</span>
+			</a>
+		}
+
 		@if (showScoreBoard()) {
 			<a
 				class="nav-item nav-item--score"

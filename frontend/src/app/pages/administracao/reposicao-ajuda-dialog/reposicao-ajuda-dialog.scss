@@ -1,0 +1,66 @@
+:host {
+	display: block;
+}
+
+.code-block {
+	max-height: 28rem;
+	overflow: hidden;
+	border: 1px solid #30363d;
+	border-radius: 0.25rem;
+	background: #0d1117;
+}
+
+.code-titlebar {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.5rem 0.75rem;
+	border-bottom: 1px solid #30363d;
+	background: #161b22;
+}
+
+.dot {
+	width: 0.65rem;
+	height: 0.65rem;
+	flex-shrink: 0;
+	border-radius: 50%;
+}
+
+.dot-red {
+	background: #ff5f57;
+}
+
+.dot-yellow {
+	background: #febc2e;
+}
+
+.dot-green {
+	background: #28c840;
+}
+
+.code-content {
+	padding: 0.5rem 0;
+	overflow: auto;
+	font-family: 'JetBrains Mono', Consolas, monospace;
+	font-size: 0.8rem;
+	line-height: 1.5;
+}
+
+.code-line {
+	display: grid;
+	grid-template-columns: 2.5rem max-content;
+	padding: 0.05rem 0.5rem;
+}
+
+.line-number {
+	padding-right: 0.75rem;
+	color: #6e7681;
+	font-size: 0.75rem;
+	text-align: right;
+	user-select: none;
+}
+
+.line-content {
+	color: #c9d1d9;
+	white-space: pre;
+}
