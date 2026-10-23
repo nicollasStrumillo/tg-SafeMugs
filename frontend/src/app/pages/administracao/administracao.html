@@ -1,0 +1,203 @@
+<section class="administracao-shell">
+	<div class="administracao-topo">
+		<header class="administracao-hero">
+			<p class="eyebrow">Administração</p>
+			<h1>Gerencie avaliações e estoque.</h1>
+			<p class="lead">
+				Modere as avaliações da comunidade e reponha o estoque por importação de XML.
+			</p>
+		</header>
+		<section class="reposicao-section" aria-label="Importação de estoque">
+			<div class="reposicao-cabecalho">
+				<div class="reposicao-titulo">
+					<h2>Reposição de estoque</h2>
+					<button
+						mat-icon-button
+						type="button"
+						class="ajuda-estrutura-btn"
+						matTooltip="Ver a estrutura esperada do XML"
+						aria-label="Ver a estrutura esperada do XML"
+						(click)="abrirAjudaEstruturaXml()"
+					>
+						<mat-icon>info_outline</mat-icon>
+					</button>
+				</div>
+				<p>Selecione um arquivo XML para atualizar o estoque.</p>
+			</div>
+			<div class="upload-area">
+				<input
+					#arquivoInput
+					type="file"
+					accept=".xml,application/xml,text/xml"
+					(change)="aoSelecionarArquivo($event)"
+					hidden
+				/>
+				<button
+					mat-stroked-button
+					type="button"
+					(click)="arquivoInput.value = ''; arquivoInput.click()"
+					[disabled]="enviandoReposicao()"
+				>
+					<mat-icon>upload_file</mat-icon>
+					Selecionar XML
+				</button>
+
+				@if (nomeArquivoSelecionado(); as nome) {
+					<span class="arquivo-nome">{{ nome }}</span>
+				} @else {
+					<span class="arquivo-nome arquivo-nome--vazio">Nenhum arquivo selecionado</span>
+				}
+
+				<button
+					mat-flat-button
+					type="button"
+					class="importar-btn"
+					(click)="importarReposicao()"
+					[disabled]="!podeImportar()"
+				>
+					@if (enviandoReposicao()) {
+						<mat-spinner diameter="20"></mat-spinner>
+					} @else {
+						<mat-icon>publish</mat-icon>
+					}
+					Importar estoque
+				</button>
+			</div>
+
+		</section>
+	</div>
+
+	<div class="administracao-grid">
+		<!-- Avaliações -->
+		<mat-card class="painel">
+			<mat-card-header>
+				<mat-card-title>Avaliações</mat-card-title>
+				<mat-card-subtitle>Todas as avaliações cadastradas.</mat-card-subtitle>
+			</mat-card-header>
+			<mat-card-content>
+				@if (carregandoAvaliacoes()) {
+					<div class="estado" role="status">
+						<mat-spinner diameter="32"></mat-spinner>
+						<span>Carregando avaliações...</span>
+					</div>
+				} @else if (erroAvaliacoes(); as erro) {
+					<div class="estado estado--erro" role="alert">
+						<mat-icon>error_outline</mat-icon>
+						<span>{{ erro }}</span>
+						<button mat-stroked-button type="button" (click)="carregarAvaliacoes()">
+							Tentar novamente
+						</button>
+					</div>
+				} @else if (avaliacoes().length === 0) {
+					<div class="estado">
+						<mat-icon>rate_review</mat-icon>
+						<span>Nenhuma avaliação cadastrada.</span>
+					</div>
+				} @else {
+					<ul class="lista lista--avaliacoes" aria-label="Lista de avaliações">
+						@for (avaliacao of avaliacoes(); track avaliacao.id) {
+							<li>
+								<mat-card class="card-avaliacao">
+									<div class="card-avaliacao-cabecalho">
+										<div class="avaliacao-identificacao">
+											<strong class="avaliacao-produto">{{ avaliacao.produtoNome }}</strong>
+											<!-- Stored XSS (intencional, laboratório): e-mail renderizado sem sanitização. -->
+											<span class="avaliacao-email" [innerHTML]="avaliacao.emailUsuario"></span>
+										</div>
+										<div
+											class="avaliacao-nota"
+											[attr.aria-label]="'Nota ' + avaliacao.nota + ' de 5'"
+										>
+											<strong>{{ avaliacao.nota | number: '1.0-1' }}</strong>
+											<span class="estrelas" aria-hidden="true">
+												@for (indice of [1, 2, 3, 4, 5]; track indice) {
+													<mat-icon>{{ estrelaIcone(indice, avaliacao.nota) }}</mat-icon>
+												}
+											</span>
+										</div>
+										<button
+											mat-icon-button
+											type="button"
+											class="excluir-btn"
+											(click)="excluirAvaliacao(avaliacao)"
+											[disabled]="estaExcluindo(avaliacao.id)"
+											matTooltip="Excluir avaliação"
+											[attr.aria-label]="'Excluir avaliação de ' + avaliacao.produtoNome"
+										>
+											@if (estaExcluindo(avaliacao.id)) {
+												<mat-spinner diameter="20"></mat-spinner>
+											} @else {
+												<mat-icon>delete</mat-icon>
+											}
+										</button>
+									</div>
+									<p class="avaliacao-comentario">{{ avaliacao.comentario }}</p>
+								</mat-card>
+							</li>
+						}
+					</ul>
+				}
+			</mat-card-content>
+		</mat-card>
+
+		<!-- Produtos -->
+		<mat-card class="painel">
+			<mat-card-header>
+				<mat-card-title>Produtos</mat-card-title>
+				<mat-card-subtitle>Estoque atual dos produtos cadastrados.</mat-card-subtitle>
+			</mat-card-header>
+			<mat-card-content>
+				@if (carregandoProdutos()) {
+					<div class="estado" role="status">
+						<mat-spinner diameter="32"></mat-spinner>
+						<span>Carregando produtos...</span>
+					</div>
+				} @else if (erroProdutos(); as erro) {
+					<div class="estado estado--erro" role="alert">
+						<mat-icon>error_outline</mat-icon>
+						<span>{{ erro }}</span>
+						<button mat-stroked-button type="button" (click)="carregarProdutos()">
+							Tentar novamente
+						</button>
+					</div>
+				} @else if (produtos().length === 0) {
+					<div class="estado">
+						<mat-icon>storefront</mat-icon>
+						<span>Nenhum produto cadastrado.</span>
+					</div>
+				} @else {
+					<ul class="lista lista--produtos" aria-label="Lista de produtos">
+						@for (produto of produtos(); track produto.id) {
+							<li>
+								<mat-card class="card-produto">
+									<div class="produto-media">
+										<img [src]="produto.imagemUrl" [alt]="produto.nome" loading="lazy" />
+									</div>
+									<div class="produto-info">
+										<strong class="produto-nome">{{ produto.nome }}</strong>
+										@if (produto.avaliacaoMedia === null) {
+											<span class="produto-sem-avaliacao">Sem avaliações</span>
+										} @else {
+											<span class="produto-avaliacao">
+												<span class="estrelas" aria-hidden="true">
+													@for (indice of [1, 2, 3, 4, 5]; track indice) {
+														<mat-icon>{{ estrelaIcone(indice, produto.avaliacaoMedia!) }}</mat-icon>
+													}
+												</span>
+												<span>{{ produto.avaliacaoMedia! | number: '1.1-1' }}</span>
+											</span>
+										}
+										<span class="produto-estoque">
+											<mat-icon aria-hidden="true">inventory_2</mat-icon>
+											Estoque: {{ produto.estoque }}
+										</span>
+									</div>
+								</mat-card>
+							</li>
+						}
+					</ul>
+				}
+			</mat-card-content>
+		</mat-card>
+	</div>
+</section>

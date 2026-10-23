@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Estrutura esperada do XML</h2>
+
+<mat-dialog-content>
+	<div class="code-block">
+		<div class="code-titlebar" aria-hidden="true">
+			<span class="dot dot-red"></span>
+			<span class="dot dot-yellow"></span>
+			<span class="dot dot-green"></span>
+		</div>
+		<div class="code-content">
+			@for (linha of linhasExemplo; track $index) {
+				<div class="code-line">
+					<span class="line-number">{{ $index + 1 }}</span>
+					<span class="line-content" [innerHTML]="highlightCodigo(linha || ' ')"></span>
+				</div>
+			}
+		</div>
+	</div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<button mat-flat-button type="button" mat-dialog-close>Ok</button>
+</mat-dialog-actions>

@@ -1,5 +1,6 @@
 import { model } from '@angular/core';
 import { Routes } from '@angular/router';
+import { adminGuard } from './services/usuario/auth/admin.guard';
 
 export const routes: Routes = [
 	{
@@ -51,6 +52,12 @@ export const routes: Routes = [
 		path: 'pedidos',
 		loadComponent: () =>
 			import('./pages/pedidos/pedidos').then((module) => module.Pedidos),
+	},
+	{
+		path: 'administracao',
+		canMatch: [adminGuard],
+		loadComponent: () =>
+			import('./pages/administracao/administracao').then((module) => module.Administracao),
 	},
 	{
 		path: '**',

@@ -56,6 +56,12 @@ export class AuthSessionService {
 	readonly token = this.tokenSignal.asReadonly();
 	readonly usuarioLogado = this.usuarioLogadoSignal.asReadonly();
 	readonly autenticado = computed(() => this.tokenSignal() !== null);
+	readonly isAdmin = computed(() => {
+		const token = this.tokenSignal();
+		if (!token) return false;
+		const payload = decodeToken(token);
+		return payload?.role === 'Administrador';
+	});
 
 	constructor() {
 		this.carregarSessaoSalva();

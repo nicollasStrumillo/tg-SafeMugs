@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>
+	{{ resultado.sucesso ? 'Reposição concluída' : 'Reposição não aplicada' }}
+</h2>
+
+<mat-dialog-content>
+	<section
+		class="resultado"
+		[class.resultado--ok]="resultado.sucesso"
+		[class.resultado--erro]="!resultado.sucesso"
+	>
+		<div class="resultado-resumo">
+			<span class="resultado-status">
+				<mat-icon>{{ resultado.sucesso ? 'check_circle' : 'cancel' }}</mat-icon>
+				{{ resultado.sucesso ? 'Lote aplicado' : 'Lote não aplicado' }}
+			</span>
+			<span class="resultado-contagem">
+				{{ resultado.linhasProcessadas }} de {{ resultado.totalLinhas }} linhas processadas
+			</span>
+		</div>
+
+		@if (resultado.erro; as erroGeral) {
+			<p class="resultado-erro">{{ erroGeral }}</p>
+		}
+
+		@if (resultado.linhas.length > 0) {
+			<ul class="resultado-linhas" aria-label="Relatório da importação">
+				@for (linha of resultado.linhas; track $index) {
+					<li
+						[class.linha--ok]="linha.sucesso && resultado.sucesso"
+						[class.linha--erro]="!linha.sucesso"
+					>
+						<mat-icon>
+							{{ !linha.sucesso ? 'close' : resultado.sucesso ? 'check' : 'info' }}
+						</mat-icon>
+						<span class="linha-id">ID {{ linha.idRecebido }}</span>
+						<span class="linha-qtd">Qtd. {{ linha.quantidadeRecebida }}</span>
+						@if (linha.produtoNome && resultado.sucesso) {
+							<span class="linha-produto">
+								{{ linha.produtoNome }}: {{ linha.estoqueAnterior }} → {{ linha.estoqueNovo }}
+							</span>
+						} @else if (linha.sucesso && !resultado.sucesso) {
+							<span class="linha-nao-aplicada">Linha válida; lote não aplicado.</span>
+						}
+						@if (linha.erro; as erroLinha) {
+							<span class="linha-erro">{{ erroLinha }}</span>
+						}
+					</li>
+				}
+			</ul>
+		}
+	</section>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+	<button mat-flat-button type="button" mat-dialog-close>Ok</button>
+</mat-dialog-actions>
