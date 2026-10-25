@@ -10,7 +10,7 @@ public class QuizDesafioService : IQuizDesafioService
 
     public async Task MontarDicionario()
     {
-        var pastaQuiz = Path.Combine(AppContext.BaseDirectory, "QuizDesafios");
+        var pastaQuiz = Path.Combine(AppContext.BaseDirectory, "DesafioAssets", "QuizDesafios");
         if (!Directory.Exists(pastaQuiz))
             throw new InvalidOperationException($"Pasta de QuizDesafios não encontrada em: {pastaQuiz}");
 

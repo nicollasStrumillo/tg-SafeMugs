@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Xml;
 using System.Xml.Linq;
 using backend.DTOs.Produto;
+using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
 
@@ -10,12 +11,15 @@ namespace backend.Services.Implementations;
 public class ReposicaoEstoqueService : IReposicaoEstoqueService
 {
     private const int TamanhoMaximoValorExibido = 10_000;
+    private const string ConteudoXxe = "Desafio de XXE resolvido!";
 
     private readonly IProdutoRepository _produtoRepository;
+    private readonly IDesafioService _desafioService;
 
-    public ReposicaoEstoqueService(IProdutoRepository produtoRepository)
+    public ReposicaoEstoqueService(IProdutoRepository produtoRepository, IDesafioService desafioService)
     {
         _produtoRepository = produtoRepository;
+        _desafioService = desafioService;
     }
 
     public async Task<ReposicaoEstoqueResultadoDTO> ImportarAsync(Stream xml)
@@ -30,7 +34,7 @@ public class ReposicaoEstoqueService : IReposicaoEstoqueService
                 MaxCharactersFromEntities = 0,
             };
 
-            using var reader = XmlReader.Create(xml, settings);
+            using var reader = XmlReader.Create(xml, settings, new Uri(AppContext.BaseDirectory).AbsoluteUri);
             documento = XDocument.Load(reader, LoadOptions.None);
         }
         catch (Exception ex)
@@ -40,6 +44,11 @@ public class ReposicaoEstoqueService : IReposicaoEstoqueService
 
         if (documento.Root is null || documento.Root.Name.LocalName != "reposicao")
             return FalhaGeral("Formato inesperado: o elemento raiz do arquivo deve ser <reposicao>.");
+
+        var saidaXml = documento.ToString(SaveOptions.DisableFormatting);
+        await _desafioService.SolveIfAsync(
+            DesafiosEnum.XxeReposicaoEstoque,
+            () => saidaXml.Contains(ConteudoXxe, StringComparison.Ordinal));
 
         var linhas = new List<ReposicaoEstoqueLinhaDTO>();
         var quantidadesPorProduto = new Dictionary<int, long>();

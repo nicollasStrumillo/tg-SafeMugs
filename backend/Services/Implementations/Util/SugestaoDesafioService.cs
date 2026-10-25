@@ -30,6 +30,10 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.LoginAdmin
             ] },
 
+        new() { Desafio = DesafiosEnum.XxeReposicaoEstoque, Dependencias = [
+                DesafiosEnum.LoginAdmin
+            ] },
+
         new() { Desafio = DesafiosEnum.DomXss, Dependencias = 
             [
                 DesafiosEnum.EncontrarScoreBoard
