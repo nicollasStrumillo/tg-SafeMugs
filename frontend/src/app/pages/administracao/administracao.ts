@@ -71,6 +71,13 @@ export class Administracao implements OnInit {
 	ngOnInit(): void {
 		this.carregarAvaliacoes();
 		this.carregarProdutos();
+		this.resolverDesafioAcessoAdministracao();
+	}
+
+	private resolverDesafioAcessoAdministracao(): void {
+		this.administracaoService.resolverDesafioAcessoAdministracao().subscribe({
+			error: (erro: HttpErrorResponse) => this.notificationService.notificarErroApi(erro),
+		});
 	}
 
 	protected abrirAjudaEstruturaXml(): void {

@@ -26,6 +26,10 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.TratamentoErro
             ] },
 
+        new() { Desafio = DesafiosEnum.EncontrarAdministracao, Dependencias = [
+                DesafiosEnum.LoginAdmin
+            ] },
+
         new() { Desafio = DesafiosEnum.DomXss, Dependencias = 
             [
                 DesafiosEnum.EncontrarScoreBoard
