@@ -77,6 +77,12 @@ public enum CategoriaDesafio
     PathTraversal,
 
     [Display(
+        Name = "XML External Entity (XXE)",
+        Description = "Ocorre quando um parser XML processa entidades externas controladas pelo usuário, podendo permitir a leitura de arquivos locais ou o acesso a recursos externos pelo servidor."
+    )]
+    XmlExternalEntity,
+
+    [Display(
         Name = "Outros",
         Description = "Desafios não relacionados a uma vulnerabilidade específica."
     )]

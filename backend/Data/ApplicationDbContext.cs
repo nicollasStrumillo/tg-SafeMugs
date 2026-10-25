@@ -1860,6 +1860,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 2,
                 Rota = RotasEnum.Administracao.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 28,
+                Nome = DesafiosEnum.XxeReposicaoEstoque.GetNomeDisplay(),
+                Descricao = "Leia o arquivo local DesafioAssets/xxe.txt explorando o processamento de XML.",
+                DescricaoDetalhes = "Uma vulnerabilidade XXE ocorre quando um parser aceita DTDs e resolve entidades externas definidas em um XML não confiável. Como o parser atua no servidor, essas referências podem levar a aplicação a acessar arquivos locais ou recursos externos e incorporar seus conteúdos ao documento, expondo informações que não deveriam estar disponíveis. XML recebido de usuários deve ser processado sem DTDs ou resolução externa, salvo quando esses recursos forem necessários e estiverem restritos.",
+                Categoria = CategoriaDesafio.XmlExternalEntity,
+                Dificuldade = 4,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2259,6 +2270,14 @@ public class ApplicationDBContext : DbContext
                 NrDica = 2,
                 Texto = "A coluna HashSenha, do tipo string na tabela usuarios, cabe na coluna textual do número do pedido.",
                 DesafioId = 26
+            },
+
+            new DicaDesafio
+            {
+                Id = 55,
+                NrDica = 1,
+                Texto = "Um DTD pode declarar entidades externas que apontam para recursos locais; o caminho do arquivo está na descrição.",
+                DesafioId = 28
             }
         );
 

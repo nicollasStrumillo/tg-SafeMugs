@@ -83,5 +83,8 @@ public enum DesafiosEnum
     ExtrairHashSenha,
 
     [Display(Name = "Acessar o painel de Administração")]
-    EncontrarAdministracao
+    EncontrarAdministracao,
+
+    [Display(Name = "Leia um arquivo local usando XXE")]
+    XxeReposicaoEstoque
 }
