@@ -80,5 +80,8 @@ public enum DesafiosEnum
     CarrinhoQuantidadeInvalida,
 
     [Display(Name = "Capture o hash da senha de um usuário")]
-    ExtrairHashSenha
+    ExtrairHashSenha,
+
+    [Display(Name = "Acessar o painel de Administração")]
+    EncontrarAdministracao
 }

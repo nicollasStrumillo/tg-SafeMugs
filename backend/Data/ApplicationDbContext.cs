@@ -1849,6 +1849,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 4,
                 Rota = RotasEnum.Pedidos.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 27,
+                Nome = DesafiosEnum.EncontrarAdministracao.GetNomeDisplay(),
+                Descricao = "Acesse o painel de Administração do SafeMugs.",
+                DescricaoDetalhes = "O painel de Administração reúne funções fora do fluxo comum de compra. Quando uma conta possui perfil administrativo, a navegação disponibiliza uma entrada para esse painel. Explore a aplicação para encontrar o painel. O acesso, porém, exige uma conta com perfil de Administrador.",
+                Categoria = CategoriaDesafio.Outros,
+                Dificuldade = 2,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 

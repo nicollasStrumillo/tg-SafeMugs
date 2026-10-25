@@ -1259,6 +1259,17 @@ namespace backend.Migrations
                             Nome = "Capture o hash da senha de um usuário",
                             Resolvido = false,
                             Rota = "/pedidos"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Categoria = "Outros",
+                            Descricao = "Acesse o painel de Administração do SafeMugs.",
+                            DescricaoDetalhes = "O painel de Administração reúne funções fora do fluxo comum de compra. Quando uma conta possui perfil administrativo, a navegação disponibiliza uma entrada para esse painel. Explore a aplicação para encontrar o painel. O acesso, porém, exige uma conta com perfil de Administrador.",
+                            Dificuldade = 2,
+                            Nome = "Acessar o painel de Administração",
+                            Resolvido = false,
+                            Rota = "/administracao"
                         });
                 });
 
