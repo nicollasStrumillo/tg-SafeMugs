@@ -11,6 +11,7 @@ namespace backend.Services.Implementations;
 public class ReposicaoEstoqueService : IReposicaoEstoqueService
 {
     private const int TamanhoMaximoValorExibido = 10_000;
+    private static readonly TimeSpan LimiteTempoDos = TimeSpan.FromSeconds(8);
     private const string ConteudoXxe = "Desafio de XXE resolvido!";
 
     private readonly IProdutoRepository _produtoRepository;
@@ -25,6 +26,9 @@ public class ReposicaoEstoqueService : IReposicaoEstoqueService
     public async Task<ReposicaoEstoqueResultadoDTO> ImportarAsync(Stream xml)
     {
         XDocument documento;
+        using var token = new CancellationTokenSource();
+        Task? task = null;
+
         try
         {
             var settings = new XmlReaderSettings
@@ -35,12 +39,21 @@ public class ReposicaoEstoqueService : IReposicaoEstoqueService
             };
 
             using var reader = XmlReader.Create(xml, settings, new Uri(AppContext.BaseDirectory).AbsoluteUri);
+            task = MonitorarDemoraDoXmlAsync(token.Token);
             documento = XDocument.Load(reader, LoadOptions.None);
         }
         catch (Exception ex)
         {
+            token.Cancel();
+            if (task is not null)
+                await task;
+
             return FalhaGeral($"Falha ao interpretar o XML: {ex.Message}");
         }
+
+        token.Cancel();
+        if (task is not null)
+            await task;
 
         if (documento.Root is null || documento.Root.Name.LocalName != "reposicao")
             return FalhaGeral("Formato inesperado: o elemento raiz do arquivo deve ser <reposicao>.");
@@ -123,6 +136,20 @@ public class ReposicaoEstoqueService : IReposicaoEstoqueService
             LinhasProcessadas = linhas.Count,
             Linhas = linhas
         };
+    }
+
+    private async Task MonitorarDemoraDoXmlAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await Task.Delay(LimiteTempoDos, cancellationToken);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.DOS, () => true);
     }
 
     private static ReposicaoEstoqueLinhaDTO MontarLinha(XElement elementoProduto, Dictionary<int, long> quantidadesPorProduto)

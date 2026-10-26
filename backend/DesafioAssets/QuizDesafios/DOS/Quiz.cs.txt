@@ -1,0 +1,11 @@
+public XDocument LerXml(Stream arquivo)
+{
+    var configuracoes = new XmlReaderSettings // neutra
+    {
+        DtdProcessing = DtdProcessing.Parse, // correta
+        MaxCharactersFromEntities = 0 // correta
+    };
+
+    using var leitor = XmlReader.Create(arquivo, configuracoes); // neutra
+    return XDocument.Load(leitor); // neutra
+}

@@ -1,0 +1,1 @@
+XML recebido de uma origem não confiável não deve permitir a expansão ilimitada de entidades. Rejeitar DTDs impede essa expansão e reduz o risco de uma entrada pequena consumir recursos excessivos do servidor.
