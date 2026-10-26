@@ -26,6 +26,16 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.TratamentoErro
             ] },
 
+        new() { Desafio = DesafiosEnum.EncontrarAdministracao, Dependencias = [
+                DesafiosEnum.LoginAdmin
+            ] },
+
+        new() { Desafio = DesafiosEnum.XxeReposicaoEstoque, Dependencias = [
+                DesafiosEnum.LoginAdmin
+            ] },
+
+        new() { Desafio = DesafiosEnum.DOS, Dependencias = [] },
+
         new() { Desafio = DesafiosEnum.DomXss, Dependencias = 
             [
                 DesafiosEnum.EncontrarScoreBoard
@@ -121,6 +131,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.ReflectedXss,
                 DesafiosEnum.CadastroInvalido
             ]},
+
+        new() { Desafio = DesafiosEnum.StoredXssAdministracao, Dependencias =
+            [
+                DesafiosEnum.CadastroInvalido
+            ] },
 
         new() { Desafio = DesafiosEnum.CriarAvaliacaoOutroUsuario, Dependencias = 
             [

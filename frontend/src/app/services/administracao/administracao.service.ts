@@ -21,6 +21,10 @@ export class AdministracaoService {
         return this.http.delete<void>(`/api/administracao/avaliacoes/${avaliacaoId}`);
     }
 
+    public resolverDesafioAcessoAdministracao(): Observable<void> {
+        return this.http.post<void>('/api/administracao/desafio-acesso', null);
+    }
+
     public importarReposicao(arquivoXml: File): Observable<ReposicaoEstoqueResultadoDto> {
         const formData = new FormData();
 		formData.append('arquivoXml', arquivoXml);

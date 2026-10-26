@@ -58,7 +58,7 @@
 			<span class="nav-label">GitHub</span>
 		</a>
 
-		@if (auth.isAdmin()) {
+		@if (auth.isAdmin() && showPainelAdmin()) {
 			<a
 				class="nav-item nav-item--admin"
 				routerLink="/administracao"

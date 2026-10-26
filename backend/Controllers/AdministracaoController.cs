@@ -1,5 +1,6 @@
 using backend.DTOs.Produto;
 using backend.Exceptions;
+using backend.models.Enums;
 using backend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +14,23 @@ public class AdministracaoController : ControllerBase
 {
     private readonly IProdutoService _produtoService;
     private readonly IReposicaoEstoqueService _reposicaoEstoqueService;
+    private readonly IDesafioService _desafioService;
 
-    public AdministracaoController(IProdutoService produtoService, IReposicaoEstoqueService reposicaoEstoqueService)
+    public AdministracaoController(
+        IProdutoService produtoService,
+        IReposicaoEstoqueService reposicaoEstoqueService,
+        IDesafioService desafioService)
     {
         _produtoService = produtoService;
         _reposicaoEstoqueService = reposicaoEstoqueService;
+        _desafioService = desafioService;
+    }
+
+    [HttpPost("desafio-acesso")]
+    public async Task<IActionResult> ResolverDesafioAcesso()
+    {
+        await _desafioService.SolveIfAsync(DesafiosEnum.EncontrarAdministracao, () => true);
+        return NoContent();
     }
 
     [HttpGet("avaliacoes")]

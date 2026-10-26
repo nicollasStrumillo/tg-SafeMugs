@@ -1259,6 +1259,50 @@ namespace backend.Migrations
                             Nome = "Capture o hash da senha de um usuário",
                             Resolvido = false,
                             Rota = "/pedidos"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Categoria = "Outros",
+                            Descricao = "Acesse o painel de Administração do SafeMugs.",
+                            DescricaoDetalhes = "O painel de Administração reúne funções fora do fluxo comum de compra. Quando uma conta possui perfil administrativo, a navegação disponibiliza uma entrada para esse painel. Explore a aplicação para encontrar o painel. O acesso, porém, exige uma conta com perfil de Administrador.",
+                            Dificuldade = 2,
+                            Nome = "Acessar o painel de Administração",
+                            Resolvido = false,
+                            Rota = "/administracao"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Categoria = "XmlExternalEntity",
+                            Descricao = "Leia o arquivo local DesafioAssets/xxe.txt explorando o processamento de XML.",
+                            DescricaoDetalhes = "Uma vulnerabilidade XXE ocorre quando um parser aceita DTDs e resolve entidades externas definidas em um XML não confiável. Como o parser atua no servidor, essas referências podem levar a aplicação a acessar arquivos locais ou recursos externos e incorporar seus conteúdos ao documento, expondo informações que não deveriam estar disponíveis. XML recebido de usuários deve ser processado sem DTDs ou resolução externa, salvo quando esses recursos forem necessários e estiverem restritos.",
+                            Dificuldade = 4,
+                            Nome = "Leia um arquivo local usando XXE",
+                            Resolvido = false,
+                            Rota = "/administracao"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Categoria = "XmlExternalEntity",
+                            Descricao = "Faça uma requisição que deixe o servidor ocupado por um tempo.",
+                            DescricaoDetalhes = "Parsers que processam XML não confiável sem limites adequados podem consumir recursos desproporcionais ao conteúdo recebido. Em especial, a expansão de entidades em DTDs pode transformar uma entrada pequena em um grande volume de texto, consumindo CPU e memória e reduzindo a capacidade do servidor de atender outras requisições. Rejeitar DTDs ou limitar rigorosamente a expansão reduz esse risco.",
+                            Dificuldade = 4,
+                            Nome = "DOS",
+                            Resolvido = false,
+                            Rota = "/administracao"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Categoria = "StoredXSS",
+                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de Administração.",
+                            DescricaoDetalhes = "Stored XSS ocorre quando conteúdo controlado pelo usuário é armazenado e posteriormente interpretado como HTML. Neste fluxo, o e-mail associado ao autor de uma avaliação é persistido na conta e exibido na listagem administrativa. Como esse valor é tratado como HTML, conteúdo malicioso pode ser executado no navegador de quem visualiza a lista. Dados persistidos devem ser tratados como não confiáveis e renderizados com codificação adequada ao contexto.",
+                            Dificuldade = 4,
+                            Nome = "Stored XSS em Administração",
+                            Resolvido = false,
+                            Rota = "/administracao"
                         });
                 });
 
@@ -1666,6 +1710,48 @@ namespace backend.Migrations
                             DesafioId = 26,
                             NrDica = 2,
                             Texto = "A coluna HashSenha, do tipo string na tabela usuarios, cabe na coluna textual do número do pedido."
+                        },
+                        new
+                        {
+                            Id = 55,
+                            DesafioId = 28,
+                            NrDica = 1,
+                            Texto = "Um DTD pode declarar entidades externas que apontam para recursos locais; o caminho do arquivo está na descrição."
+                        },
+                        new
+                        {
+                            Id = 56,
+                            DesafioId = 29,
+                            NrDica = 1,
+                            Texto = "A página de Administração oferece a reposição de estoque por XML; explore esse fluxo."
+                        },
+                        new
+                        {
+                            Id = 57,
+                            DesafioId = 29,
+                            NrDica = 2,
+                            Texto = "O tamanho enviado não é o único custo; considere o trabalho que o parser faz ao interpretar o XML."
+                        },
+                        new
+                        {
+                            Id = 58,
+                            DesafioId = 29,
+                            NrDica = 3,
+                            Texto = "Entidades declaradas em um DTD podem referenciar outras entidades, fazendo o conteúdo processado crescer rapidamente."
+                        },
+                        new
+                        {
+                            Id = 59,
+                            DesafioId = 30,
+                            NrDica = 1,
+                            Texto = "A listagem de avaliações mostra outros dados do autor além do comentário."
+                        },
+                        new
+                        {
+                            Id = 60,
+                            DesafioId = 30,
+                            NrDica = 2,
+                            Texto = "O e-mail do autor vem do cadastro e é exibido na listagem; observe como o navegador interpreta esse valor."
                         });
                 });
 

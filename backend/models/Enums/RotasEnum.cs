@@ -27,6 +27,10 @@ public enum RotasEnum
 
     [Display(Name = "/perfil")]
     Perfil,
+
+    [Display(Name = "/administracao")]
+    Administracao,
+    
     
     [Display(Name = "/score-board")]
     ScoreBoard,

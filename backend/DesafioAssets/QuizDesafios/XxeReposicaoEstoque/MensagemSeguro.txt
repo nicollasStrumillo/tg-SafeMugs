@@ -1,0 +1,1 @@
+Quando o XML vem de uma origem não confiável, o parser não deve processar DTDs nem resolver entidades externas. Proibir DTDs e manter o resolvedor externo desativado impede que o documento induza o servidor a ler arquivos locais ou acessar recursos externos.

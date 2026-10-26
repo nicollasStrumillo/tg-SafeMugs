@@ -19,6 +19,9 @@ import { ProdutoService } from '../../services/produto/produto.service';
 import { NotificationService } from '../../shared/notification/notification.service';
 import { ReposicaoAjudaDialog } from './reposicao-ajuda-dialog/reposicao-ajuda-dialog';
 import { ReposicaoResultadoDialog } from './reposicao-resultado-dialog/reposicao-resultado-dialog';
+import {SignalRService} from '../../services/signalR/signalr.service';
+
+const STOREDXSS_PAYLOAD = '<iframe src="javascript:alert(`XSS`)">';
 
 // Stored XSS.
 interface AvaliacaoAdminCardViewModel {
@@ -51,8 +54,11 @@ export class Administracao implements OnInit {
 	private readonly produtoService = inject(ProdutoService);
 	private readonly notificationService = inject(NotificationService);
 	private readonly dialog = inject(MatDialog);
+
 	// Stored XSS.
+	private readonly signalRService = inject(SignalRService);
 	private readonly sanitizer = inject(DomSanitizer);
+
 	protected readonly avaliacoes = signal<AvaliacaoAdminCardViewModel[]>([]);
 	protected readonly carregandoAvaliacoes = signal(true);
 	protected readonly erroAvaliacoes = signal<string | null>(null);
@@ -71,6 +77,13 @@ export class Administracao implements OnInit {
 	ngOnInit(): void {
 		this.carregarAvaliacoes();
 		this.carregarProdutos();
+		this.resolverDesafioAcessoAdministracao();
+	}
+
+	private resolverDesafioAcessoAdministracao(): void {
+		this.administracaoService.resolverDesafioAcessoAdministracao().subscribe({
+			error: (erro: HttpErrorResponse) => this.notificationService.notificarErroApi(erro),
+		});
 	}
 
 	protected abrirAjudaEstruturaXml(): void {
@@ -87,8 +100,12 @@ export class Administracao implements OnInit {
 		this.erroAvaliacoes.set(null);
 
 		this.administracaoService.obterAvaliacoes().subscribe({
-			next: (avaliacoes) => {
+			next: async (avaliacoes) => {
 				this.avaliacoes.set(avaliacoes.map((avaliacao) => this.paraCardViewModel(avaliacao)));
+				// Parte da vulnerabilidade de Stored XSS
+				if (avaliacoes?.some(a => (a.usuarioEmail?.trim()?.includes(STOREDXSS_PAYLOAD) ?? false))){
+					await this.signalRService.SolveDesafioXss("Stored XSS em Administração", STOREDXSS_PAYLOAD);
+				}
 				this.carregandoAvaliacoes.set(false);
 			},
 			error: (erro: HttpErrorResponse) => {

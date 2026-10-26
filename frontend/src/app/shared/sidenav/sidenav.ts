@@ -22,6 +22,7 @@ export class SidenavComponent implements OnInit {
 
 	protected readonly expanded = signal(true);
 	protected readonly showScoreBoard = signal(false);
+	protected readonly showPainelAdmin = signal(false);
 
 	protected readonly toggleIcon = computed(() => (this.expanded() ? 'chevron_left' : 'chevron_right'));
 	protected readonly toggleTooltip = computed(() => (this.expanded() ? 'Recolher menu' : 'Expandir menu'));
@@ -34,10 +35,22 @@ export class SidenavComponent implements OnInit {
 				this.showScoreBoard.set(true);
 			}
 		});
+		this.scoreBoardService.buscarDesafioPorNome('Acessar o painel de Administração').subscribe((desafio) => {
+			if (desafio && desafio.resolvido) {
+				this.showPainelAdmin.set(true);
+			}
+		});
 
 		this.signalRService.desafioSolved$.subscribe((desafio) => {
-			if (desafio && desafio.resolvido && desafio.nome === 'Encontrar a Score-Board') {
-				this.showScoreBoard.set(true);
+			if (desafio && desafio.resolvido) {
+				if (desafio.nome === 'Encontrar a Score-Board'){
+					this.showScoreBoard.set(true);
+					return;
+				}
+				if (desafio.nome === 'Acessar o painel de Administração'){
+					this.showPainelAdmin.set(true);
+					return;
+				}
 			}
 		});
 	}

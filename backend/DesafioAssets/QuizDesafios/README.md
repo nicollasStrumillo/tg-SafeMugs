@@ -3,7 +3,7 @@ Um Quiz, no SafeMugs, é uma dinâmica didática que oferece ao usuário o desaf
 Os "metadados" de um Quiz são: as linhas corretas — a resposta esperada do cliente; as linhas neutras –– não farão diferença no resultado da resposta; a linguagem do código do Quiz (c#, typescript ou html); de qual Desafio é o Quiz. 
 
 ## Criação de um Quiz
-Todo o conteúdo dos Quizzes ficam na pasta `backend\QuizDesafios`.
+Todo o conteúdo dos Quizzes fica na pasta `backend\DesafioAssets\QuizDesafios`.
 
 Cada Desafio deve possuir sua própria pasta, com o respectivo nome do Enum do desafio. 
 (vide backend\models\Enums\DesafiosEnum.cs)
@@ -22,7 +22,7 @@ Para criar um arquivo, utilizar o seguinte padrão: `{EnumDesafio}\\Quiz.{extens
 
 Por exemplo, o Quiz criado para o desafio "Login como Admin":
 
-\QuizDesafios\LoginAdmin\Quiz.cs.txt:
+\DesafioAssets\QuizDesafios\LoginAdmin\Quiz.cs.txt:
 ```
 public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
 {
@@ -63,7 +63,7 @@ Para criar um arquivo, utilizar o seguinte padrão: `{EnumDesafio}\\Seguro.{exte
 
 Por exemplo, o Código Seguro criado para o desafio "Login como Admin":
 
-\QuizDesafios\LoginAdmin\Seguro.cs.txt:
+\DesafioAssets\QuizDesafios\LoginAdmin\Seguro.cs.txt:
 ```
 public async Task<LoginResponse?> RealizarLoginAsync(LoginRequest request)
 {
@@ -108,7 +108,7 @@ Para criar um arquivo, utilizar o seguinte padrão: `{EnumDesafio}\\MensagemSegu
 
 Por exemplo, a mensagem criada para o desafio "Login como Admin":
 
-\QuizDesafios\LoginAdmin\MensagemSeguro.txt:
+\DesafioAssets\QuizDesafios\LoginAdmin\MensagemSeguro.txt:
 ```
 "Toda ferramenta de acesso a banco de dados oferece uma forma segura de enviar parâmetros para uma consulta SQL, evitando que eles sejam concatenados diretamente na string da consulta."
 ```

@@ -1,0 +1,6 @@
+@for (avaliacao of avaliacoes(); track avaliacao.id) {
+  <article class="card-avaliacao">
+    <strong>{{ avaliacao.produtoNome }}</strong>
+    <span>{{ avaliacao.emailUsuario }}</span>
+  </article>
+}

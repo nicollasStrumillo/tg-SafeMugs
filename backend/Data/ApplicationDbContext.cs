@@ -1849,6 +1849,50 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 4,
                 Rota = RotasEnum.Pedidos.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 27,
+                Nome = DesafiosEnum.EncontrarAdministracao.GetNomeDisplay(),
+                Descricao = "Acesse o painel de Administração do SafeMugs.",
+                DescricaoDetalhes = "O painel de Administração reúne funções fora do fluxo comum de compra. Quando uma conta possui perfil administrativo, a navegação disponibiliza uma entrada para esse painel. Explore a aplicação para encontrar o painel. O acesso, porém, exige uma conta com perfil de Administrador.",
+                Categoria = CategoriaDesafio.Outros,
+                Dificuldade = 2,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 28,
+                Nome = DesafiosEnum.XxeReposicaoEstoque.GetNomeDisplay(),
+                Descricao = "Leia o arquivo local DesafioAssets/xxe.txt explorando o processamento de XML.",
+                DescricaoDetalhes = "Uma vulnerabilidade XXE ocorre quando um parser aceita DTDs e resolve entidades externas definidas em um XML não confiável. Como o parser atua no servidor, essas referências podem levar a aplicação a acessar arquivos locais ou recursos externos e incorporar seus conteúdos ao documento, expondo informações que não deveriam estar disponíveis. XML recebido de usuários deve ser processado sem DTDs ou resolução externa, salvo quando esses recursos forem necessários e estiverem restritos.",
+                Categoria = CategoriaDesafio.XmlExternalEntity,
+                Dificuldade = 4,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 29,
+                Nome = DesafiosEnum.DOS.GetNomeDisplay(),
+                Descricao = "Faça uma requisição que deixe o servidor ocupado por um tempo.",
+                DescricaoDetalhes = "Parsers que processam XML não confiável sem limites adequados podem consumir recursos desproporcionais ao conteúdo recebido. Em especial, a expansão de entidades em DTDs pode transformar uma entrada pequena em um grande volume de texto, consumindo CPU e memória e reduzindo a capacidade do servidor de atender outras requisições. Rejeitar DTDs ou limitar rigorosamente a expansão reduz esse risco.",
+                Categoria = CategoriaDesafio.XmlExternalEntity,
+                Dificuldade = 4,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 30,
+                Nome = DesafiosEnum.StoredXssAdministracao.GetNomeDisplay(),
+                Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de Administração.",
+                DescricaoDetalhes = "Stored XSS ocorre quando conteúdo controlado pelo usuário é armazenado e posteriormente interpretado como HTML. Neste fluxo, o e-mail associado ao autor de uma avaliação é persistido na conta e exibido na listagem administrativa. Como esse valor é tratado como HTML, conteúdo malicioso pode ser executado no navegador de quem visualiza a lista. Dados persistidos devem ser tratados como não confiáveis e renderizados com codificação adequada ao contexto.",
+                Categoria = CategoriaDesafio.StoredXSS,
+                Dificuldade = 4,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2248,6 +2292,51 @@ public class ApplicationDBContext : DbContext
                 NrDica = 2,
                 Texto = "A coluna HashSenha, do tipo string na tabela usuarios, cabe na coluna textual do número do pedido.",
                 DesafioId = 26
+            },
+
+            new DicaDesafio
+            {
+                Id = 55,
+                NrDica = 1,
+                Texto = "Um DTD pode declarar entidades externas que apontam para recursos locais; o caminho do arquivo está na descrição.",
+                DesafioId = 28
+            },
+
+            new DicaDesafio
+            {
+                Id = 56,
+                NrDica = 1,
+                Texto = "A página de Administração oferece a reposição de estoque por XML; explore esse fluxo.",
+                DesafioId = 29
+            },
+            new DicaDesafio
+            {
+                Id = 57,
+                NrDica = 2,
+                Texto = "O tamanho enviado não é o único custo; considere o trabalho que o parser faz ao interpretar o XML.",
+                DesafioId = 29
+            },
+            new DicaDesafio
+            {
+                Id = 58,
+                NrDica = 3,
+                Texto = "Entidades declaradas em um DTD podem referenciar outras entidades, fazendo o conteúdo processado crescer rapidamente.",
+                DesafioId = 29
+            },
+
+            new DicaDesafio
+            {
+                Id = 59,
+                NrDica = 1,
+                Texto = "A listagem de avaliações mostra outros dados do autor além do comentário.",
+                DesafioId = 30
+            },
+            new DicaDesafio
+            {
+                Id = 60,
+                NrDica = 2,
+                Texto = "O e-mail do autor vem do cadastro e é exibido na listagem; observe como o navegador interpreta esse valor.",
+                DesafioId = 30
             }
         );
 

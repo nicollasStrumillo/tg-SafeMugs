@@ -80,5 +80,17 @@ public enum DesafiosEnum
     CarrinhoQuantidadeInvalida,
 
     [Display(Name = "Capture o hash da senha de um usuário")]
-    ExtrairHashSenha
+    ExtrairHashSenha,
+
+    [Display(Name = "Acessar o painel de Administração")]
+    EncontrarAdministracao,
+
+    [Display(Name = "Leia um arquivo local usando XXE")]
+    XxeReposicaoEstoque,
+
+    [Display(Name = "DOS")]
+    DOS,
+
+    [Display(Name = "Stored XSS em Administração")]
+    StoredXssAdministracao
 }

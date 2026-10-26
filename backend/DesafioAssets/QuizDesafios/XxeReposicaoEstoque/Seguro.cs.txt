@@ -1,0 +1,11 @@
+public XDocument LerXmlReposicao(Stream arquivo)
+{
+    var configuracoes = new XmlReaderSettings
+    {
+        DtdProcessing = DtdProcessing.Prohibit,
+        XmlResolver = null
+    };
+
+    using var leitor = XmlReader.Create(arquivo, configuracoes);
+    return XDocument.Load(leitor);
+}
