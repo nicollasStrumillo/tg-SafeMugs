@@ -1871,6 +1871,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 4,
                 Rota = RotasEnum.Administracao.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 29,
+                Nome = DesafiosEnum.DOS.GetNomeDisplay(),
+                Descricao = "Faça uma requisição que deixe o servidor ocupado por um tempo.",
+                DescricaoDetalhes = "Parsers que processam XML não confiável sem limites adequados podem consumir recursos desproporcionais ao conteúdo recebido. Em especial, a expansão de entidades em DTDs pode transformar uma entrada pequena em um grande volume de texto, consumindo CPU e memória e reduzindo a capacidade do servidor de atender outras requisições. Rejeitar DTDs ou limitar rigorosamente a expansão reduz esse risco.",
+                Categoria = CategoriaDesafio.XmlExternalEntity,
+                Dificuldade = 4,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2278,6 +2289,28 @@ public class ApplicationDBContext : DbContext
                 NrDica = 1,
                 Texto = "Um DTD pode declarar entidades externas que apontam para recursos locais; o caminho do arquivo está na descrição.",
                 DesafioId = 28
+            },
+
+            new DicaDesafio
+            {
+                Id = 56,
+                NrDica = 1,
+                Texto = "A página de Administração oferece a reposição de estoque por XML; explore esse fluxo.",
+                DesafioId = 29
+            },
+            new DicaDesafio
+            {
+                Id = 57,
+                NrDica = 2,
+                Texto = "O tamanho enviado não é o único custo; considere o trabalho que o parser faz ao interpretar o XML.",
+                DesafioId = 29
+            },
+            new DicaDesafio
+            {
+                Id = 58,
+                NrDica = 3,
+                Texto = "Entidades declaradas em um DTD podem referenciar outras entidades, fazendo o conteúdo processado crescer rapidamente.",
+                DesafioId = 29
             }
         );
 

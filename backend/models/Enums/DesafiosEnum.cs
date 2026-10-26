@@ -86,5 +86,8 @@ public enum DesafiosEnum
     EncontrarAdministracao,
 
     [Display(Name = "Leia um arquivo local usando XXE")]
-    XxeReposicaoEstoque
+    XxeReposicaoEstoque,
+
+    [Display(Name = "DOS")]
+    DOS
 }

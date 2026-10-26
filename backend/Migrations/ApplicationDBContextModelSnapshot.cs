@@ -1281,6 +1281,17 @@ namespace backend.Migrations
                             Nome = "Leia um arquivo local usando XXE",
                             Resolvido = false,
                             Rota = "/administracao"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Categoria = "XmlExternalEntity",
+                            Descricao = "Faça uma requisição que deixe o servidor ocupado por um tempo.",
+                            DescricaoDetalhes = "Parsers que processam XML não confiável sem limites adequados podem consumir recursos desproporcionais ao conteúdo recebido. Em especial, a expansão de entidades em DTDs pode transformar uma entrada pequena em um grande volume de texto, consumindo CPU e memória e reduzindo a capacidade do servidor de atender outras requisições. Rejeitar DTDs ou limitar rigorosamente a expansão reduz esse risco.",
+                            Dificuldade = 4,
+                            Nome = "DOS",
+                            Resolvido = false,
+                            Rota = "/administracao"
                         });
                 });
 
@@ -1695,6 +1706,27 @@ namespace backend.Migrations
                             DesafioId = 28,
                             NrDica = 1,
                             Texto = "Um DTD pode declarar entidades externas que apontam para recursos locais; o caminho do arquivo está na descrição."
+                        },
+                        new
+                        {
+                            Id = 56,
+                            DesafioId = 29,
+                            NrDica = 1,
+                            Texto = "A página de Administração oferece a reposição de estoque por XML; explore esse fluxo."
+                        },
+                        new
+                        {
+                            Id = 57,
+                            DesafioId = 29,
+                            NrDica = 2,
+                            Texto = "O tamanho enviado não é o único custo; considere o trabalho que o parser faz ao interpretar o XML."
+                        },
+                        new
+                        {
+                            Id = 58,
+                            DesafioId = 29,
+                            NrDica = 3,
+                            Texto = "Entidades declaradas em um DTD podem referenciar outras entidades, fazendo o conteúdo processado crescer rapidamente."
                         });
                 });
 
