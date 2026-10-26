@@ -1882,6 +1882,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 4,
                 Rota = RotasEnum.Administracao.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 30,
+                Nome = DesafiosEnum.StoredXssAdministracao.GetNomeDisplay(),
+                Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de Administração.",
+                DescricaoDetalhes = "Stored XSS ocorre quando conteúdo controlado pelo usuário é armazenado e posteriormente interpretado como HTML. Neste fluxo, o e-mail associado ao autor de uma avaliação é persistido na conta e exibido na listagem administrativa. Como esse valor é tratado como HTML, conteúdo malicioso pode ser executado no navegador de quem visualiza a lista. Dados persistidos devem ser tratados como não confiáveis e renderizados com codificação adequada ao contexto.",
+                Categoria = CategoriaDesafio.StoredXSS,
+                Dificuldade = 4,
+                Rota = RotasEnum.Administracao.GetNomeDisplay(),
+                Resolvido = false
             }
         );
 
@@ -2311,6 +2322,21 @@ public class ApplicationDBContext : DbContext
                 NrDica = 3,
                 Texto = "Entidades declaradas em um DTD podem referenciar outras entidades, fazendo o conteúdo processado crescer rapidamente.",
                 DesafioId = 29
+            },
+
+            new DicaDesafio
+            {
+                Id = 59,
+                NrDica = 1,
+                Texto = "A listagem de avaliações mostra outros dados do autor além do comentário.",
+                DesafioId = 30
+            },
+            new DicaDesafio
+            {
+                Id = 60,
+                NrDica = 2,
+                Texto = "O e-mail do autor vem do cadastro e é exibido na listagem; observe como o navegador interpreta esse valor.",
+                DesafioId = 30
             }
         );
 

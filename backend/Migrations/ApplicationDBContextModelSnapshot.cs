@@ -1292,6 +1292,17 @@ namespace backend.Migrations
                             Nome = "DOS",
                             Resolvido = false,
                             Rota = "/administracao"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Categoria = "StoredXSS",
+                            Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de Stored XSS na página de Administração.",
+                            DescricaoDetalhes = "Stored XSS ocorre quando conteúdo controlado pelo usuário é armazenado e posteriormente interpretado como HTML. Neste fluxo, o e-mail associado ao autor de uma avaliação é persistido na conta e exibido na listagem administrativa. Como esse valor é tratado como HTML, conteúdo malicioso pode ser executado no navegador de quem visualiza a lista. Dados persistidos devem ser tratados como não confiáveis e renderizados com codificação adequada ao contexto.",
+                            Dificuldade = 4,
+                            Nome = "Stored XSS em Administração",
+                            Resolvido = false,
+                            Rota = "/administracao"
                         });
                 });
 
@@ -1727,6 +1738,20 @@ namespace backend.Migrations
                             DesafioId = 29,
                             NrDica = 3,
                             Texto = "Entidades declaradas em um DTD podem referenciar outras entidades, fazendo o conteúdo processado crescer rapidamente."
+                        },
+                        new
+                        {
+                            Id = 59,
+                            DesafioId = 30,
+                            NrDica = 1,
+                            Texto = "A listagem de avaliações mostra outros dados do autor além do comentário."
+                        },
+                        new
+                        {
+                            Id = 60,
+                            DesafioId = 30,
+                            NrDica = 2,
+                            Texto = "O e-mail do autor vem do cadastro e é exibido na listagem; observe como o navegador interpreta esse valor."
                         });
                 });
 

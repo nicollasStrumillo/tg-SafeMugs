@@ -89,5 +89,8 @@ public enum DesafiosEnum
     XxeReposicaoEstoque,
 
     [Display(Name = "DOS")]
-    DOS
+    DOS,
+
+    [Display(Name = "Stored XSS em Administração")]
+    StoredXssAdministracao
 }
