@@ -132,6 +132,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.CadastroInvalido
             ]},
 
+        new() { Desafio = DesafiosEnum.StoredXssAdministracao, Dependencias =
+            [
+                DesafiosEnum.CadastroInvalido
+            ] },
+
         new() { Desafio = DesafiosEnum.CriarAvaliacaoOutroUsuario, Dependencias = 
             [
                 DesafiosEnum.CriarAvaliacaoZeroEstrelas,

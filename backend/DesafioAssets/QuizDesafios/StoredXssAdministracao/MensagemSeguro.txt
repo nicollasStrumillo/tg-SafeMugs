@@ -1,0 +1,1 @@
+Dados persistidos de usuários continuam não confiáveis. O binding [innerHTML] faz o navegador interpretar o e-mail como marcação; a interpolação Angular o exibe como texto e evita que HTML fornecido pelo usuário seja executado.
