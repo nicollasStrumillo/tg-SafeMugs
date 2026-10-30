@@ -98,6 +98,8 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.EncontrarScoreBoard
             ] },
 
+        new() { Desafio = DesafiosEnum.VisualizarDadosOutroUsuario, Dependencias = [] },
+
         new() { Desafio = DesafiosEnum.ModificarCarrinhoAlheio, Dependencias = 
             [
                 DesafiosEnum.VisualizarCarrinhoAlheio
@@ -158,7 +160,8 @@ public class SugestaoDesafioService : ISugestaoDesafioService
         new() { Desafio = DesafiosEnum.MudarSenhaUsuarioInvalido, Dependencias =
             [
                 DesafiosEnum.ForjarJwt,
-                DesafiosEnum.SsrfServicoInternoOculto
+                DesafiosEnum.SsrfServicoInternoOculto,
+                DesafiosEnum.VisualizarDadosOutroUsuario
             ] },
 
         new() { Desafio = DesafiosEnum.DomClobbering, Dependencias =

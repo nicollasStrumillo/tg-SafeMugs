@@ -113,7 +113,7 @@ public class UsuarioService : IUsuarioService
         var usuario = await _usuarioRepository.BuscarPorIdAsync(usuarioId)
             ?? throw new NotFoundException("Usuário não encontrado.");
 
-        return new UsuarioDetalhesDTO
+        var detalhes = new UsuarioDetalhesDTO
         {
             Id = usuario.Id,
             NomeCompleto = usuario.NomeCompleto,
@@ -135,6 +135,12 @@ public class UsuarioService : IUsuarioService
                 Cep = usuario.Endereco.Cep
             } : null
         };
+
+        await _desafioService.SolveIfAsync(
+            DesafiosEnum.VisualizarDadosOutroUsuario,
+            () => usuario.Id != _user.UsuarioId);
+
+        return detalhes;
     }
 
     private async Task ResolverDesafiosBruteForceAsync(string email, string hashSenha)
