@@ -92,5 +92,8 @@ public enum DesafiosEnum
     DOS,
 
     [Display(Name = "Stored XSS em Administração")]
-    StoredXssAdministracao
+    StoredXssAdministracao,
+
+    [Display(Name = "Acesso reservado")]
+    ForjarJwt
 }

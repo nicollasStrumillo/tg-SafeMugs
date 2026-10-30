@@ -1,0 +1,7 @@
+[Authorize(Roles = "Administrador")]
+[HttpGet("avaliacoes")]
+public async Task<ActionResult<List<AvaliacaoAdminDTO>>> ObterAvaliacoes()
+{
+    var avaliacoes = await _produtoService.ObterTodasAvaliacoesAsync();
+    return Ok(avaliacoes);
+}

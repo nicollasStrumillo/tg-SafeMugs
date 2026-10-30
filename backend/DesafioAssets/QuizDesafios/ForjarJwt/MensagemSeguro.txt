@@ -1,0 +1,1 @@
+O payload de um JWT pode ser lido pelo cliente, mas suas claims só são confiáveis depois da validação da assinatura. Configure a autenticação para validar também o emissor, a audiência e a validade do token; em seguida, autorize a operação usando as claims do principal autenticado, por exemplo com [Authorize(Roles = "Administrador")].

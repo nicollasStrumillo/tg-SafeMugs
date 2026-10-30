@@ -1,0 +1,14 @@
+[HttpGet("avaliacoes")]
+public async Task<ActionResult<List<AvaliacaoAdminDTO>>> ObterAvaliacoes()
+{
+    var token = _jwtService.ObterToken(Request); // neutra
+    
+    if (token.Claims.Any(claim => claim.Type == "perfil" && // correta
+        claim.Value.Equals("Administrador", StringComparison.OrdinalIgnoreCase))) // correta
+    { // neutra
+        var avaliacoes = await _produtoService.ObterTodasAvaliacoesAsync(); // neutra
+        return Ok(avaliacoes); // neutra
+    } // neutra
+
+    return Unauthorized("Acesso negado.");
+}

@@ -1893,6 +1893,17 @@ public class ApplicationDBContext : DbContext
                 Dificuldade = 4,
                 Rota = RotasEnum.Administracao.GetNomeDisplay(),
                 Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 31,
+                Nome = DesafiosEnum.ForjarJwt.GetNomeDisplay(),
+                Descricao = "Usando uma conta comum, faça uma requisição bem-sucedida a uma operação exclusiva para administradores, sem utilizar uma sessão válida de administrador.",
+                DescricaoDetalhes = "Um JWT contém claims que representam a identidade e as permissões do usuário. Seu payload pode ser lido pelo cliente, mas a assinatura é necessária para detectar alterações e confirmar que essas informações são confiáveis. Se a API usa uma claim de perfil para autorizar uma operação antes de validar a assinatura, dados alterados pelo cliente podem ser interpretados como privilégios legítimos. A proteção de navegação no cliente não substitui a autorização no servidor: a API deve validar o token antes de confiar nas claims.",
+                Categoria = CategoriaDesafio.SecurityMisconfiguration,
+                Dificuldade = 3,
+                Rota = null,
+                Resolvido = false
             }
         );
 
@@ -2337,6 +2348,27 @@ public class ApplicationDBContext : DbContext
                 NrDica = 2,
                 Texto = "O e-mail do autor vem do cadastro e é exibido na listagem; observe como o navegador interpreta esse valor.",
                 DesafioId = 30
+            },
+            new DicaDesafio
+            {
+                Id = 61,
+                NrDica = 1,
+                Texto = "Observe os dados de autenticação que o cliente envia junto à requisição.",
+                DesafioId = 31
+            },
+            new DicaDesafio
+            {
+                Id = 62,
+                NrDica = 2,
+                Texto = "A API recebe um JWT. Inspecione o payload e procure a claim de perfil usada na decisão de acesso.",
+                DesafioId = 31
+            },
+            new DicaDesafio
+            {
+                Id = 63,
+                NrDica = 3,
+                Texto = "Alterar uma claim modifica o conteúdo do token e invalida sua assinatura original. Verifique se o servidor valida essa assinatura antes de confiar no perfil.",
+                DesafioId = 31
             }
         );
 
