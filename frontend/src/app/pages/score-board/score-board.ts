@@ -11,10 +11,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 import { NotificationService } from '../../shared/notification/notification.service';
-import { DesafioResponse, DetalhesDesafioModel, DicaDesafioDto, QuizDesafio } from './score-board.models';
+import { DesafioResponse, DicaDesafioDto } from './score-board.models';
 import { ScoreBoardService } from './score-board.service';
 import { SignalRService } from '../../services/signalR/signalr.service';
 import { DetalhesDesafio } from './detalhes-desafio/detalhes-desafio';
+import { GuiaCategoria } from './guia-categoria/guia-categoria.service';
+import { GuiaCategoriaService } from './guia-categoria/guia-categoria.service';
+import { GuiaCategoriaDialog } from './guia-categoria/guia-categoria-dialog';
 import { DesafiosnavService } from './../../shared/desafiosnav/desafiosnav.service';
 
 interface FragmentoTexto{
@@ -46,6 +49,7 @@ type ItemSugestao = {
 })
 export class ScoreBoard implements OnInit {
 	private readonly scoreBoardService = inject(ScoreBoardService);
+	private readonly guiaCategoriaService = inject(GuiaCategoriaService);
 	private readonly notificationService = inject(NotificationService);
 	private readonly signalRService = inject(SignalRService);
 	private readonly desafionavService = inject(DesafiosnavService);
@@ -245,6 +249,24 @@ export class ScoreBoard implements OnInit {
 				this.notificationService.erro('Erro ao carregar detalhes do desafio');
 				return;
 			}
+		});
+	}
+
+	protected guiaDaCategoria(categoriaId: string): GuiaCategoria | null {
+		return this.guiaCategoriaService.obterGuia(categoriaId);
+	}
+
+	protected abrirGuiaCategoria(guia: GuiaCategoria, categoria: string, event?: Event): void {
+		event?.stopPropagation();
+
+		this.dialog.open(GuiaCategoriaDialog, {
+			data: { titulo: categoria, guia },
+			width: '1000px',
+			maxWidth: '95vw',
+			maxHeight: '92vh',
+			panelClass: 'guia-categoria-dialog',
+			ariaLabel: `Guia da categoria ${categoria}`,
+			autoFocus: false,
 		});
 	}
 

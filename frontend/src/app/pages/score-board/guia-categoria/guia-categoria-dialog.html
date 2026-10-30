@@ -1,0 +1,28 @@
+<div class="guia-categoria-card">
+	<header class="guia-header">
+		<div class="guia-header-texto">
+			<p class="guia-eyebrow">Guia da categoria</p>
+			<h1 class="guia-titulo">{{ data.titulo }}</h1>
+		</div>
+
+		<button
+			mat-icon-button
+			type="button"
+			class="btn-fechar"
+			(click)="fechar()"
+			aria-label="Fechar guia da categoria"
+		>
+			<mat-icon>close</mat-icon>
+		</button>
+	</header>
+
+	<div class="guia-conteudo">
+		@if (carregando()) {
+			<div class="guia-estado">Carregando guia...</div>
+		} @else if (erro()) {
+			<div class="guia-estado guia-estado-erro">{{ erro() }}</div>
+		} @else {
+			<article class="guia-markdown" [innerHTML]="conteudoHtml()"></article>
+		}
+	</div>
+</div>

@@ -230,6 +230,7 @@ public class SugestaoDesafioService : ISugestaoDesafioService
             Nome = desafio.Nome,
             Descricao = desafio.Descricao,
             Categoria = desafio.Categoria.GetNomeDisplay(),
+            CategoriaId = desafio.Categoria.ToString(),
             Dificuldade = desafio.Dificuldade,
             Resolvido = desafio.Resolvido,
             Rota = desafio.Rota,

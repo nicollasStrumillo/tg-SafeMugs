@@ -36,7 +36,19 @@
                 role="button"
               >
                 <div class="challenge-topline">
-                  <span class="category-pill">{{ item.desafio.categoria }}</span>
+                  @if (guiaDaCategoria(item.desafio.categoriaId); as guia) {
+                    <button
+                      type="button"
+                      class="category-pill category-pill-guia"
+                      matTooltip="Ler guia da categoria"
+                      [attr.aria-label]="'Abrir guia da categoria ' + item.desafio.categoria"
+                      (click)="abrirGuiaCategoria(guia, item.desafio.categoria, $event)"
+                      (keyup.enter)="$event.stopPropagation()"
+                      (keyup.space)="$event.stopPropagation()"
+                    >{{ item.desafio.categoria }}</button>
+                  } @else {
+                    <span class="category-pill">{{ item.desafio.categoria }}</span>
+                  }
 
                   <button
                     mat-icon-button
@@ -282,7 +294,19 @@
             [class.is-resolved]="desafio.resolvido"
           >
             <div class="challenge-topline">
-              <span class="category-pill">{{ desafio.categoria }}</span>
+              @if (guiaDaCategoria(desafio.categoriaId); as guia) {
+                <button
+                  type="button"
+                  class="category-pill category-pill-guia"
+                  matTooltip="Ler guia da categoria"
+                  [attr.aria-label]="'Abrir guia da categoria ' + desafio.categoria"
+                  (click)="abrirGuiaCategoria(guia, desafio.categoria, $event)"
+                  (keyup.enter)="$event.stopPropagation()"
+                  (keyup.space)="$event.stopPropagation()"
+                >{{ desafio.categoria }}</button>
+              } @else {
+                <span class="category-pill">{{ desafio.categoria }}</span>
+              }
 
               <div class="topline-right">
                 <button

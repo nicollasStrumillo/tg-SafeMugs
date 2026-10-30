@@ -158,6 +158,21 @@ body .sm-elevated-panel {
 	overflow: hidden;
 }
 
+.guia-categoria-dialog .mdc-dialog__surface {
+	border-radius: 0.25rem;
+	overflow: hidden;
+}
+
+.guia-categoria-dialog .guia-markdown img {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 100%;
+	height: auto;
+	object-fit: contain;
+	margin: auto;
+}
+
 body .mat-mdc-form-field {
 	width: 100%;
 	--mdc-outlined-text-field-outline-color: var(--sm-border);

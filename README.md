@@ -39,6 +39,8 @@ Projeto de Trabalho de Graduação (TG) — loja virtual **intencionalmente vuln
 | Zone.js | `0.15.x` (`~0.15.0`) |
 | `@microsoft/signalr` | `^10.0.0` |
 | `highlight.js` | `^11.11.1` |
+| `marked` | `^18.1.2` |
+| `marked-highlight` | `^2.2.4` |
 
 > Imagens Docker: `mcr.microsoft.com/dotnet/sdk:9.0` + `aspnet:9.0`, `node:22-alpine`, `nginx:1.27-alpine`.
 
@@ -105,6 +107,14 @@ Acesse em qualquer opção Docker:
 - Frontend: `http://localhost:4200`
 - Backend: `http://localhost:8080` (`/api`, `/imagens`, `/notifications`)
 - MySQL: interno `db:3306` (externo não exposto; backend usa `server=db` via `ConnectionStrings__DefaultConnection`)
+
+## Guias de categoria (score-board)
+
+O pill da categoria de um desafio abre, quando há guia registrado, uma modal de leitura com um documento Markdown didático sobre a exploração e o impacto daquela categoria de falha.
+
+- Os guias são arquivos `.md` servidos estaticamente a partir de `frontend/public/guias-categoria/`; imagens ficam em `frontend/public/guias-categoria/imagens/` e são referenciadas como `![Descrição](/guias-categoria/imagens/arquivo.svg)`.
+- O registro das categorias que possuem guia fica em `frontend/src/app/pages/score-board/guias-categoria/guias-categoria.registro.ts` e começa vazio: uma categoria só exibe o pill clicável depois que seu guia for registrado lá, informando o valor do enum `CategoriaDesafio` do backend (ex.: `SqlInjection`) e o caminho do arquivo.
+- Blocos de código (ex.: ` ```sql `) são realçados com o `highlight.js` já usado no projeto.
 
 ## Atribuição de créditos
 

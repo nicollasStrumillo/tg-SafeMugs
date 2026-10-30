@@ -9,6 +9,7 @@ export interface DesafioResponse {
 	nome: string;
 	descricao: string;
 	categoria: string;
+	categoriaId: string;
 	dificuldade: number;
 	resolvido: boolean;
 	rota: string | null;
