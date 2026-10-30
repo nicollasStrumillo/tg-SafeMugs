@@ -14,11 +14,11 @@ export class AdministracaoService {
     private readonly http = inject(HttpClient);
 
     public obterAvaliacoes(): Observable<AvaliacaoAdminDto[]> {
-        return this.http.get<AvaliacaoAdminDto[]>('/api/administracao/avaliacoes');
+        return this.http.get<AvaliacaoAdminDto[]>('/api/produtos/avaliacoes');
     }
 
     public excluirAvaliacao(avaliacaoId: number): Observable<void> {
-        return this.http.delete<void>(`/api/administracao/avaliacoes/${avaliacaoId}`);
+        return this.http.delete<void>(`/api/produtos/avaliacoes/${avaliacaoId}`);
     }
 
     public resolverDesafioAcessoAdministracao(): Observable<void> {

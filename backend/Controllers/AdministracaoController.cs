@@ -33,20 +33,6 @@ public class AdministracaoController : ControllerBase
         return NoContent();
     }
 
-    [HttpGet("avaliacoes")]
-    public async Task<ActionResult<List<AvaliacaoAdminDTO>>> ObterAvaliacoes()
-    {
-        var avaliacoes = await _produtoService.ObterTodasAvaliacoesAsync();
-        return Ok(avaliacoes);
-    }
-
-    [HttpDelete("avaliacoes/{avaliacaoId}")]
-    public async Task<IActionResult> ExcluirAvaliacao(int avaliacaoId)
-    {
-        await _produtoService.ExcluirAvaliacaoAsync(avaliacaoId);
-        return Ok(new { mensagem = "Avaliação excluída com sucesso." });
-    }
-
     [HttpPost("reposicao-estoque")]
     public async Task<ActionResult<ReposicaoEstoqueResultadoDTO>> ImportarReposicao(IFormFile arquivoXml)
     {

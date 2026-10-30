@@ -60,4 +60,49 @@ public class JwtService : IJwtService
             Perfil = userData.Perfil,
         };
     }
+
+    public JwtSecurityToken? ObterTokenBruto(HttpRequest request) 
+    {
+        const string prefixo = "Bearer ";
+        var authorization = request.Headers.Authorization.ToString();
+
+        if (!authorization.StartsWith(prefixo, StringComparison.OrdinalIgnoreCase))
+            return null;
+        string token = authorization[prefixo.Length..].Trim();
+
+        JwtSecurityToken jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
+        return jwt;
+    }
+
+    public bool ValidaAssinatura(JwtSecurityToken jwt)
+    {
+        string token = jwt.RawData;
+        if (string.IsNullOrWhiteSpace(token))
+            return false;
+
+        var parametros = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = true,
+            RequireSignedTokens = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.SecretKey)),
+            ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
+        };
+
+        try
+        {
+            new JwtSecurityTokenHandler().ValidateToken(token, parametros, out _);
+            return true;
+        }
+        catch (SecurityTokenException)
+        {
+            return false;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
+    }
 }

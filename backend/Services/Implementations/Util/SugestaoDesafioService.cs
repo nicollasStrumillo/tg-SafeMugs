@@ -30,6 +30,8 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.LoginAdmin
             ] },
 
+        new() { Desafio = DesafiosEnum.ForjarJwt, Dependencias = [] },
+
         new() { Desafio = DesafiosEnum.XxeReposicaoEstoque, Dependencias = [
                 DesafiosEnum.LoginAdmin
             ] },
@@ -155,6 +157,7 @@ public class SugestaoDesafioService : ISugestaoDesafioService
 
         new() { Desafio = DesafiosEnum.MudarSenhaUsuarioInvalido, Dependencias =
             [
+                DesafiosEnum.ForjarJwt,
                 DesafiosEnum.SsrfServicoInternoOculto
             ] },
 
