@@ -1285,11 +1285,11 @@ namespace backend.Migrations
                         new
                         {
                             Id = 29,
-                            Categoria = "XmlExternalEntity",
+                            Categoria = "SecurityMisconfiguration",
                             Descricao = "Faça uma requisição que deixe o servidor ocupado por um tempo.",
                             DescricaoDetalhes = "Parsers que processam XML não confiável sem limites adequados podem consumir recursos desproporcionais ao conteúdo recebido. Em especial, a expansão de entidades em DTDs pode transformar uma entrada pequena em um grande volume de texto, consumindo CPU e memória e reduzindo a capacidade do servidor de atender outras requisições. Rejeitar DTDs ou limitar rigorosamente a expansão reduz esse risco.",
                             Dificuldade = 4,
-                            Nome = "DOS",
+                            Nome = "DoS",
                             Resolvido = false,
                             Rota = "/administracao"
                         },
@@ -1312,6 +1312,16 @@ namespace backend.Migrations
                             DescricaoDetalhes = "Um JWT contém claims que representam a identidade e as permissões do usuário. Seu payload pode ser lido pelo cliente, mas a assinatura é necessária para detectar alterações e confirmar que essas informações são confiáveis. Se a API usa uma claim de perfil para autorizar uma operação antes de validar a assinatura, dados alterados pelo cliente podem ser interpretados como privilégios legítimos. A proteção de navegação no cliente não substitui a autorização no servidor: a API deve validar o token antes de confiar nas claims.",
                             Dificuldade = 3,
                             Nome = "Acesso reservado",
+                            Resolvido = false
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Categoria = "IDOR",
+                            Descricao = "Consulte pela API os dados de uma conta diferente da sua.",
+                            DescricaoDetalhes = "A página de perfil carrega os dados da conta por meio de uma requisição à API. O backend usa o identificador recebido na URL para buscar e retornar o perfil sem exigir autenticação nem verificar se o solicitante pode acessar aquele registro. Como o identificador é controlado pelo cliente, alterá-lo permite consultar informações pessoais de outras contas. A API deve validar a autorização no servidor para cada recurso; não basta a interface enviar o próprio identificador.",
+                            Dificuldade = 1,
+                            Nome = "Visualizar dados de outro usuário",
                             Resolvido = false
                         });
                 });

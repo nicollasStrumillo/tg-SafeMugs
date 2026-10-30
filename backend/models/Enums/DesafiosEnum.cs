@@ -88,12 +88,15 @@ public enum DesafiosEnum
     [Display(Name = "Leia um arquivo local usando XXE")]
     XxeReposicaoEstoque,
 
-    [Display(Name = "DOS")]
+    [Display(Name = "DoS")]
     DOS,
 
     [Display(Name = "Stored XSS em Administração")]
     StoredXssAdministracao,
 
     [Display(Name = "Acesso reservado")]
-    ForjarJwt
+    ForjarJwt,
+
+    [Display(Name = "Visualizar dados de outro usuário")]
+    VisualizarDadosOutroUsuario
 }
