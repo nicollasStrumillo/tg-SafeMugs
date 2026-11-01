@@ -22,6 +22,9 @@ public enum DesafiosEnum
     [Display(Name = "Altere o comentário de outro usuário")]
     AlterarComentarioOutroUsuario,
 
+    [Display(Name = "Redefinir senha de outro usuário")]
+    RedefinirSenhaOutroUsuario,
+
     [Display(Name = "Stored XSS em Catalogo")]
     StoredXssComentarios,
 

@@ -1608,7 +1608,7 @@ public class ApplicationDBContext : DbContext
                 Id = 3,
                 Nome = DesafiosEnum.BruteForceLogin.GetNomeDisplay(),
                 Descricao = "Acesse a conta de um dos usuários do domínio @safemugs.com utilizando força bruta.",
-                DescricaoDetalhes = "O fluxo de login do SafeMugs não implementa nenhum mecanismo de antiautomação: não há limite de tentativas por conta, bloqueio temporário, captcha nem atraso entre requisições. Conhecendo um e-mail válido do domínio |@safemugs.com|, é possível automatizar tentativas consecutivas de senha até acertar. As senhas dos usuários comuns são fracas e baseadas em padrões conhecidos (como 'welcome123' ou 'password123'), o que torna viável um ataque usando uma lista de palavras. Sem qualquer controle de velocidade, um script consegue testar milhares de combinações em poucos segundos, obtendo acesso a uma conta legítima.",
+                DescricaoDetalhes = "O fluxo de login do SafeMugs não implementa nenhum mecanismo de antiautomação: não há limite de tentativas por conta, bloqueio temporário, captcha nem atraso entre requisições. Conhecendo um e-mail válido do domínio @safemugs.com, é possível automatizar tentativas consecutivas de senha até acertar. As senhas dos usuários comuns são fracas e baseadas em padrões conhecidos (como 'welcome123' ou 'password123'), o que torna viável um ataque usando uma lista de palavras. Sem qualquer controle de velocidade, um script consegue testar milhares de combinações em poucos segundos, obtendo acesso a uma conta legítima.",
                 Categoria = CategoriaDesafio.BrokenAntiAutomation,
                 Dificuldade = 3,
                 Rota = RotasEnum.Login.GetNomeDisplay(),
@@ -1931,6 +1931,17 @@ public class ApplicationDBContext : DbContext
                 Categoria = CategoriaDesafio.IDOR,
                 Dificuldade = 1,
                 Rota = null,
+                Resolvido = false
+            },
+            new Desafio
+            {
+                Id = 33,
+                Nome = DesafiosEnum.RedefinirSenhaOutroUsuario.GetNomeDisplay(),
+                Descricao = "Use o fluxo de recuperação de senha para redefinir a senha de uma conta comum pré-cadastrada do domínio @safemugs.com.",
+                DescricaoDetalhes = "A recuperação envia um link com um token para o e-mail associado à conta. Tokens de redefinição precisam ser imprevisíveis, e o endpoint deve limitar tentativas. Neste fluxo, o token incorpora o identificador do usuário e tem poucas combinações variáveis, permitindo testar candidatos automaticamente e redefinir a senha sem acesso à caixa de entrada do alvo.",
+                Categoria = CategoriaDesafio.BrokenAntiAutomation,
+                Dificuldade = 3,
+                Rota = RotasEnum.EsqueciSenha.GetNomeDisplay(),
                 Resolvido = false
             }
         );
@@ -2397,6 +2408,20 @@ public class ApplicationDBContext : DbContext
                 NrDica = 3,
                 Texto = "Alterar uma claim modifica o conteúdo do token e invalida sua assinatura original. Verifique se o servidor valida essa assinatura antes de confiar no perfil.",
                 DesafioId = 31
+            },
+            new DicaDesafio
+            {
+                Id = 64,
+                NrDica = 1,
+                Texto = "Solicite um link de recuperação para uma conta que você controla e compare o parâmetro token em mais de uma solicitação.",
+                DesafioId = 33
+            },
+            new DicaDesafio
+            {
+                Id = 65,
+                NrDica = 2,
+                Texto = "Parte do token acompanha o identificador da conta-alvo; os caracteres restantes têm poucas possibilidades. Considere automatizar candidatos no POST que conclui a recuperação.",
+                DesafioId = 33
             }
         );
 
