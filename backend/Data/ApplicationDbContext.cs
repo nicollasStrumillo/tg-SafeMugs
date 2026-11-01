@@ -1599,7 +1599,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Utilize o payload |<iframe src=\"javascript:alert(`XSS`)\">| para causar um ataque de DOM XSS na página do catalogo.",
                 DescricaoDetalhes = "O campo de busca do catálogo reflete, no próprio DOM do navegador, o termo digitado sem qualquer tratamento. A entrada do usuário é inserida diretamente no HTML da página, permitindo que tags e atributos perigosos sejam interpretados pelo navegador. Como a manipulação acontece inteiramente no lado do cliente, nenhum dado malicioso precisa trafegar pelo servidor: tudo ocorre no DOM. O payload |<iframe src=\"javascript:alert(`XSS`)\">|, por exemplo, é interpretado ao ser renderizado no catálogo, comprovando uma injeção de HTML tipicamente conhecida como DOM XSS.",
                 Categoria = CategoriaDesafio.DomXSS,
-                Dificuldade = 2,
+                Dificuldade = 1,
                 Rota = RotasEnum.Catalogo.GetNomeDisplay(),
                 Resolvido = false
             },
@@ -1621,7 +1621,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Tente burlar a validação do formulário de cadastro.",
                 DescricaoDetalhes = "O formulário de cadastro valida os dados apenas no navegador. No servidor, a checagem de formato do e-mail é insuficiente e não impede registros com valores malformados. Ao interceptar a requisição de cadastro e enviar um e-mail em formato inválido (como |ana@@safemugs..com|), o servidor aceita o registro. Isso demonstra que a validação do front-end pode ser facilmente contornada e que o servidor não deve confiar nos dados recebidos, precisando aplicar regras de formato e sanitização por conta própria.",
                 Categoria = CategoriaDesafio.ImproperInputValidation,
-                Dificuldade = 2,
+                Dificuldade = 3,
                 Rota = RotasEnum.Cadastro.GetNomeDisplay(),
                 Resolvido = false
             },
@@ -1720,7 +1720,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Visualize o carrinho de compras de outro usuário.",
                 DescricaoDetalhes = "A rota que busca o carrinho de compras recebe o identificador do usuário diretamente pela URL e o utiliza para localizar o carrinho, sem verificar se ele corresponde ao usuário autenticado. Ao interceptar a requisição que a tela de carrinho dispara e trocar o identificador pelo de outro cliente, o servidor devolve o carrinho completo do alvo: itens, quantidades e preços — acompanhados dos dados pessoais do dono, como nome, e-mail, telefone e endereço.\nO servidor confia que o parâmetro recebido na URL identifica o próprio dono do recurso, quando deveria validar que ele corresponde ao usuário autenticado antes de retornar qualquer dado, caracterizando uma Insecure Direct Object Reference (IDOR).",
                 Categoria = CategoriaDesafio.IDOR,
-                Dificuldade = 2,
+                Dificuldade = 1,
                 Rota = RotasEnum.Carrinho.GetNomeDisplay(),
                 Resolvido = false
             },
@@ -1863,7 +1863,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Obtenha a hash de senha de um usuário através de injeção SQL.",
                 DescricaoDetalhes = "A consulta que pesquisa pedidos por número concatena o termo digitado diretamente na string SQL, permitindo injeção. Como ela retorna seis colunas, um |UNION SELECT| precisa trazer o mesmo número de colunas para ser aceito. A coluna do número do pedido é textual, então consegue exibir strings vindas de outras tabelas — como a coluna |HashSenha| (string) da tabela |usuarios|. Combinar colunas com |CONCAT| permite trazer mais de um dado na mesma coluna textual, e finalizar com |%23| comenta o restante da consulta original.",
                 Categoria = CategoriaDesafio.SqlInjection,
-                Dificuldade = 4,
+                Dificuldade = 5,
                 Rota = RotasEnum.Pedidos.GetNomeDisplay(),
                 Resolvido = false
             },
@@ -1885,7 +1885,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Leia o arquivo local DesafioAssets/xxe.txt explorando o processamento de XML.",
                 DescricaoDetalhes = "Uma vulnerabilidade XXE ocorre quando um parser aceita DTDs e resolve entidades externas definidas em um XML não confiável. Como o parser atua no servidor, essas referências podem levar a aplicação a acessar arquivos locais ou recursos externos e incorporar seus conteúdos ao documento, expondo informações que não deveriam estar disponíveis. XML recebido de usuários deve ser processado sem DTDs ou resolução externa, salvo quando esses recursos forem necessários e estiverem restritos.",
                 Categoria = CategoriaDesafio.XmlExternalEntity,
-                Dificuldade = 4,
+                Dificuldade = 5,
                 Rota = RotasEnum.Administracao.GetNomeDisplay(),
                 Resolvido = false
             },
@@ -1918,7 +1918,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Usando uma conta comum, faça uma requisição bem-sucedida a uma operação exclusiva para administradores, sem utilizar uma sessão válida de administrador.",
                 DescricaoDetalhes = "Um JWT contém claims que representam a identidade e as permissões do usuário. Seu payload pode ser lido pelo cliente, mas a assinatura é necessária para detectar alterações e confirmar que essas informações são confiáveis. Se a API usa uma claim de perfil para autorizar uma operação antes de validar a assinatura, dados alterados pelo cliente podem ser interpretados como privilégios legítimos. A proteção de navegação no cliente não substitui a autorização no servidor: a API deve validar o token antes de confiar nas claims.",
                 Categoria = CategoriaDesafio.SecurityMisconfiguration,
-                Dificuldade = 3,
+                Dificuldade = 4,
                 Rota = null,
                 Resolvido = false
             },
@@ -1940,7 +1940,7 @@ public class ApplicationDBContext : DbContext
                 Descricao = "Use o fluxo de recuperação de senha para redefinir a senha de uma conta comum pré-cadastrada do domínio @safemugs.com.",
                 DescricaoDetalhes = "A recuperação envia um link com um token para o e-mail associado à conta. Tokens de redefinição precisam ser imprevisíveis, e o endpoint deve limitar tentativas. Neste fluxo, o token incorpora o identificador do usuário e tem poucas combinações variáveis, permitindo testar candidatos automaticamente e redefinir a senha sem acesso à caixa de entrada do alvo.",
                 Categoria = CategoriaDesafio.BrokenAntiAutomation,
-                Dificuldade = 3,
+                Dificuldade = 4,
                 Rota = RotasEnum.EsqueciSenha.GetNomeDisplay(),
                 Resolvido = false
             }

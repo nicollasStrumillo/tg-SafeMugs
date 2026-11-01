@@ -36,7 +36,9 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.LoginAdmin
             ] },
 
-        new() { Desafio = DesafiosEnum.DOS, Dependencias = [] },
+        new() { Desafio = DesafiosEnum.DOS, Dependencias = [
+                DesafiosEnum.LoginAdmin
+        ] },
 
         new() { Desafio = DesafiosEnum.DomXss, Dependencias = 
             [
