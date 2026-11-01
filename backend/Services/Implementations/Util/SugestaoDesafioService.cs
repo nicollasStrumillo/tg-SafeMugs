@@ -48,6 +48,11 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.EncontrarScoreBoard
             ] },
 
+        new() { Desafio = DesafiosEnum.RedefinirSenhaOutroUsuario, Dependencias =
+            [
+                DesafiosEnum.VisualizarDadosOutroUsuario,
+            ] },
+
         new() { Desafio = DesafiosEnum.CadastroInvalido, Dependencias = 
             [
                 DesafiosEnum.EncontrarScoreBoard

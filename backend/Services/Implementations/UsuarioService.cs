@@ -191,6 +191,9 @@ public class UsuarioService : IUsuarioService
         registroToken.UsadoEm = agora;
 
         await _context.SaveChangesAsync();
+
+        await _desafioService.SolveIfAsync(DesafiosEnum.RedefinirSenhaOutroUsuario, () => EhUsuarioPreCadastrado(registroToken.Usuario.Email));
+        
         await transaction.CommitAsync();
     }
 
@@ -236,6 +239,20 @@ public class UsuarioService : IUsuarioService
             () => usuario.Id != _user.UsuarioId);
 
         return detalhes;
+    }
+
+    private bool EhUsuarioPreCadastrado(string email)
+    {
+        return new[]
+        {
+            EmailsESenhasUsuarios.AnaLopes,
+            EmailsESenhasUsuarios.BrunoCosta,
+            EmailsESenhasUsuarios.CarlaMendes,
+            EmailsESenhasUsuarios.DiegoSouza,
+            EmailsESenhasUsuarios.ElisaMartins,
+            EmailsESenhasUsuarios.FelipeRocha,
+            EmailsESenhasUsuarios.MarinaAlves,
+        }.Any(u => email == u.GetNomeDisplay());
     }
 
     private async Task ResolverDesafiosBruteForceAsync(string email, string hashSenha)
