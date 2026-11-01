@@ -6,6 +6,8 @@ public interface IUsuarioService
 {
     Task CadastrarUsuarioAsync(CadastroRequest request);
     Task<AuthTokenResponse?> RealizarLoginAsync(LoginRequest request);
+    Task SolicitarResetSenhaAsync(string email);
+    Task RedefinirSenhaAsync(string token, ResetSenhaRequestDto dto);
     Task<UsuarioDetalhesDTO> ObterUsuarioDetalhesAsync(int usuarioId);
     Task<AuthTokenResponse?> EditarUsuarioAsync(EditarUsuarioRequest request);
     Task<AuthTokenResponse?> UploadFotoPerfilAsync(IFormFile foto);

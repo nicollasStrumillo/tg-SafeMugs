@@ -4,12 +4,14 @@ using backend.Authentication;
 using backend.Authentication.Implementations;
 using backend.Authentication.Interfaces;
 using backend.SsrfConfiguration;
+using backend.EmailConfiguration;
 using backend.Data;
 using backend.Exceptions;
 using backend.Hubs;
 using backend.Repositories.Implementations;
 using backend.Repositories.Interfaces;
 using backend.Services.Implementations;
+using backend.Services.Implementations.Email;
 using backend.Services.Implementations.Util;
 using backend.Services.Interfaces;
 using backend.Services.Interfaces.Util;
@@ -57,6 +59,7 @@ var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName);
 builder.Services.Configure<JwtSettings>(jwtSettings);
 //Configuracoes pro desafio de SSRF
 builder.Services.Configure<SsrfSettings>(builder.Configuration.GetSection(SsrfSettings.SectionName));
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection(EmailSettings.SectionName));
 
 builder.Services.AddAuthentication(options =>
 {
@@ -104,9 +107,9 @@ builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
 builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IReposicaoEstoqueService, ReposicaoEstoqueService>();
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IDesafioRepository, DesafioRepository>();
 builder.Services.AddScoped<IDesafioService, DesafioService>();
-builder.Services.AddScoped<ISenhaService, SenhaService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEnderecoRepository, EnderecoRepository>();
 builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();

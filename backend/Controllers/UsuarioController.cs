@@ -18,8 +18,6 @@ public class UsuarioController : ControllerBase
     private readonly SsrfSettings _ssrf;
     private readonly IWebHostEnvironment _env;
 
-
-
     public UsuarioController(IUsuarioService authService, IDesafioService desafioService, IOptions<SsrfSettings> ssrf, IWebHostEnvironment env)
     {
         _usuarioService = authService;
@@ -92,6 +90,23 @@ public class UsuarioController : ControllerBase
     {
         await _usuarioService.DesativarUsuarioAsync(usuarioId);
         return Ok();
+    }
+
+    [HttpPost("reset/solicitar")]
+    public async Task<IActionResult> SolicitarResetSenha([FromBody] SolicitarResetSenhaRequestDto request)
+    {
+        await _usuarioService.SolicitarResetSenhaAsync(request.Email);
+        return Ok(new
+        {
+            detail = "Se o endereço estiver cadastrado, enviaremos um link para redefinir sua senha."
+        });
+    }
+
+    [HttpPost("reset")]
+    public async Task<IActionResult> ResetPassword([FromQuery] string token, [FromBody] ResetSenhaRequestDto request)
+    {
+        await _usuarioService.RedefinirSenhaAsync(token, request);
+        return NoContent();
     }
 
     // Endpoint para resolver o desafio de SSRF

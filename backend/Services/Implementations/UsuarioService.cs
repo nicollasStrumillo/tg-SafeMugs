@@ -7,9 +7,12 @@ using backend.models;
 using backend.models.Enums;
 using backend.Repositories.Interfaces;
 using backend.Services.Interfaces;
+using backend.EmailConfiguration;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Text;
 using backend.SsrfConfiguration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace backend.Services.Implementations;
@@ -28,6 +31,8 @@ public class UsuarioService : IUsuarioService
     private readonly ApplicationDBContext _context;
     private readonly IWebHostEnvironment _env;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IEmailSender _emailSender;
+    private readonly EmailSettings _emailSettings;
     
     public UsuarioService(
         IUsuarioRepository usuarioRepository,
@@ -38,7 +43,9 @@ public class UsuarioService : IUsuarioService
         ApplicationDBContext context,
         IWebHostEnvironment env,
         IHttpClientFactory httpClientFactory,
-        IOptions<SsrfSettings> ssrfSettings)
+        IOptions<SsrfSettings> ssrfSettings,
+        IEmailSender emailSender,
+        IOptions<EmailSettings> emailSettings)
     {
         _usuarioRepository = usuarioRepository;
         _enderecoRepository = enderecoRepository;
@@ -49,6 +56,8 @@ public class UsuarioService : IUsuarioService
         _env = env;
         _httpClientFactory = httpClientFactory;
         _ssrf = ssrfSettings.Value;
+        _emailSender = emailSender;
+        _emailSettings = emailSettings.Value;
     }
 
     public async Task CadastrarUsuarioAsync(CadastroRequest request)
@@ -106,6 +115,92 @@ public class UsuarioService : IUsuarioService
         await ResolverDesafiosBruteForceAsync(request.Email, request.HashSenha);
 
         return _jwtService.GenerateToken(usuario);
+    }
+
+    public async Task SolicitarResetSenhaAsync(string email)
+    {
+        var usuario = await _usuarioRepository.BuscaPorEmailAsync(email.Trim());
+
+        if (usuario is null || !usuario.Ativo)
+            return;
+
+        var agora = DateTime.UtcNow;
+        var token = GerarTokenRedefinicaoPrevisivel(usuario.Id);
+
+        var tokensAnteriores = await _context.TokensRedefinicaoSenha
+            .Where(t => t.UsuarioId == usuario.Id)
+            .ToListAsync();
+
+        await using (var transaction = await _context.Database.BeginTransactionAsync())
+        {
+            _context.TokensRedefinicaoSenha.RemoveRange(tokensAnteriores);
+            await _context.SaveChangesAsync();
+
+            _context.TokensRedefinicaoSenha.Add(new TokenRedefinicaoSenha
+            {
+                UsuarioId = usuario.Id,
+                Token = token,
+                CriadoEm = agora,
+                ExpiraEm = agora.AddMinutes(_emailSettings.ResetTokenLifetimeMinutes)
+            });
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+
+        var urlBase = _emailSettings.FrontendBaseUrl.TrimEnd('/');
+        var linkRedefinicao = $"{urlBase}/senha?token={Uri.EscapeDataString(token)}";
+        var corpo = $"""
+            <p>Houve uma solicitação para redefinir a senha da sua conta SafeMugs.</p>
+            <p><a href="{linkRedefinicao}">Criar uma nova senha</a></p>
+            <p>Este link expira em {_emailSettings.ResetTokenLifetimeMinutes} minutos.</p>
+            """;
+
+        await _emailSender.EnviarAsync(usuario.Email, "Redefinição de senha SafeMugs", corpo);
+    }
+
+    public async Task RedefinirSenhaAsync(string token, ResetSenhaRequestDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.NovaSenha) || string.IsNullOrWhiteSpace(dto.ConfirmarSenha))
+            throw new ValidationException("A nova senha e sua confirmação são obrigatórias.");
+
+        if (dto.NovaSenha != dto.ConfirmarSenha)
+            throw new ValidationException("As senhas não coincidem.");
+
+        if (dto.NovaSenha.Length < 8)
+            throw new ValidationException("A nova senha deve ter pelo menos 8 caracteres.");
+
+        if (string.IsNullOrWhiteSpace(token))
+            throw new BusinessException("Token inválido ou expirado.");
+
+        var agora = DateTime.UtcNow;
+        var registroToken = await _context.TokensRedefinicaoSenha
+            .Include(t => t.Usuario)
+            .FirstOrDefaultAsync(t =>
+                t.Token == token &&
+                t.UsadoEm == null &&
+                t.ExpiraEm > agora);
+
+        if (registroToken is null || !registroToken.Usuario.Ativo)
+            throw new BusinessException("Token inválido ou expirado.");
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        registroToken.Usuario.HashSenha = HashHelper.GerarMD5(dto.NovaSenha);
+        registroToken.Usuario.DtAtualizacao = agora;
+        registroToken.UsadoEm = agora;
+
+        await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
+    }
+
+    private static string GerarTokenRedefinicaoPrevisivel(int usuarioId)
+    {
+        var letra = (char)('a' + RandomNumberGenerator.GetInt32(26));
+        var digito1 = RandomNumberGenerator.GetInt32(10);
+        var digito2 = RandomNumberGenerator.GetInt32(10);
+
+        return $"t{usuarioId}{letra}{digito1}{digito2}sm";
     }
 
     public async Task<UsuarioDetalhesDTO> ObterUsuarioDetalhesAsync(int usuarioId)
