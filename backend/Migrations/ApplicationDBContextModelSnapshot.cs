@@ -2384,6 +2384,41 @@ namespace backend.Migrations
                         });
                 });
 
+            modelBuilder.Entity("backend.models.TokenRedefinicaoSenha", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CriadoEm")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("ExpiraEm")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("varchar(32)");
+
+                    b.Property<DateTime?>("UsadoEm")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UsuarioId", "ExpiraEm");
+
+                    b.ToTable("tokens_redefinicao_senha", (string)null);
+                });
+
             modelBuilder.Entity("backend.models.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -2679,6 +2714,17 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("CategoriaProduto");
+                });
+
+            modelBuilder.Entity("backend.models.TokenRedefinicaoSenha", b =>
+                {
+                    b.HasOne("backend.models.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("backend.models.Usuario", b =>

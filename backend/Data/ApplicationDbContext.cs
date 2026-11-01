@@ -16,6 +16,7 @@ public class ApplicationDBContext : DbContext
     public DbSet<Carrinho> Carrinhos => Set<Carrinho>();
     public DbSet<ItemCarrinho> ItensCarrinho => Set<ItemCarrinho>();
     public DbSet<Pedido> Pedidos => Set<Pedido>();
+    public DbSet<TokenRedefinicaoSenha> TokensRedefinicaoSenha => Set<TokenRedefinicaoSenha>();
     public DbSet<Desafio> Desafios => Set<Desafio>();
     public DbSet<DicaDesafio> DicasDesafio => Set<DicaDesafio>();
 
@@ -186,6 +187,22 @@ public class ApplicationDBContext : DbContext
                 .WithOne(e => e.Pedido)
                 .HasForeignKey<Pedido>(e => e.CarrinhoId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        modelBuilder.Entity<TokenRedefinicaoSenha>(entity =>
+        {
+            entity.ToTable("tokens_redefinicao_senha");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Token).IsRequired().HasMaxLength(32);
+            entity.Property(e => e.CriadoEm).IsRequired();
+            entity.Property(e => e.ExpiraEm).IsRequired();
+            entity.HasIndex(e => e.Token).IsUnique();
+            entity.HasIndex(e => new { e.UsuarioId, e.ExpiraEm });
+
+            entity.HasOne(e => e.Usuario)
+                .WithMany()
+                .HasForeignKey(e => e.UsuarioId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Desafio>(entity =>
