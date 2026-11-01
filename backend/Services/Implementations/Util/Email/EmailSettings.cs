@@ -9,7 +9,7 @@ public sealed class EmailSettings
     public bool EnableSsl { get; set; } = true;
     public string? Username { get; set; }
     public string? Password { get; set; }
-    public string FromAddress { get; set; } = "SEU_EMAIL_GMAIL@gmail.com";
+    public string FromAddress { get; set; } = "email@gmail.com";
     public string FrontendBaseUrl { get; set; } = "http://localhost:4200";
     public int ResetTokenLifetimeMinutes { get; set; } = 15;
 }

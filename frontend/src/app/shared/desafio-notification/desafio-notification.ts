@@ -170,5 +170,6 @@ export class DesafioNotification implements OnInit {
 
   protected abrirDetalhesDesafio(desafioId: number): void {
     this.router.navigate(['/score-board'], { queryParams: { idDesafio: desafioId } });
+    this.fecharNotificacao();
 	}
 }

@@ -155,8 +155,13 @@ export class ScoreBoard implements OnInit {
 
 	ngOnInit(): void {
 		this.route.queryParamMap.subscribe((params) => {
-			const id = params.get('idDesafio') ?? '';
-			if (id) this.idDesafioQuery = Number(id);
+			const id = params.get('idDesafio');
+			this.idDesafioQuery = id ? Number(id) : null;
+
+			if (this.idDesafioQuery !== null && !this.carregandoDesafios()) {
+				const desafio = this.desafios().find((d) => d.id === this.idDesafioQuery);
+				if (desafio) this.abrirDesafio(desafio);
+			}
 		});
 
 		this.carregarDesafios();
