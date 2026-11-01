@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { CadastroRequest, LoginRequest, AuthTokenResponse, DetalhesUsuarioResponse, EditarUsuarioRequest, UploadFotoPerfilUrlRequest, MudarSenhaRequest} from './usuario.models';
+import { CadastroRequest, LoginRequest, AuthTokenResponse, SolicitarResetSenhaRequest, ResetSenhaRequest ,DetalhesUsuarioResponse, EditarUsuarioRequest, UploadFotoPerfilUrlRequest, MudarSenhaRequest} from './usuario.models';
 
 @Injectable({
 	providedIn: 'root',
@@ -16,6 +16,15 @@ export class UsuarioApiService {
 
 	public cadastrar(request: CadastroRequest): Observable<void> {
 		return this.http.post<void>(`/api/usuario/cadastro`, request);
+	}
+
+	public solicitarResetSenha(request: SolicitarResetSenhaRequest): Observable<{ detail: string }> {
+    	return this.http.post<{ detail: string }>('/api/usuario/reset/solicitar', request);
+  	}
+
+	public resetSenha(token: string, request: ResetSenhaRequest): Observable<void> {
+		const tokenParam = encodeURIComponent(token);
+		return this.http.post<void>(`/api/usuario/reset?token=${tokenParam}`, request);
 	}
 
 	public detalhes(id: number): Observable<DetalhesUsuarioResponse> {

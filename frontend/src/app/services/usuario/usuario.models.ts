@@ -39,6 +39,15 @@ export interface UsuarioLogado {
 	perfil: string;
 }
 
+export interface SolicitarResetSenhaRequest {
+  email: string;
+}
+
+export interface ResetSenhaRequest {
+  novaSenha: string;
+  confirmarSenha: string;
+}
+
 
 // Detalhes Usuario
 export interface EnderecoDto{

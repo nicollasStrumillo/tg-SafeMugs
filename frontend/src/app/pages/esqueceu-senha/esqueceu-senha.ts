@@ -1,73 +1,172 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ReactiveFormsModule} from '@angular/forms';
-import { MatError, MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatIcon } from "@angular/material/icon";
-import { MatCardActions, MatCardContent, MatCardSubtitle, MatCardHeader, MatCardTitle, MatCard } from "@angular/material/card";
-import { CommonModule } from '@angular/common';
-import { SenhaService } from '../../shared/senha/senha-service'; 
-import { MatInputModule } from '@angular/material/input';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  AbstractControl,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { finalize, map } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-@Component({
-  selector: 'sm-esqueceu-senha',
-  imports: [CommonModule, MatError, MatIcon, MatCardActions, MatFormField, MatLabel, MatCardContent, MatCardSubtitle, MatCardHeader, MatCardTitle, MatCard, ReactiveFormsModule,
-    MatInputModule, MatButtonModule
-  ],
-  templateUrl: './esqueceu-senha.html',
-  styleUrl: './esqueceu-senha.scss',
-})
-export class SenhaPage implements OnInit {
-resetForm!: FormGroup;
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
-  hidePassword = true;
-  hideConfirmPassword = true;
+import { UsuarioApiService } from '../../services/usuario/usuario-api.service';
 
-  constructor(
-    private fb: FormBuilder,
-    private senhaService: SenhaService
-  ) {}
+function passwordsMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const passwordControl = control.get('novaSenha');
+  const confirmPasswordControl = control.get('confirmarSenha');
 
-  ngOnInit(): void {
-
-    this.resetForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
-    }, {
-      validators: this.matchPasswordsValidator
-    });
-
+  if (!passwordControl || !confirmPasswordControl) {
+    return null;
   }
 
-  matchPasswordsValidator(control: AbstractControl): ValidationErrors | null {
+  const password = passwordControl.value;
+  const confirmPassword = confirmPasswordControl.value;
 
-    const password = control.get('password')?.value;
-    const confirmPassword = control.get('confirmPassword')?.value;
-
-    if (password !== confirmPassword) {
-      control.get('confirmPassword')?.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
+  if (!password || !confirmPassword) {
+    if (confirmPasswordControl.hasError('passwordMismatch')) {
+      const { passwordMismatch, ...remainingErrors } = confirmPasswordControl.errors ?? {};
+      confirmPasswordControl.setErrors(Object.keys(remainingErrors).length ? remainingErrors : null);
     }
 
     return null;
   }
 
-  onSubmit(): void {
-
-    if (this.resetForm.invalid) {
-      return;
+  if (password !== confirmPassword) {
+    if (!confirmPasswordControl.hasError('passwordMismatch')) {
+      confirmPasswordControl.setErrors({
+        ...(confirmPasswordControl.errors ?? {}),
+        passwordMismatch: true,
+      });
     }
 
-    this.senhaService.resetSenha({
-      email: this.resetForm.value.email,
-      novaSenha: this.resetForm.value.password
-    }).subscribe({
-      next: () => {
-        console.log('Senha alterada com sucesso.');
-      },
-      error: (erro) => {
-        console.error(erro);
-      }
-    });
-
+    return { passwordMismatch: true };
   }
+
+  if (confirmPasswordControl.hasError('passwordMismatch')) {
+    const { passwordMismatch, ...remainingErrors } = confirmPasswordControl.errors ?? {};
+    confirmPasswordControl.setErrors(Object.keys(remainingErrors).length ? remainingErrors : null);
+  }
+
+  return null;
+}
+
+@Component({
+  selector: 'sm-esqueceu-senha',
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    RouterLink,
+  ],
+  templateUrl: './esqueceu-senha.html',
+  styleUrl: './esqueceu-senha.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SenhaPage {
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly usuarioService = inject(UsuarioApiService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly tokenParam = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('token'))),
+    { initialValue: this.route.snapshot.queryParamMap.get('token') },
+  );
+
+  protected readonly token = computed(() => this.tokenParam());
+  protected readonly redefinindoSenha = computed(() => !!this.token());
+  protected readonly carregando = signal(false);
+  protected readonly solicitacaoConcluida = signal(false);
+  protected readonly senhaAlterada = signal(false);
+  protected readonly formSubmitted = signal(false);
+  protected readonly mensagemErro = signal<string | null>(null);
+  protected readonly passwordHidden = signal(true);
+  protected readonly confirmPasswordHidden = signal(true);
+  protected readonly passwordInputType = computed(() =>
+    this.passwordHidden() ? 'password' : 'text',
+  );
+  protected readonly confirmPasswordInputType = computed(() =>
+    this.confirmPasswordHidden() ? 'password' : 'text',
+  );
+
+  protected readonly requestForm = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+  });
+
+  protected readonly resetForm = this.formBuilder.group(
+    {
+      novaSenha: ['', [Validators.required, Validators.minLength(8)]],
+      confirmarSenha: ['', Validators.required],
+    },
+    { validators: [passwordsMatchValidator] },
+  );
+
+  protected solicitarLink(): void {
+    this.formSubmitted.set(true);
+    this.requestForm.markAllAsTouched();
+
+    if (this.requestForm.invalid) return;
+
+    this.mensagemErro.set(null);
+    this.carregando.set(true);
+
+    this.usuarioService
+      .solicitarResetSenha({ email: this.requestForm.getRawValue().email })
+      .pipe(finalize(() => this.carregando.set(false)))
+      .subscribe({
+        next: () => this.solicitacaoConcluida.set(true),
+        error: () =>
+          this.mensagemErro.set('Não foi possível solicitar o link agora. Tente novamente.'),
+      });
+  }
+
+  protected redefinir(): void {
+    this.formSubmitted.set(true);
+    this.resetForm.markAllAsTouched();
+
+    const token = this.token();
+    if (this.resetForm.invalid || !token) return;
+
+    this.mensagemErro.set(null);
+    this.carregando.set(true);
+
+    this.usuarioService
+      .resetSenha(token, this.resetForm.getRawValue())
+      .pipe(finalize(() => this.carregando.set(false)))
+      .subscribe({
+        next: () => this.senhaAlterada.set(true),
+        error: (error: HttpErrorResponse) => {
+          const detail = (error.error as { detail?: unknown } | null)?.detail;
+          this.mensagemErro.set(
+            typeof detail === 'string' ? detail : 'O link é inválido ou expirou. Solicite outro.',
+          );
+        },
+      });
+  }
+
+  protected alternarVisibilidadeSenha(): void {
+    this.passwordHidden.update((value) => !value);
+  }
+
+  protected alternarVisibilidadeConfirmacao(): void {
+    this.confirmPasswordHidden.update((value) => !value);
+  }
+
+  protected solicitarOutroLink(): void {
+    this.mensagemErro.set(null);
+    this.formSubmitted.set(false);
+    this.resetForm.reset();
+    void this.router.navigate(['/senha']);
+  }
+
 }
