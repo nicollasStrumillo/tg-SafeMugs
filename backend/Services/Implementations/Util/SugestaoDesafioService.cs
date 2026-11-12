@@ -30,7 +30,9 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.LoginAdmin
             ] },
 
-        new() { Desafio = DesafiosEnum.ForjarJwt, Dependencias = [] },
+        new() { Desafio = DesafiosEnum.ForjarJwt, Dependencias = [
+                DesafiosEnum.EncontrarScoreBoard
+        ] },
 
         new() { Desafio = DesafiosEnum.XxeReposicaoEstoque, Dependencias = [
                 DesafiosEnum.LoginAdmin
@@ -47,6 +49,7 @@ public class SugestaoDesafioService : ISugestaoDesafioService
 
         new() { Desafio = DesafiosEnum.BruteForceLogin, Dependencias = 
             [
+                DesafiosEnum.VisualizarDadosOutroUsuario,
                 DesafiosEnum.EncontrarScoreBoard
             ] },
 
@@ -105,7 +108,10 @@ public class SugestaoDesafioService : ISugestaoDesafioService
                 DesafiosEnum.EncontrarScoreBoard
             ] },
 
-        new() { Desafio = DesafiosEnum.VisualizarDadosOutroUsuario, Dependencias = [] },
+        new() { Desafio = DesafiosEnum.VisualizarDadosOutroUsuario, Dependencias = 
+            [
+                DesafiosEnum.EncontrarScoreBoard
+            ] },
 
         new() { Desafio = DesafiosEnum.ModificarCarrinhoAlheio, Dependencias = 
             [
@@ -145,6 +151,7 @@ public class SugestaoDesafioService : ISugestaoDesafioService
 
         new() { Desafio = DesafiosEnum.StoredXssAdministracao, Dependencias =
             [
+                DesafiosEnum.EncontrarAdministracao,
                 DesafiosEnum.CadastroInvalido
             ] },
 

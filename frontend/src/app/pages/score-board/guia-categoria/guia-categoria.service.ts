@@ -14,7 +14,8 @@ const GUIAS_CATEGORIAS: GuiaCategoria[] = [
 	{ categoriaId: 'IDOR', caminhoMarkdown: '/guias-categoria/idor.md'},
 	{ categoriaId: 'ReflectedXSS', caminhoMarkdown: '/guias-categoria/reflectedxss.md'},
 	{ categoriaId: 'StoredXSS', caminhoMarkdown: '/guias-categoria/storedxss.md'},
-	{ categoriaId: 'DomXSS', caminhoMarkdown: '/guias-categoria/domxss.md'}
+	{ categoriaId: 'DomXSS', caminhoMarkdown: '/guias-categoria/domxss.md'},
+	{ categoriaId: 'BrokenAntiAutomation', caminhoMarkdown: '/guias-categoria/brokenantiautomation.md'}
 ];
 
 export interface GuiaCategoria {
