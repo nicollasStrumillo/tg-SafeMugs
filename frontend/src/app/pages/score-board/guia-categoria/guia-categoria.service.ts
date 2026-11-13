@@ -15,7 +15,15 @@ const GUIAS_CATEGORIAS: GuiaCategoria[] = [
 	{ categoriaId: 'ReflectedXSS', caminhoMarkdown: '/guias-categoria/reflectedxss.md'},
 	{ categoriaId: 'StoredXSS', caminhoMarkdown: '/guias-categoria/storedxss.md'},
 	{ categoriaId: 'DomXSS', caminhoMarkdown: '/guias-categoria/domxss.md'},
-	{ categoriaId: 'BrokenAntiAutomation', caminhoMarkdown: '/guias-categoria/brokenantiautomation.md'}
+	{ categoriaId: 'BrokenAntiAutomation', caminhoMarkdown: '/guias-categoria/brokenantiautomation.md'},
+	{ categoriaId: 'SecurityMisconfiguration', caminhoMarkdown: '/guias-categoria/securitymisconfiguration.md'},
+	{ categoriaId: 'ImproperInputValidation', caminhoMarkdown: '/guias-categoria/improperinputvalidation.md'},
+	{ categoriaId: 'ParameterTampering', caminhoMarkdown: '/guias-categoria/parametertampering.md'},
+	{ categoriaId: 'OpenRedirect', caminhoMarkdown: '/guias-categoria/openredirect.md'},
+	{ categoriaId: 'ServerSideRequestForgery', caminhoMarkdown: '/guias-categoria/serversiderequestforgery.md'},
+	{ categoriaId: 'PathTraversal', caminhoMarkdown: '/guias-categoria/pathtraversal.md'},
+	{ categoriaId: 'XmlExternalEntity', caminhoMarkdown: '/guias-categoria/xmlexternalentity.md'},
+	{ categoriaId: 'Outros', caminhoMarkdown: '/guias-categoria/outros.md'}
 ];
 
 export interface GuiaCategoria {

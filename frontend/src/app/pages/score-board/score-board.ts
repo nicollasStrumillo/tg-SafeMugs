@@ -74,7 +74,7 @@ export class ScoreBoard implements OnInit {
 		const dificuldadesSelecionadas = this.dificuldadesSelecionadas();
 		const categoriasSelecionadas = this.categoriasSelecionadas();
 	
-		return this.desafios().filter((desafio) => {
+		const desafiosFiltrados = this.desafios().filter((desafio) => {
 			if (termo) {
 				const textoBusca = `${desafio.nome} ${desafio.descricao}`;
 				if (!this.normalizarTexto(textoBusca).includes(termo)) {
@@ -92,6 +92,14 @@ export class ScoreBoard implements OnInit {
 
 			return true;
 		});
+
+		const desafioScoreBoard = desafiosFiltrados.find((desafio) => desafio.nome === 'Encontrar a Score-Board');
+		if (!desafioScoreBoard) return desafiosFiltrados;
+
+		return [
+			desafioScoreBoard,
+			...desafiosFiltrados.filter((desafio) => desafio.id !== desafioScoreBoard.id),
+		];
 	});
 
 	protected readonly resolvidosPorDificuldade = computed(() => {
